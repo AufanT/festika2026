@@ -18,9 +18,6 @@ export const metadata: Metadata = {
   description:
     "Unleashing Innovation through Digital Creativity. Festival Teknologi Informasi terbesar di Universitas — kompetisi UI/UX Design, Competitive Programming, dan Web Development.",
   keywords: ["festika", "IT festival", "2026", "kompetisi", "teknologi"],
-  icons: {
-    icon: "/favicon.ico",
-  },
 };
 
 export default function RootLayout({
