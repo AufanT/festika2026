@@ -44,6 +44,15 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   const [search, setSearch] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
+  // Security Layer 2: Client-side Guard
+  // If the server accidentally serves a cached page to an unauthorized user,
+  // this script will immediately kick them out.
+  useEffect(() => {
+    if (!user || !user.email) {
+      window.location.href = "/admin/login";
+    }
+  }, [user]);
+
   // Add Competition State
   const [isAdding, setIsAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
