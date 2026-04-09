@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 config();
-import pool from "./src/lib/mysql";
+import pool from "../src/lib/mysql";
 
 async function run() {
   try {
