@@ -1,4 +1,5 @@
 import { StaffRepository } from "@/lib/repositories/staff.repository";
+import { staffSchema } from "@/lib/validations";
 import crypto from "crypto";
 
 export class StaffService {
@@ -11,26 +12,12 @@ export class StaffService {
     return await StaffRepository.findCoreLeaders();
   }
 
-  static async createStaff(data: {
-    name: string;
-    role: string;
-    description?: string | null;
-    imageUrl?: string | null;
-    divisionId?: string | null;
-    orderIndex?: number;
-  }) {
-    if (!data.name || data.name.trim() === "") {
-      throw new Error("Nama wajib diisi");
-    }
-    if (!data.role || data.role.trim() === "") {
-      throw new Error("Peran (Role) wajib diisi");
-    }
-
-    const roleUpper = data.role.trim().toUpperCase();
+  static async createStaff(data: any) {
+    const validated = staffSchema.parse(data);
 
     // Validasi Koordinator (Max 1 per divisi)
-    if (roleUpper === "KOORDINATOR" && data.divisionId) {
-      const existingKoorCount = await StaffRepository.countCoordinators(data.divisionId);
+    if (validated.role === "KOORDINATOR" && validated.divisionId) {
+      const existingKoorCount = await StaffRepository.countCoordinators(validated.divisionId);
       if (existingKoorCount >= 1) {
         throw new Error("Divisi ini sudah memiliki seorang Koordinator.");
       }
@@ -38,12 +25,12 @@ export class StaffService {
 
     const newStaff = {
       id: "stf-" + crypto.randomBytes(8).toString("hex"),
-      name: data.name.trim(),
-      role: roleUpper,
-      description: data.description || null,
-      imageUrl: data.imageUrl || null,
-      divisionId: data.divisionId || null,
-      orderIndex: data.orderIndex || 0,
+      name: validated.name.trim(),
+      role: validated.role,
+      description: validated.description || null,
+      imageUrl: validated.imageUrl || null,
+      divisionId: validated.divisionId || null,
+      orderIndex: validated.orderIndex || 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

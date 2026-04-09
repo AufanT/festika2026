@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// --- Registration (Public) ---
 export const registerSchema = z.object({
   name: z.string().min(2, "Nama wajib diisi (minimal 2 karakter)").max(100),
   email: z.string().email("Format email tidak valid"),
@@ -10,3 +11,34 @@ export const registerSchema = z.object({
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
+
+// --- Admin Schemas ---
+
+export const competitionSchema = z.object({
+  title: z.string().min(3, "Judul lomba minimal 3 karakter").max(100),
+  description: z.string().max(1000, "Deskripsi terlalu panjang").optional().nullable(),
+});
+
+export const divisionSchema = z.object({
+  name: z.string().min(2, "Nama divisi minimal 2 karakter").max(100),
+  imageUrl: z.string().url("Format URL gambar tidak valid").optional().nullable(),
+});
+
+export const staffSchema = z.object({
+  name: z.string().min(2, "Nama minimal 2 karakter").max(100),
+  role: z.enum([
+    "KETUA PELAKSANA", 
+    "SEKRETARIS UMUM", 
+    "BENDAHARA UMUM", 
+    "KOORDINATOR", 
+    "STAFF"
+  ] as const),
+  description: z.string().max(500, "Deskripsi terlalu panjang").optional().nullable(),
+  imageUrl: z.string().url("Format URL gambar tidak valid").optional().nullable(),
+  divisionId: z.string().optional().nullable(),
+  orderIndex: z.number().int().optional().default(0),
+});
+
+export type CompetitionFormData = z.infer<typeof competitionSchema>;
+export type DivisionFormData = z.infer<typeof divisionSchema>;
+export type StaffFormData = z.infer<typeof staffSchema>;

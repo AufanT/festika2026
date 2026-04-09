@@ -1,4 +1,5 @@
 import { DivisionRepository } from "@/lib/repositories/division.repository";
+import { divisionSchema } from "@/lib/validations";
 import crypto from "crypto";
 
 export class DivisionService {
@@ -6,15 +7,13 @@ export class DivisionService {
     return await DivisionRepository.findAll();
   }
 
-  static async createDivision(data: { name: string; imageUrl?: string | null }) {
-    if (!data.name || data.name.trim() === "") {
-      throw new Error("Nama divisi wajib diisi");
-    }
+  static async createDivision(data: any) {
+    const validated = divisionSchema.parse(data);
 
     const newDiv = {
       id: "div-" + crypto.randomBytes(8).toString("hex"),
-      name: data.name.trim(),
-      imageUrl: data.imageUrl || null,
+      name: validated.name.trim(),
+      imageUrl: validated.imageUrl || null,
       orderIndex: 0,
       createdAt: new Date(),
       updatedAt: new Date(),

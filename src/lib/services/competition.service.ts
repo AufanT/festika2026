@@ -1,4 +1,5 @@
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
+import { competitionSchema } from "@/lib/validations";
 import crypto from "crypto";
 
 export class CompetitionService {
@@ -12,15 +13,13 @@ export class CompetitionService {
     return competition;
   }
 
-  static async createCompetition(data: { title: string; description?: string }) {
-    if (!data.title || data.title.trim() === "") {
-      throw new Error("Judul lomba wajib diisi");
-    }
+  static async createCompetition(data: any) {
+    const validated = competitionSchema.parse(data);
 
     const newComp = {
       id: "cuid-" + crypto.randomBytes(8).toString("hex"),
-      title: data.title.trim(),
-      description: data.description?.trim() || "",
+      title: validated.title.trim(),
+      description: validated.description?.trim() || "",
       createdAt: new Date(),
       updatedAt: new Date(),
     };
