@@ -14,6 +14,22 @@ export type Registrant = {
   createdAt: string;
 };
 
+export type Staff = {
+  id: string;
+  name: string;
+  role: string;
+  description: string | null;
+  imageUrl: string | null;
+  createdAt: string;
+};
+
+export type Division = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  isCore?: boolean;
+};
+
 export type User = {
   name?: string | null;
   email?: string | null;
