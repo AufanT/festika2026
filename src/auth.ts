@@ -53,4 +53,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET || "festika-admin-secret-2026",
 });
