@@ -1,5 +1,5 @@
+import { Suspense } from "react";
 import RegisterContainer from "./RegisterContainer";
-import { CompetitionService } from "@/lib/services/competition.service";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 
 export default async function RegisterPage() {
@@ -32,7 +32,9 @@ export default async function RegisterPage() {
           </div>
 
           <div className="max-w-3xl mx-auto">
-            <RegisterContainer competitions={competitions} />
+            <Suspense fallback={<div className="text-center p-12 text-festika-navy">Memuat formulir...</div>}>
+              <RegisterContainer competitions={competitions} />
+            </Suspense>
           </div>
         </div>
       </main>
