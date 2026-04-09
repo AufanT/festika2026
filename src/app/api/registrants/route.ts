@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   try {
     const token = await getToken({
       req,
-      secret: process.env.NEXTAUTH_SECRET ?? "festika-admin-secret-2026",
+      secret: process.env.NEXTAUTH_SECRET,
     });
 
     if (!token) {
@@ -16,10 +16,12 @@ export async function GET(req: NextRequest) {
 
     const searchParams = req.nextUrl.searchParams;
     const competitionId = searchParams.get("competitionId") || undefined;
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "50");
 
-    const data = await RegistrantService.getAllRegistrants(competitionId);
+    const result = await RegistrantService.getAllRegistrants(competitionId, page, limit);
 
-    return ApiResponse.success(data);
+    return ApiResponse.success(result);
   } catch (error: any) {
     console.error("Error fetching registrants:", error);
     return ApiResponse.error("Gagal mengambil data pendaftar", 500);

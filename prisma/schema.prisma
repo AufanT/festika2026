@@ -31,6 +31,7 @@ model Registrant {
   competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
 
+  @@index([competitionId])
   @@map("registrants")
 }
 
@@ -73,6 +74,7 @@ model Staff {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  @@index([divisionId])
   @@map("staff")
 }
 

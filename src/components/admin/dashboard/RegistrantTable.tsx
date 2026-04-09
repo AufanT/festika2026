@@ -9,6 +9,11 @@ type RegistrantTableProps = {
   onRefresh: () => void;
   onExport: () => void;
   isLoading: boolean;
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+  };
 };
 
 export default function RegistrantTable({
@@ -18,7 +23,8 @@ export default function RegistrantTable({
   onSearchChange,
   onRefresh,
   onExport,
-  isLoading
+  isLoading,
+  pagination
 }: RegistrantTableProps) {
   return (
     <div className="bg-white border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36]">
@@ -70,17 +76,19 @@ export default function RegistrantTable({
             <tbody>
               {filteredRegistrants.map((r, i) => (
                 <tr key={r.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  <td className="p-4 text-gray-400 font-mono text-xs">{i + 1}</td>
+                  <td className="p-4 text-gray-400 font-mono text-xs">
+                    {pagination ? (pagination.currentPage - 1) * 50 + (i + 1) : i + 1}
+                  </td>
                   <td className="p-4 font-bold text-festika-navy">{r.name}</td>
-                  <td className="p-4 text-gray-600">{r.email}</td>
-                  <td className="p-4 text-gray-600">{r.phone}</td>
+                  <td className="p-4 text-gray-600 font-mono text-xs">{r.email}</td>
+                  <td className="p-4 text-gray-600 font-mono text-xs">{r.phone}</td>
                   <td className="p-4">
-                    <span className="bg-festika-teal/10 text-festika-teal px-2 py-0.5 text-xs font-bold">
+                    <span className="bg-festika-teal/10 text-festika-teal px-2 py-0.5 text-[10px] font-bold">
                       {r.major}
                     </span>
                   </td>
                   <td className="p-4">
-                    <span className="bg-festika-orange/10 text-festika-orange px-2 py-0.5 text-xs font-bold">
+                    <span className="bg-festika-orange/10 text-festika-orange px-2 py-0.5 text-[10px] font-bold">
                       {r.year}
                     </span>
                   </td>
@@ -90,6 +98,30 @@ export default function RegistrantTable({
           </table>
         )}
       </div>
+
+      {pagination && pagination.totalPages > 1 && (
+        <div className="bg-gray-50 p-4 border-t-2 border-festika-navy flex items-center justify-between">
+          <p className="text-xs font-bold text-festika-navy">
+            Halaman {pagination.currentPage} dari {pagination.totalPages}
+          </p>
+          <div className="flex gap-2">
+            <button
+              disabled={pagination.currentPage <= 1 || isLoading}
+              onClick={() => pagination.onPageChange(pagination.currentPage - 1)}
+              className="px-4 py-1.5 border-2 border-festika-navy font-bold text-sm bg-white hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              Prev
+            </button>
+            <button
+              disabled={pagination.currentPage >= pagination.totalPages || isLoading}
+              onClick={() => pagination.onPageChange(pagination.currentPage + 1)}
+              className="px-4 py-1.5 border-2 border-festika-navy font-bold text-sm bg-festika-navy text-white hover:bg-festika-navy/90 disabled:opacity-30 disabled:cursor-not-allowed transition-colors shadow-[2px_2px_0_0_#F5A623]"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

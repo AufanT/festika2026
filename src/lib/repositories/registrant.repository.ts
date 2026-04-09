@@ -1,19 +1,28 @@
 import pool from "@/lib/mysql";
 
 export class RegistrantRepository {
-  static async findAll(competitionId?: string) {
+  static async findAll(competitionId?: string, limit: number = 50, offset: number = 0) {
     if (competitionId) {
       const [rows]: any = await pool.query(
-        "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants WHERE competitionId = ? ORDER BY createdAt DESC",
-        [competitionId]
+        "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants WHERE competitionId = ? ORDER BY createdAt DESC LIMIT ? OFFSET ?",
+        [competitionId, limit, offset]
       );
       return rows;
     }
 
     const [rows]: any = await pool.query(
-      "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants ORDER BY createdAt DESC"
+      "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants ORDER BY createdAt DESC LIMIT ? OFFSET ?",
+      [limit, offset]
     );
     return rows;
+  }
+
+  static async countByCompetitionId(competitionId: string) {
+    const [rows]: any = await pool.query(
+      "SELECT COUNT(*) as total FROM registrants WHERE competitionId = ?",
+      [competitionId]
+    );
+    return rows[0].total;
   }
 
   static async findByEmail(email: string) {

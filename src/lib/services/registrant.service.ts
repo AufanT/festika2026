@@ -2,8 +2,28 @@ import { RegistrantRepository } from "@/lib/repositories/registrant.repository";
 import crypto from "crypto";
 
 export class RegistrantService {
-  static async getAllRegistrants(competitionId?: string) {
-    return await RegistrantRepository.findAll(competitionId);
+  static async getAllRegistrants(competitionId?: string, page: number = 1, limit: number = 50) {
+    const offset = (page - 1) * limit;
+    const data = await RegistrantRepository.findAll(competitionId, limit, offset);
+    
+    let total = 0;
+    let topM = "-";
+    let topY = "-";
+
+    if (competitionId) {
+      total = await RegistrantRepository.countByCompetitionId(competitionId);
+      // Optional: Add more complex SQL here for top major/year if needed, 
+      // but for now total is the priority.
+    }
+    
+    return {
+      data,
+      total,
+      topM,
+      topY,
+      page,
+      totalPages: Math.ceil(total / limit)
+    };
   }
 
   static async registerParticipant(data: {

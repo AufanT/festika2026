@@ -23,6 +23,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [selectedComp, setSelectedComp] = useState<Competition | null>(null);
   const [registrants, setRegistrants] = useState<Registrant[]>([]);
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 0, page: 1, topM: "-", topY: "-" });
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -52,12 +53,21 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     } catch { /* ignore */ }
   }, []);
 
-  const fetchRegistrants = useCallback(async (compId: string) => {
+  const fetchRegistrants = useCallback(async (compId: string, pageNum: number = 1) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/registrants?competitionId=${compId}`);
+      const res = await fetch(`/api/registrants?competitionId=${compId}&page=${pageNum}&limit=50`);
       const json = await res.json();
-      setRegistrants(json.data || []);
+      if (json.success) {
+        setRegistrants(json.data.data || []);
+        setPagination({
+          total: json.data.total,
+          totalPages: json.data.totalPages,
+          page: json.data.page,
+          topM: json.data.topM,
+          topY: json.data.topY
+        });
+      }
       setLastUpdated(new Date());
     } catch { /* ignore */ } finally {
       setIsLoading(false);
@@ -69,8 +79,8 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   }, [fetchCompetitions]);
 
   useEffect(() => {
-    if (selectedComp) fetchRegistrants(selectedComp.id);
-  }, [selectedComp, fetchRegistrants]);
+    if (selectedComp) fetchRegistrants(selectedComp.id, pagination.page);
+  }, [selectedComp, fetchRegistrants, pagination.page]);
 
   const handleCreateCompetition = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,19 +140,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     r.major.toLowerCase().includes(search.toLowerCase())
   ), [registrants, search]);
 
-  const stats = useMemo(() => {
-    const total = registrants.length;
-    const majors = registrants.reduce<Record<string, number>>((acc, r) => {
-      acc[r.major] = (acc[r.major] || 0) + 1; return acc;
-    }, {});
-    const topM = Object.entries(majors).sort((a, b) => b[1] - a[1])[0];
-    const years = registrants.reduce<Record<number, number>>((acc, r) => {
-      acc[r.year] = (acc[r.year] || 0) + 1; return acc;
-    }, {});
-    const topY = Object.entries(years).sort((a, b) => b[1] - a[1])[0];
-    return { total, topM: topM?.[0], topY: topY?.[0] };
-  }, [registrants]);
-
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
     if (activeTab === "site") return <SitePanel />;
@@ -176,16 +173,21 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           </div>
         </div>
 
-        <StatsOverview totalRegistrants={stats.total} topMajor={stats.topM} topYear={stats.topY} />
+        <StatsOverview totalRegistrants={pagination.total} topMajor={pagination.topM} topYear={pagination.topY} />
 
         <RegistrantTable 
           registrants={registrants}
           filteredRegistrants={filtered}
           search={search}
           onSearchChange={setSearch}
-          onRefresh={() => fetchRegistrants(selectedComp.id)}
+          onRefresh={() => fetchRegistrants(selectedComp.id, pagination.page)}
           onExport={exportCSV}
           isLoading={isLoading}
+          pagination={{
+            currentPage: pagination.page,
+            totalPages: pagination.totalPages,
+            onPageChange: (p) => setPagination(prev => ({ ...prev, page: p }))
+          }}
         />
       </div>
     );
