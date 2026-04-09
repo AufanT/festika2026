@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import pool from "@/lib/mysql";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -17,21 +18,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!rows || rows.length === 0) return null;
 
         const user = rows[0];
-        console.log("Found user:", user.email);
         
         const isValid = await bcrypt.compare(
           credentials.password as string,
           user.password
         );
-        console.log("Password valid:", isValid);
 
-        if (!isValid) {
-          console.log("Login failed: Invalid password");
-          return null;
-        }
+        if (!isValid) return null;
 
         return {
-          id: user.id,
+          id: user.id.toString(),
           email: user.email,
           name: user.name,
         };
@@ -47,7 +43,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id.toString();
       }
       return token;
     },
@@ -58,5 +54,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET ?? "festika-admin-secret-2026",
+  secret: process.env.NEXTAUTH_SECRET || "festika-admin-secret-2026",
 });
