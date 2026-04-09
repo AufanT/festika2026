@@ -3,8 +3,6 @@ import { redirect } from "next/navigation";
 import AdminDashboard from "@/components/admin/AdminDashboard";
 import { NotificationProvider } from "@/context/NotificationContext";
 
-export const dynamic = "force-dynamic";
-
 export default async function AdminPage() {
   const session = await auth();
   if (!session) redirect("/admin/login");
