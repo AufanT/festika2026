@@ -174,16 +174,16 @@ export default function StaffPanel() {
     <div className="w-full">
       {!selectedDiv ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex justify-between items-end mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
             <div>
-              <h1 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-extrabold text-festika-navy">
+              <h1 className="font-[family-name:var(--font-space-grotesk)] text-2xl sm:text-3xl font-extrabold text-festika-navy leading-tight">
                 Manajemen Kepanitiaan
               </h1>
-              <p className="text-gray-500 mt-1">Kelola pimpinan inti dan divisi panitia</p>
+              <p className="text-gray-500 text-sm mt-1">Kelola pimpinan inti dan divisi panitia</p>
             </div>
             <button
               onClick={() => setShowAddDiv(true)}
-              className="flex items-center gap-2 bg-festika-teal hover:bg-festika-navy text-white px-4 py-2 font-bold transition-all border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36]"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-festika-teal hover:bg-festika-navy text-white px-4 py-2.5 font-bold transition-all border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36]"
             >
               <Plus size={18} />
               Tambah Divisi
@@ -266,7 +266,7 @@ export default function StaffPanel() {
         </div>
       ) : (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex justify-between items-end mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
             <div>
               <button
                 onClick={() => setSelectedDiv(null)}
@@ -274,8 +274,8 @@ export default function StaffPanel() {
               >
                 <ArrowLeft size={16} /> Kembali ke Daftar
               </button>
-              <h1 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-extrabold text-festika-navy">
-                Staf: {selectedDiv.name}
+              <h1 className="font-[family-name:var(--font-space-grotesk)] text-2xl sm:text-3xl font-extrabold text-festika-navy leading-tight">
+                Staf: <span className="text-festika-orange">{selectedDiv.name}</span>
               </h1>
             </div>
             <button
@@ -283,7 +283,7 @@ export default function StaffPanel() {
                 setShowAddStaff(true);
                 setStaffRole(""); // reset role selection
               }}
-              className={`flex items-center gap-2 px-4 py-2 font-bold transition-all border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] ${selectedDiv.isCore ? 'bg-festika-teal text-white' : 'bg-festika-orange text-white'}`}
+              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 font-bold transition-all border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] ${selectedDiv.isCore ? 'bg-festika-teal text-white' : 'bg-festika-orange text-white'}`}
             >
               <Plus size={18} />
               Tambah Anggota

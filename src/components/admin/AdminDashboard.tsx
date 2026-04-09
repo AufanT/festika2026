@@ -182,16 +182,16 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     if (!selectedComp) {
       return (
         <div className="animate-in fade-in zoom-in-95 duration-500">
-          <div className="flex justify-between items-end mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
             <div>
-              <h1 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-extrabold text-festika-navy">
+              <h1 className="font-[family-name:var(--font-space-grotesk)] text-2xl sm:text-3xl font-extrabold text-festika-navy leading-tight">
                 Manajemen Lomba
               </h1>
-              <p className="text-gray-500 mt-1">Pilih lomba untuk melihat daftar peserta</p>
+              <p className="text-gray-500 text-sm mt-1">Pilih lomba untuk melihat daftar peserta</p>
             </div>
             <button
               onClick={() => setIsAdding(true)}
-              className="flex items-center gap-2 bg-festika-orange hover:bg-festika-orange-light text-white px-4 py-2 font-bold transition-all border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36]"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-festika-orange hover:bg-festika-orange-light text-white px-4 py-2.5 font-bold transition-all border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36]"
             >
               <Plus size={18} />
               Tambah Lomba
@@ -362,7 +362,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 flex">
+        <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto no-scrollbar scroll-smooth">
           {[
             { id: "competitions", label: "Lomba", icon: Trophy, activeColor: "border-festika-orange" },
             { id: "staff", label: "Panitia", icon: Users, activeColor: "border-festika-teal" },
@@ -371,12 +371,12 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
             <button
               key={tab.id}
               onClick={() => { setActiveTab(tab.id as any); setSelectedComp(null); }}
-              className={`flex items-center gap-2 px-6 py-4 font-bold transition-all border-b-4 ${
+              className={`flex items-center gap-2 px-5 sm:px-6 py-4 font-bold transition-all border-b-4 shrink-0 whitespace-nowrap ${
                 activeTab === tab.id ? `${tab.activeColor} text-white bg-white/5` : "border-transparent text-gray-400 hover:text-white"
               }`}
             >
               <tab.icon size={18} />
-              <span>{tab.label}</span>
+              <span className="text-sm sm:text-base">{tab.label}</span>
             </button>
           ))}
         </div>

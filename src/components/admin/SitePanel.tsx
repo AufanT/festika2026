@@ -97,17 +97,17 @@ export default function SitePanel() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-black text-festika-navy uppercase tracking-tight">Pengaturan Situs</h2>
-          <p className="text-gray-500 text-sm">Kelola konten visual dan teks pada halaman utama.</p>
+          <h2 className="text-xl sm:text-2xl font-black text-festika-navy uppercase tracking-tight leading-tight">Pengaturan Situs</h2>
+          <p className="text-gray-500 text-xs sm:text-sm">Kelola konten visual dan teks pada halaman utama.</p>
         </div>
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 bg-festika-orange text-white px-6 py-3 font-bold uppercase tracking-widest text-sm border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-festika-orange text-white px-6 py-3 font-bold uppercase tracking-widest text-xs border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
         >
-          {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+          {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
           Simpan Perubahan
         </button>
       </div>
