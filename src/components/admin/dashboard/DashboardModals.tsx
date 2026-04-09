@@ -70,7 +70,7 @@ export function DeleteCompetitionModal({
                 <p className="text-red-600 text-xs leading-relaxed font-bold">PERINGATAN: Menghapus lomba akan menghapus SEMUA data pendaftar terkait secara permanen!</p>
               </div>
               <div className="flex gap-3">
-                <button onClick={() => onInputChange("") || onNextStep()} className="flex-1 py-3 border-2 border-gray-200 font-bold">Batal (Reset)</button>
+                <button onClick={() => { onInputChange(""); onNextStep(); }} className="flex-1 py-3 border-2 border-gray-200 font-bold">Batal (Reset)</button>
                 <button onClick={onConfirm} disabled={isLoading} className="flex-1 py-3 bg-red-600 text-white font-bold hover:bg-red-700 flex items-center justify-center gap-2">
                    {isLoading && <Loader2 size={16} className="animate-spin" />} Ya, Hapus!
                 </button>
