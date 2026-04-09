@@ -8,7 +8,7 @@ import { Loader2, LogIn, AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
     setError("");
 
     const result = await signIn("credentials", {
-      email,
+      username,
       password,
       redirect: false,
     });
@@ -27,7 +27,7 @@ export default function AdminLoginPage() {
     setIsLoading(false);
 
     if (result?.error) {
-      setError("Email atau password salah. Coba lagi.");
+      setError("Username atau password salah. Coba lagi.");
     } else {
       router.push("/admin");
       router.refresh();
@@ -87,17 +87,17 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block text-sm font-bold text-festika-navy mb-1.5"
               >
-                Email
+                Username
               </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@festika.com"
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Masukkan username admin"
                 required
                 className="w-full border-2 border-gray-300 focus:border-festika-teal focus:outline-none px-3 py-2.5 text-sm rounded-none transition-colors"
               />

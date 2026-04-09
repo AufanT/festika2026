@@ -37,6 +37,7 @@ model Registrant {
 // Admin yang bisa login ke dashboard
 model AdminUser {
   id        String   @id @default(cuid())
+  username  String   @unique
   email     String   @unique
   password  String   // Disimpan sebagai bcrypt hash, JANGAN plain text
   name      String

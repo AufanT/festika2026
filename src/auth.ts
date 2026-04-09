@@ -6,17 +6,12 @@ import pool from "@/lib/mysql";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        if (!credentials?.username || !credentials?.password) return null;
 
         const [rows]: any = await pool.query(
-          "SELECT * FROM admin_users WHERE email = ? LIMIT 1",
-          [credentials.email]
+          "SELECT * FROM admin_users WHERE username = ? LIMIT 1",
+          [credentials.username]
         );
 
         if (!rows || rows.length === 0) return null;
