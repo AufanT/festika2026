@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Lomba yang tersedia
+model Competition {
+  id          String       @id @default(cuid())
+  title       String
+  description String?      @db.Text
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  registrants Registrant[]
+
+  @@map("competitions")
+}
+
+// Peserta yang mendaftar ke event
+model Registrant {
+  id            String      @id @default(cuid())
+  name          String
+  email         String      @unique
+  phone         String
+  major         String      // Jurusan / prodi
+  year          Int         // Angkatan (misal: 2022)
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@map("registrants")
+}
+
+// Admin yang bisa login ke dashboard
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Disimpan sebagai bcrypt hash, JANGAN plain text
+  name      String
+  createdAt DateTime @default(now())
+
+  @@map("admin_users")
+}
+
+// Divisi Kepanitiaan
+model Division {
+  id         String   @id @default(cuid())
+  name       String
+  imageUrl   String?
+  orderIndex Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  staff      Staff[]
+
+  @@map("divisions")
+}
+
+// Anggota Staff dalam suatu divisi
+model Staff {
+  id          String   @id @default(cuid())
+  name        String
+  role        String   // Ketua, Wakil Ketua, Anggota
+  description String?  @db.Text
+  imageUrl    String?
+  divisionId  String?
+  division    Division? @relation(fields: [divisionId], references: [id], onDelete: Cascade)
+  orderIndex  Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("staff")
+}
+
+// Konfigurasi Situs (Hero, About, dll)
+model SiteSetting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("site_settings")
+}

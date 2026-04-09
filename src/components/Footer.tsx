@@ -1,0 +1,122 @@
+import Link from "next/link";
+import { Globe, MessageCircle, Briefcase, Code } from "lucide-react";
+
+const footerLinks = [
+  { href: "#about", label: "About" },
+  { href: "#competitions", label: "Competitions" },
+  { href: "#timeline", label: "Timeline" },
+  { href: "#hero", label: "Register" },
+];
+
+const socialLinks = [
+  { icon: Globe, href: "#", label: "Instagram" },
+  { icon: MessageCircle, href: "#", label: "Twitter" },
+  { icon: Briefcase, href: "#", label: "LinkedIn" },
+  { icon: Code, href: "#", label: "GitHub" },
+];
+
+const partners = ["TechCorp", "InnovateLab", "DevStudio", "CloudSys"];
+
+export default function Footer() {
+  return (
+    <footer className="bg-festika-navy text-white">
+      {/* Orange top border */}
+      <div className="h-1 bg-festika-orange" />
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {/* Branding */}
+          <div>
+            <h2 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold">
+              FESTIKA<span className="text-festika-orange">.</span>
+            </h2>
+            <p className="text-gray-400 mt-4 text-sm leading-relaxed max-w-xs">
+              Unleashing Innovation through Digital Creativity. Join us in
+              shaping the future of technology and design at the premier IT
+              festival of 2026.
+            </p>
+          </div>
+
+          {/* Links */}
+          <div>
+            <h3 className="text-festika-orange font-bold uppercase tracking-wider text-sm">
+              Links
+            </h3>
+            <ul className="mt-4 space-y-3">
+              {footerLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors text-sm"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="text-festika-orange font-bold uppercase tracking-wider text-sm">
+              Contact
+            </h3>
+            <div className="mt-4 space-y-3 text-sm text-gray-300">
+              <p>info@festika2026.tech</p>
+              <p>+62 123 4567 890</p>
+            </div>
+            <div className="flex gap-3 mt-5">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  className="w-9 h-9 border border-gray-600 rounded-md flex items-center justify-center text-gray-400 hover:text-white hover:border-festika-orange transition-colors"
+                  aria-label={social.label}
+                >
+                  <social.icon size={16} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Partners Section */}
+      <div className="border-t border-gray-700/50">
+        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+          <p className="text-center text-xs uppercase tracking-[0.2em] text-gray-500 mb-6">
+            In Partnership With
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14">
+            {partners.map((partner) => (
+              <div key={partner} className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded bg-gray-600" />
+                <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold text-gray-400">
+                  {partner}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Copyright */}
+      <div className="border-t border-gray-700/50">
+        <div className="mx-auto max-w-7xl px-6 py-5 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-gray-500">
+            &copy; 2026 FESTIKA. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="#" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">
+              Terms of Service
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
