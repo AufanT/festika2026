@@ -118,9 +118,9 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   const exportCSV = () => {
     if (registrants.length === 0 || !selectedComp) return;
-    const headers = ["ID", "Nama", "Email", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
+    const headers = ["ID", "Nama", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
     const rows = registrants.map((r, i) => [
-      i + 1, r.name, r.email, r.phone, r.major, r.year,
+      i + 1, r.name, r.phone, r.major, r.year,
       new Date(r.createdAt).toLocaleString("id-ID")
     ]);
     const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
@@ -136,7 +136,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   const filtered = useMemo(() => registrants.filter(r => 
     r.name.toLowerCase().includes(search.toLowerCase()) || 
-    r.email.toLowerCase().includes(search.toLowerCase()) ||
     r.major.toLowerCase().includes(search.toLowerCase())
   ), [registrants, search]);
 
