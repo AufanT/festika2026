@@ -67,6 +67,7 @@ export default function RegistrantTable({
               <tr className="bg-festika-navy text-white text-left font-bold">
                 <th className="p-4">#</th>
                 <th className="p-4">Nama</th>
+                <th className="p-4">Email</th>
                 <th className="p-4">WhatsApp</th>
                 <th className="p-4">Jurusan</th>
                 <th className="p-4">Angkatan</th>
@@ -79,6 +80,7 @@ export default function RegistrantTable({
                     {pagination ? (pagination.currentPage - 1) * 50 + (i + 1) : i + 1}
                   </td>
                   <td className="p-4 font-bold text-festika-navy">{r.name}</td>
+                  <td className="p-4 text-gray-600 font-mono text-xs">{r.email}</td>
                   <td className="p-4 text-gray-600 font-mono text-xs">{r.phone}</td>
                   <td className="p-4">
                     <span className="bg-festika-teal/10 text-festika-teal px-2 py-0.5 text-[10px] font-bold">

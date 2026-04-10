@@ -118,9 +118,9 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   const exportCSV = () => {
     if (registrants.length === 0 || !selectedComp) return;
-    const headers = ["ID", "Nama", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
+    const headers = ["ID", "Nama", "Email", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
     const rows = registrants.map((r, i) => [
-      i + 1, r.name, r.phone, r.major, r.year,
+      i + 1, r.name, r.email, r.phone, r.major, r.year,
       new Date(r.createdAt).toLocaleString("id-ID")
     ]);
     const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
@@ -136,6 +136,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   const filtered = useMemo(() => registrants.filter(r => 
     r.name.toLowerCase().includes(search.toLowerCase()) || 
+    r.email.toLowerCase().includes(search.toLowerCase()) ||
     r.major.toLowerCase().includes(search.toLowerCase())
   ), [registrants, search]);
 
@@ -196,10 +197,11 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-festika-navy sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <span className="text-white font-[family-name:var(--font-space-grotesk)] font-black text-2xl tracking-tighter">
-              FESTIKA<span className="text-festika-orange">.</span>
-            </span>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-festika-orange flex items-center justify-center">
+              <Image src="/Logo_Festika-04.webp" alt="Logo" width={32} height={32} />
+            </div>
+            <span className="text-white font-bold text-lg">FESTIKA ADMIN</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden sm:block text-right text-xs text-white">
