@@ -206,7 +206,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           <div className="flex items-center gap-4">
             <div className="hidden sm:block text-right text-xs text-white">
               <p className="font-bold">{user?.name || "Admin"}</p>
-              <p className="text-gray-400">{user?.email}</p>
             </div>
             <button onClick={() => signOut()} className="bg-white/10 hover:bg-red-600 text-white px-3 py-1.5 flex items-center gap-2 text-sm transition-colors border border-white/20">
               <LogOut size={16} /> Logout
