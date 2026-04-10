@@ -49,7 +49,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   // Security Layer 2
   useEffect(() => {
-    if (typeof window !== "undefined" && (!user || !user.email)) {
+    if (typeof window !== "undefined" && (!user || !user.name)) {
       window.location.href = "/admin/login";
     }
   }, [user]);
