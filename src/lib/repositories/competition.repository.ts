@@ -7,7 +7,11 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          "SELECT id, title, description, createdAt, updatedAt FROM competitions ORDER BY createdAt ASC"
+          `SELECT c.id, c.title, c.description, c.createdAt, c.updatedAt, COUNT(r.id) as registrant_count 
+           FROM competitions c 
+           LEFT JOIN registrants r ON c.id = r.competitionId 
+           GROUP BY c.id 
+           ORDER BY c.createdAt ASC`
         );
         return rows;
       } catch (err: any) {

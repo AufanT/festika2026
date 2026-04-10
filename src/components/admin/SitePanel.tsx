@@ -17,6 +17,7 @@ export default function SitePanel() {
   });
 
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     fetchSettings();
@@ -39,6 +40,7 @@ export default function SitePanel() {
       console.error("Gagal mengambil setting:", error);
     } finally {
       setLoading(false);
+      setIsDirty(false);
     }
   };
 
@@ -56,6 +58,8 @@ export default function SitePanel() {
       if (res.ok) {
         const data = await res.json();
         setSettings(prev => ({ ...prev, [key]: data.url }));
+        setIsDirty(true);
+        showNotification("success", "Terunggah", "Foto berhasil diunggah. Jangan lupa klik Simpan!");
       } else {
         showNotification("error", "Gagal", "Gagal mengunggah gambar");
       }
@@ -77,6 +81,7 @@ export default function SitePanel() {
 
       if (res.ok) {
         showNotification("success", "Berhasil", "Konfigurasi berhasil disimpan!");
+        setIsDirty(false);
       } else {
         showNotification("error", "Gagal", "Gagal menyimpan konfigurasi");
       }
@@ -86,6 +91,8 @@ export default function SitePanel() {
       setSaving(false);
     }
   };
+
+  const isUploadingAny = Object.values(uploading).some(val => val);
 
   if (loading) {
     return (
@@ -102,14 +109,24 @@ export default function SitePanel() {
           <h2 className="text-xl sm:text-2xl font-black text-festika-navy uppercase tracking-tight leading-tight">Pengaturan Situs</h2>
           <p className="text-gray-500 text-xs sm:text-sm">Kelola konten visual dan teks pada halaman utama.</p>
         </div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 bg-festika-orange text-white px-6 py-3 font-bold uppercase tracking-widest text-xs border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
-        >
-          {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-          Simpan Perubahan
-        </button>
+        <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
+          {isDirty && !isUploadingAny && !saving && (
+            <span className="text-[10px] font-bold text-festika-orange uppercase bg-festika-orange/10 px-2 py-0.5 border border-festika-orange animate-pulse">
+              Ada perubahan yang belum disimpan!
+            </span>
+          )}
+          <button
+            onClick={handleSave}
+            disabled={saving || isUploadingAny}
+            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest text-xs border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] transition-all
+              ${(saving || isUploadingAny) 
+                ? "bg-gray-400 cursor-not-allowed shadow-none translate-x-1 translate-y-1" 
+                : "bg-festika-orange text-white hover:shadow-none hover:translate-x-1 hover:translate-y-1"}`}
+          >
+            {saving ? <Loader2 size={16} className="animate-spin" /> : isUploadingAny ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+            {isUploadingAny ? "Sedang Mengunggah..." : "Simpan Perubahan"}
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -184,7 +201,10 @@ export default function SitePanel() {
           
           <textarea
             value={settings.about_description}
-            onChange={(e) => setSettings(prev => ({ ...prev, about_description: e.target.value }))}
+            onChange={(e) => {
+              setSettings(prev => ({ ...prev, about_description: e.target.value }));
+              setIsDirty(true);
+            }}
             placeholder="Tuliskan deskripsi mengenai Festika di sini..."
             rows={6}
             className="w-full p-4 border-2 border-gray-200 focus:border-festika-teal focus:outline-none text-sm leading-relaxed"

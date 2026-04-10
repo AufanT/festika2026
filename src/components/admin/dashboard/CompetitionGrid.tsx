@@ -1,4 +1,4 @@
-import { Plus, Trophy, Trash2, ArrowLeft } from "lucide-react";
+import { Plus, Trophy, Trash2, ArrowLeft, Users } from "lucide-react";
 import { Competition } from "@/types/admin";
 
 type CompetitionGridProps = {
@@ -57,8 +57,14 @@ export default function CompetitionGrid({
             <p className="text-gray-600 text-xs flex-1 line-clamp-2">
               {comp.description || "Tidak ada rincian."}
             </p>
-            <div className="mt-4 pt-4 border-t border-gray-100 w-full flex justify-between items-center text-festika-teal text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity text-right">
-              <span>Kelola Peserta</span> <ArrowLeft className="rotate-180" size={16} />
+            <div className="mt-4 pt-4 border-t border-gray-100 w-full flex justify-between items-center group-hover:border-festika-teal/30 transition-colors">
+              <div className="flex items-center gap-1.5 text-festika-navy font-bold text-xs bg-gray-100 px-2 py-1 rounded-sm border border-gray-200">
+                <Users size={14} className="text-festika-teal" />
+                <span>{comp.registrant_count || 0} Pendaftar</span>
+              </div>
+              <div className="flex items-center gap-1 text-festika-teal text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                <span>Detail</span> <ArrowLeft className="rotate-180" size={14} />
+              </div>
             </div>
           </div>
         ))}

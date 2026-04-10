@@ -2,6 +2,7 @@ export type Competition = {
   id: string;
   title: string;
   description: string;
+  registrant_count: number;
 };
 
 export type Registrant = {
