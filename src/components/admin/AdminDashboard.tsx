@@ -197,11 +197,10 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-festika-navy sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-festika-orange flex items-center justify-center">
-              <Image src="/Logo_Festika-04.webp" alt="Logo" width={32} height={32} />
-            </div>
-            <span className="text-white font-bold text-lg">FESTIKA ADMIN</span>
+          <div className="flex items-center gap-1">
+            <span className="text-white font-[family-name:var(--font-space-grotesk)] font-black text-2xl tracking-tighter">
+              FESTIKA<span className="text-festika-orange">.</span>
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden sm:block text-right text-xs text-white">
