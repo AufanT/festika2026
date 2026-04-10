@@ -1,30 +1,55 @@
 import pool from "@/lib/mysql";
 
 export class RegistrantRepository {
-  static async findAll(competitionId?: string, limit: number = 50, offset: number = 0) {
-    console.log(`[RegistrantRepository] Mencari pendaftar: competitionId=${competitionId || 'ALL'}, limit=${limit}, offset=${offset}`);
+  static async findAll(competitionId?: string, limit: number = 50, offset: number = 0, search: string = "") {
+    let query = "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants";
+    const params: any[] = [];
+    const conditions: string[] = [];
+
     if (competitionId) {
-      const [rows]: any = await pool.query(
-        "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants WHERE competitionId = ? ORDER BY createdAt DESC LIMIT ? OFFSET ?",
-        [competitionId, limit, offset]
-      );
-      return rows;
+      conditions.push("competitionId = ?");
+      params.push(competitionId);
     }
 
+    if (search) {
+      conditions.push("(name LIKE ? OR email LIKE ? OR major LIKE ?)");
+      const searchVal = `%${search}%`;
+      params.push(searchVal, searchVal, searchVal);
+    }
+
+    if (conditions.length > 0) {
+      query += " WHERE " + conditions.join(" AND ");
+    }
+
+    query += " ORDER BY createdAt DESC LIMIT ? OFFSET ?";
+    params.push(limit, offset);
+
+    const [rows]: any = await pool.query(query, params);
+    return rows;
+  }
+
+  static async findAllForExport(competitionId: string) {
     const [rows]: any = await pool.query(
-      "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants ORDER BY createdAt DESC LIMIT ? OFFSET ?",
-      [limit, offset]
+      "SELECT id, name, email, phone, major, year, createdAt, competitionId FROM registrants WHERE competitionId = ? ORDER BY createdAt DESC",
+      [competitionId]
     );
     return rows;
   }
 
-  static async countByCompetitionId(competitionId: string) {
-    const [rows]: any = await pool.query(
-      "SELECT COUNT(*) as total FROM registrants WHERE competitionId = ?",
-      [competitionId]
-    );
+  static async countByCompetitionId(competitionId: string, search: string = "") {
+    let query = "SELECT COUNT(*) as total FROM registrants WHERE competitionId = ?";
+    const params: any[] = [competitionId];
+
+    if (search) {
+      query += " AND (name LIKE ? OR email LIKE ? OR major LIKE ?)";
+      const searchVal = `%${search}%`;
+      params.push(searchVal, searchVal, searchVal);
+    }
+
+    const [rows]: any = await pool.query(query, params);
     return rows[0].total;
   }
+
 
   static async findByEmail(email: string) {
     const [rows]: any = await pool.query(

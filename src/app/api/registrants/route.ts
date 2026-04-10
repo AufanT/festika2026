@@ -13,10 +13,18 @@ export async function GET(req: NextRequest) {
 
     const searchParams = req.nextUrl.searchParams;
     const competitionId = searchParams.get("competitionId") || undefined;
+    const search = searchParams.get("search") || "";
+    const isExport = searchParams.get("export") === "true";
+
+    if (isExport && competitionId) {
+      const data = await RegistrantService.getRegistrantsForExport(competitionId);
+      return ApiResponse.success({ data });
+    }
+
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "50");
 
-    const result = await RegistrantService.getAllRegistrants(competitionId, page, limit);
+    const result = await RegistrantService.getAllRegistrants(competitionId, page, limit, search);
 
     return ApiResponse.success(result);
   } catch (error: any) {

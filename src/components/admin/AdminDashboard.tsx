@@ -26,7 +26,16 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   const [pagination, setPagination] = useState({ total: 0, totalPages: 0, page: 1, topM: "-", topY: "-" });
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   // Modals state
   const [isAdding, setIsAdding] = useState(false);
@@ -40,7 +49,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   // Security Layer 2
   useEffect(() => {
-    if (!user || !user.email) {
+    if (typeof window !== "undefined" && (!user || !user.email)) {
       window.location.href = "/admin/login";
     }
   }, [user]);
@@ -53,10 +62,10 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     } catch { /* ignore */ }
   }, []);
 
-  const fetchRegistrants = useCallback(async (compId: string, pageNum: number = 1) => {
+  const fetchRegistrants = useCallback(async (compId: string, pageNum: number = 1, searchQuery: string = "") => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/registrants?competitionId=${compId}&page=${pageNum}&limit=50`);
+      const res = await fetch(`/api/registrants?competitionId=${compId}&page=${pageNum}&limit=50&search=${searchQuery}`);
       const json = await res.json();
       if (json.success) {
         setRegistrants(json.data.data || []);
@@ -79,8 +88,8 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   }, [fetchCompetitions]);
 
   useEffect(() => {
-    if (selectedComp) fetchRegistrants(selectedComp.id, pagination.page);
-  }, [selectedComp, fetchRegistrants, pagination.page]);
+    if (selectedComp) fetchRegistrants(selectedComp.id, pagination.page, debouncedSearch);
+  }, [selectedComp, fetchRegistrants, pagination.page, debouncedSearch]);
 
   const handleCreateCompetition = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,29 +125,38 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     } finally { setIsDeleting(false); }
   };
 
-  const exportCSV = () => {
-    if (registrants.length === 0 || !selectedComp) return;
-    const headers = ["ID", "Nama", "Email", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
-    const rows = registrants.map((r, i) => [
-      i + 1, r.name, r.email, r.phone, r.major, r.year,
-      new Date(r.createdAt).toLocaleString("id-ID")
-    ]);
-    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `pendaftar-${selectedComp.title}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const exportCSV = async () => {
+    if (!selectedComp) return;
+    setIsLoading(true);
+    showNotification("info", "Mengekspor", "Sedang mengunduh data pendaftar...");
+    try {
+      const res = await fetch(`/api/registrants?competitionId=${selectedComp.id}&export=true`);
+      const json = await res.json();
+      if (!json.success) throw new Error("Gagal mengambil data");
+      
+      const allData: Registrant[] = json.data.data;
+      const headers = ["ID", "Nama", "Email", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
+      const rows = allData.map((r, i) => [
+        i + 1, r.name, r.email, r.phone, r.major, r.year,
+        new Date(r.createdAt).toLocaleString("id-ID")
+      ]);
+      const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `pendaftar-${selectedComp.title}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showNotification("success", "Selesai", "Data berhasil diekspor.");
+    } catch {
+      showNotification("error", "Gagal", "Terjadi kesalahan saat mengekspor data.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const filtered = useMemo(() => registrants.filter(r => 
-    r.name.toLowerCase().includes(search.toLowerCase()) || 
-    r.email.toLowerCase().includes(search.toLowerCase()) ||
-    r.major.toLowerCase().includes(search.toLowerCase())
-  ), [registrants, search]);
 
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
@@ -177,7 +195,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
         <RegistrantTable 
           registrants={registrants}
-          filteredRegistrants={filtered}
+          filteredRegistrants={registrants}
           search={search}
           onSearchChange={setSearch}
           onRefresh={() => fetchRegistrants(selectedComp.id, pagination.page)}
