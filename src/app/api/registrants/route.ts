@@ -1,16 +1,13 @@
 import { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { auth } from "@/auth";
 import { RegistrantService } from "@/lib/services/registrant.service";
 import { ApiResponse } from "@/lib/api-response";
 
 export async function GET(req: NextRequest) {
   try {
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-    });
+    const session = await auth();
 
-    if (!token) {
+    if (!session) {
       return ApiResponse.error("Unauthorized", 401);
     }
 
