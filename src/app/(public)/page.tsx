@@ -75,14 +75,14 @@ export default async function Home() {
                 {/* Logo + Title */}
                 <div className="flex items-center gap-4 mt-8 justify-center lg:justify-start">
                   {/* Logo Icon */}
-                  <div className="w-28 h-28 lg:w-36 lg:h-36 xl:w-44 xl:h-44 bg-festika-orange rounded-2xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
+                  <div className="w-28 h-28 lg:w-36 lg:h-36 xl:w-44 xl:h-44 bg-festika-orange rounded-2xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0 p-4 lg:p-5 xl:p-6">
                     <Image
                       src="/Logo_Festika-04.webp"
                       alt="Festika Logo"
                       width={176}
                       height={176}
                       priority
-                      className="object-contain w-full h-full scale-[1.4]"
+                      className="object-contain w-full h-full"
                     />
                   </div>
                   <div>
