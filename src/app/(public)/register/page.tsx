@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import RegisterContainer from "./RegisterContainer";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 
+// Selalu render fresh — daftar lomba harus real-time dari database
+export const dynamic = "force-dynamic";
+
 export default async function RegisterPage() {
   // Fetch competitions on the server
   const competitions = await CompetitionRepository.findAll();

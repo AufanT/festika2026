@@ -3,16 +3,20 @@
 import StaffPanel from "./StaffPanel";
 import SitePanel from "./SitePanel";
 import { useNotification } from "@/context/NotificationContext";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { signOut } from "next-auth/react";
-import Image from "next/image";
 import { LogOut, Users, Trophy, ArrowLeft, Layout } from "lucide-react";
 
 // Sub-components
 import StatsOverview from "./dashboard/StatsOverview";
 import CompetitionGrid from "./dashboard/CompetitionGrid";
 import RegistrantTable from "./dashboard/RegistrantTable";
-import { AddCompetitionModal, DeleteCompetitionModal } from "./dashboard/DashboardModals";
+import {
+  AddCompetitionModal,
+  DeleteCompetitionModal,
+  DeleteMultipleModal,
+  DeleteMultipleTarget,
+} from "./dashboard/DashboardModals";
 
 // Types
 import { Competition, Registrant, User } from "@/types/admin";
@@ -31,21 +35,26 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   // Debounce search
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
+    const timer = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Modals state
+  // ── Modal: Tambah Lomba ──────────────────────────────────────────────────
   const [isAdding, setIsAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [addLoading, setAddLoading] = useState(false);
+
+  // ── Modal: Hapus satu lomba (legacy — tidak dipakai dari UI utama, tetap tersedia) ──
   const [deletingComp, setDeletingComp] = useState<Competition | null>(null);
   const [deleteStep, setDeleteStep] = useState(1);
   const [deleteInput, setDeleteInput] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // ── Modal: Hapus banyak lomba ────────────────────────────────────────────
+  const [bulkDeleteTargets, setBulkDeleteTargets] = useState<DeleteMultipleTarget[]>([]);
+  const [isBulkDeleteOpen, setIsBulkDeleteOpen] = useState(false);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   // Security Layer 2
   useEffect(() => {
@@ -54,6 +63,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     }
   }, [user]);
 
+  // ── Data Fetching ────────────────────────────────────────────────────────
   const fetchCompetitions = useCallback(async () => {
     try {
       const res = await fetch("/api/competitions");
@@ -74,7 +84,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           totalPages: json.data.totalPages,
           page: json.data.page,
           topM: json.data.topM,
-          topY: json.data.topY
+          topY: json.data.topY,
         });
       }
       setLastUpdated(new Date());
@@ -83,13 +93,12 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     }
   }, []);
 
-  useEffect(() => {
-    fetchCompetitions();
-  }, [fetchCompetitions]);
-
+  useEffect(() => { fetchCompetitions(); }, [fetchCompetitions]);
   useEffect(() => {
     if (selectedComp) fetchRegistrants(selectedComp.id, pagination.page, debouncedSearch);
   }, [selectedComp, fetchRegistrants, pagination.page, debouncedSearch]);
+
+  // ── Handlers ─────────────────────────────────────────────────────────────
 
   const handleCreateCompetition = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +107,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       const res = await fetch("/api/competitions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newTitle, description: newDesc })
+        body: JSON.stringify({ title: newTitle, description: newDesc }),
       });
       if (res.ok) {
         setNewTitle(""); setNewDesc(""); setIsAdding(false);
@@ -110,6 +119,53 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     } finally { setAddLoading(false); }
   };
 
+  /** Dipanggil oleh CompetitionGrid ketika user menekan tombol hapus di delete-mode */
+  const handleOpenBulkDelete = (selectedIds: string[]) => {
+    const targets: DeleteMultipleTarget[] = competitions
+      .filter(c => selectedIds.includes(c.id))
+      .map(c => ({
+        id: c.id,
+        label: c.title,
+        subCount: c.registrant_count ?? 0,
+        subLabel: "pendaftar",
+      }));
+    setBulkDeleteTargets(targets);
+    setIsBulkDeleteOpen(true);
+  };
+
+  /**
+   * Eksekusi hapus banyak lomba secara paralel.
+   * Setiap request dikirim ke endpoint yang sudah memiliki auth-guard.
+   * Bila ada yang gagal, bulk selesai namun notifikasi menampilkan jumlah yang berhasil.
+   */
+  const handleBulkDeleteCompetitions = async () => {
+    if (bulkDeleteTargets.length === 0) return;
+    setIsBulkDeleting(true);
+    try {
+      const results = await Promise.allSettled(
+        bulkDeleteTargets.map(t =>
+          fetch(`/api/competitions?id=${t.id}`, { method: "DELETE" })
+        )
+      );
+      const successCount = results.filter(r => r.status === "fulfilled").length;
+      const failCount = results.length - successCount;
+
+      setIsBulkDeleteOpen(false);
+      setBulkDeleteTargets([]);
+      setSelectedComp(null);
+      await fetchCompetitions();
+
+      if (failCount === 0) {
+        showNotification("success", "Berhasil Dihapus", `${successCount} lomba telah dihapus permanen.`);
+      } else {
+        showNotification("error", "Sebagian Gagal", `${successCount} berhasil, ${failCount} gagal dihapus.`);
+      }
+    } catch {
+      showNotification("error", "Error", "Terjadi kesalahan tak terduga.");
+    } finally { setIsBulkDeleting(false); }
+  };
+
+  /** Hapus satu lomba (digunakan bila single-delete modal dipanggil — legacy flow) */
   const handleDeleteCompetition = async () => {
     if (!deletingComp) return;
     setIsDeleting(true);
@@ -133,12 +189,12 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       const res = await fetch(`/api/registrants?competitionId=${selectedComp.id}&export=true`);
       const json = await res.json();
       if (!json.success) throw new Error("Gagal mengambil data");
-      
+
       const allData: Registrant[] = json.data.data;
       const headers = ["ID", "Nama", "Email", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
       const rows = allData.map((r, i) => [
         i + 1, r.name, r.email, r.phone, r.major, r.year,
-        new Date(r.createdAt).toLocaleString("id-ID")
+        new Date(r.createdAt).toLocaleString("id-ID"),
       ]);
       const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -152,25 +208,22 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       showNotification("success", "Selesai", "Data berhasil diekspor.");
     } catch {
       showNotification("error", "Gagal", "Terjadi kesalahan saat mengekspor data.");
-    } finally {
-      setIsLoading(false);
-    }
+    } finally { setIsLoading(false); }
   };
 
+  // ── Render ───────────────────────────────────────────────────────────────
 
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
     if (activeTab === "site") return <SitePanel />;
-    
+
     if (!selectedComp) {
       return (
-        <CompetitionGrid 
+        <CompetitionGrid
           competitions={competitions}
           onSelect={setSelectedComp}
           onAddRequest={() => setIsAdding(true)}
-          onDeleteRequest={(comp) => {
-            setDeletingComp(comp); setDeleteStep(1); setDeleteInput("");
-          }}
+          onDeleteMode={handleOpenBulkDelete}
         />
       );
     }
@@ -193,7 +246,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
         <StatsOverview totalRegistrants={pagination.total} topMajor={pagination.topM} topYear={pagination.topY} />
 
-        <RegistrantTable 
+        <RegistrantTable
           registrants={registrants}
           filteredRegistrants={registrants}
           search={search}
@@ -204,7 +257,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           pagination={{
             currentPage: pagination.page,
             totalPages: pagination.totalPages,
-            onPageChange: (p) => setPagination(prev => ({ ...prev, page: p }))
+            onPageChange: (p) => setPagination(prev => ({ ...prev, page: p })),
           }}
         />
       </div>
@@ -254,17 +307,31 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
         {renderDashboardContent()}
       </main>
 
-      <AddCompetitionModal 
+      {/* ── Modals ── */}
+      <AddCompetitionModal
         isOpen={isAdding} onClose={() => setIsAdding(false)} onSubmit={handleCreateCompetition}
         title={newTitle} onTitleChange={setNewTitle} description={newDesc} onDescriptionChange={setNewDesc}
         isLoading={addLoading}
       />
 
-      <DeleteCompetitionModal 
+      {/* Single-delete modal — legacy, tetap tersedia */}
+      <DeleteCompetitionModal
         competition={deletingComp} step={deleteStep} input={deleteInput}
         onInputChange={setDeleteInput} onNextStep={() => setDeleteStep(2)}
         onConfirm={handleDeleteCompetition} onClose={() => setDeletingComp(null)}
         isLoading={isDeleting}
+      />
+
+      {/* Bulk delete modal untuk Lomba */}
+      <DeleteMultipleModal
+        isOpen={isBulkDeleteOpen}
+        title="Hapus Lomba Terpilih"
+        entityLabel="LOMBA"
+        targets={bulkDeleteTargets}
+        cascadeWarning="Seluruh data pendaftar yang terdaftar pada lomba-lomba ini akan ikut terhapus secara permanen dari database. Tindakan ini tidak dapat dibatalkan."
+        onConfirm={handleBulkDeleteCompetitions}
+        onClose={() => { setIsBulkDeleteOpen(false); setBulkDeleteTargets([]); }}
+        isLoading={isBulkDeleting}
       />
     </div>
   );

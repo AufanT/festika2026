@@ -21,4 +21,9 @@ export class DivisionService {
 
     return await DivisionRepository.create(newDiv);
   }
+
+  static async deleteDivision(id: string) {
+    if (!id) throw new Error("ID divisi diperlukan");
+    return await DivisionRepository.delete(id);
+  }
 }

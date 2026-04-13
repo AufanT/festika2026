@@ -30,4 +30,8 @@ export class DivisionRepository {
     );
     return data;
   }
+
+  static async delete(id: string) {
+    await pool.query("DELETE FROM divisions WHERE id = ?", [id]);
+  }
 }

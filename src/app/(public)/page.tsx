@@ -12,6 +12,11 @@ import { CompetitionRepository } from "@/lib/repositories/competition.repository
 import { SettingRepository } from "@/lib/repositories/setting.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 
+// Paksa halaman ini selalu di-render fresh dari database per request.
+// Tanpa ini, Next.js akan meng-cache halaman di deployment dan perubahan data
+// (tambah/hapus lomba, update settings) tidak akan langsung terlihat.
+export const dynamic = "force-dynamic";
+
 /* ── Data ─────────────────────────────────────────── */
 
 const milestones = [
