@@ -12,11 +12,11 @@ import { CompetitionRepository } from "@/lib/repositories/competition.repository
 import { SettingRepository } from "@/lib/repositories/setting.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 
-// ISR: Cache halaman selama 60 detik.
-// Konten hero (settings, competitions) sangat jarang berubah.
-// Dengan ini, ratusan user yang mengakses bersamaan tetap hanya
-// memicu 1 DB query per menit, bukan 1 query per user.
-export const revalidate = 60;
+// force-dynamic: Next.js tidak melakukan pre-render saat build.
+// Halaman di-render saat ada request nyata (SSR), bukan di build time.
+// Ini menghindari kebutuhan koneksi DB saat proses build di Hostinger,
+// sekaligus memastikan data selalu fresh.
+export const dynamic = "force-dynamic";
 
 /* ── Data ─────────────────────────────────────────── */
 
