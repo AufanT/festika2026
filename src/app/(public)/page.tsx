@@ -12,10 +12,11 @@ import { CompetitionRepository } from "@/lib/repositories/competition.repository
 import { SettingRepository } from "@/lib/repositories/setting.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 
-// Paksa halaman ini selalu di-render fresh dari database per request.
-// Tanpa ini, Next.js akan meng-cache halaman di deployment dan perubahan data
-// (tambah/hapus lomba, update settings) tidak akan langsung terlihat.
-export const dynamic = "force-dynamic";
+// ISR: Cache halaman selama 60 detik.
+// Konten hero (settings, competitions) sangat jarang berubah.
+// Dengan ini, ratusan user yang mengakses bersamaan tetap hanya
+// memicu 1 DB query per menit, bukan 1 query per user.
+export const revalidate = 60;
 
 /* ── Data ─────────────────────────────────────────── */
 

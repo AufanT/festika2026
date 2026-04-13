@@ -2,8 +2,11 @@ import { Suspense } from "react";
 import RegisterContainer from "./RegisterContainer";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 
-// Selalu render fresh — daftar lomba harus real-time dari database
-export const dynamic = "force-dynamic";
+// ISR: Halaman di-cache dan diperbarui di background setiap 30 detik.
+// Jauh lebih efisien dari force-dynamic — saat trafik tinggi, tetap
+// hanya 1 DB query per 30 detik meski ada ratusan user sekaligus.
+// Data lomba jarang berubah, jadi 30 detik lag sangat bisa diterima.
+export const revalidate = 30;
 
 export default async function RegisterPage() {
   // Fetch competitions on the server
