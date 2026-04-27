@@ -39,6 +39,14 @@ export const staffSchema = z.object({
   orderIndex: z.number().int().optional().default(0),
 });
 
+export const sponsorSchema = z.object({
+  name: z.string().min(2, "Nama sponsor minimal 2 karakter").max(100),
+  imageUrl: z.string().url("Format URL logo tidak valid").optional().nullable(),
+  link: z.string().url("Format URL link sponsor tidak valid").optional().nullable().or(z.literal("")),
+  tier: z.string().optional().nullable(),
+});
+
 export type CompetitionFormData = z.infer<typeof competitionSchema>;
 export type DivisionFormData = z.infer<typeof divisionSchema>;
 export type StaffFormData = z.infer<typeof staffSchema>;
+export type SponsorFormData = z.infer<typeof sponsorSchema>;

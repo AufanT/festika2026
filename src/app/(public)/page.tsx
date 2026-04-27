@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 import { SettingRepository } from "@/lib/repositories/setting.repository";
 import CompetitionSection from "@/components/CompetitionSection";
+import SponsorSection from "@/components/SponsorSection";
+import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
 
 // force-dynamic: Next.js tidak melakukan pre-render saat build.
 // Halaman di-render saat ada request nyata (SSR), bukan di build time.
@@ -52,6 +54,7 @@ const milestones = [
 export default async function Home() {
   const competitions = await CompetitionRepository.findAll();
   const settings = await SettingRepository.findAll();
+  const sponsors = await SponsorRepository.findAll();
 
   const heroImage = settings.hero_image || null;
   const aboutImage = settings.about_image || null;
@@ -132,29 +135,45 @@ export default async function Home() {
 
               {/* Right - Photo Frame */}
               <div className="flex-1 flex justify-center lg:justify-end">
-                <div className="relative">
-                  {/* Arch behind photo */}
-                  <div className="absolute -top-8 -right-4 w-28 h-40 bg-festika-teal rounded-t-full z-0 hidden lg:block" />
+                <div className="relative w-[280px] sm:w-[340px] lg:w-[400px]" style={{ height: "480px" }}>
 
-                  {/* Photo with teal frame */}
-                  <div className="relative border-[3px] border-festika-teal z-10">
-                    <div className="w-[280px] h-[340px] sm:w-[340px] sm:h-[400px] lg:w-[380px] lg:h-[440px] bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 flex items-center justify-center relative overflow-hidden">
+                  {/* Dot grid decoration */}
+                  <div className="absolute -top-6 -right-6 w-28 h-28 z-0" style={{
+                    backgroundImage: "radial-gradient(circle, #0F2A36 1.5px, transparent 1.5px)",
+                    backgroundSize: "10px 10px",
+                    opacity: 0.2,
+                  }} />
+
+                  {/* Rotated background card */}
+                  <div className="absolute inset-0 bg-festika-orange rounded-2xl z-0" style={{ transform: "rotate(5deg) translate(10px, 8px)", opacity: 0.7 }} />
+                  <div className="absolute inset-0 bg-festika-teal rounded-2xl z-0" style={{ transform: "rotate(2deg) translate(5px, 4px)", opacity: 0.85 }} />
+
+                  {/* Main photo card */}
+                  <div className="absolute inset-0 rounded-2xl overflow-hidden z-10 shadow-2xl border-2 border-white/20">
+                    <div className="w-full h-full bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 flex items-center justify-center relative">
                       {heroImage ? (
                         <Image src={heroImage} alt="Hero Festika" fill className="object-cover" />
                       ) : (
-                        <span className="text-gray-500 text-sm font-medium">
-                          Photo Placeholder
-                        </span>
+                        <span className="text-gray-500 text-sm font-medium">Photo Placeholder</span>
                       )}
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-festika-navy/40 via-transparent to-transparent pointer-events-none" />
                     </div>
                   </div>
 
-                  {/* 26 Badge */}
-                  <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-festika-orange flex items-center justify-center z-20 shadow-lg">
-                    <span className="font-[family-name:var(--font-space-grotesk)] text-white text-2xl font-bold">
-                      26
-                    </span>
+                  {/* Floating year badge */}
+                  <div className="absolute -bottom-4 -left-6 z-20 bg-festika-orange rounded-xl px-4 py-2 shadow-[4px_4px_0_0_#0F2A36] border-2 border-festika-navy flex items-center gap-1">
+                    <span className="font-[family-name:var(--font-space-grotesk)] text-white text-xl font-extrabold leading-none">2026</span>
                   </div>
+
+                  {/* Small floating accent circle */}
+                  <div className="absolute -top-3 left-8 z-20 w-8 h-8 bg-white rounded-full border-2 border-festika-teal shadow-md flex items-center justify-center">
+                    <div className="w-3 h-3 rounded-full bg-festika-orange" />
+                  </div>
+
+                  {/* Bottom-right decorative line */}
+                  <div className="absolute -bottom-8 right-4 w-16 h-[3px] bg-festika-teal z-0" />
+                  <div className="absolute -bottom-12 right-4 w-10 h-[3px] bg-festika-orange z-0" />
                 </div>
               </div>
             </div>
@@ -176,29 +195,45 @@ export default async function Home() {
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
               {/* Left - Photo Frame */}
               <div className="flex-1 flex justify-center lg:justify-start">
-                <div className="relative">
-                  {/* Arch behind photo */}
-                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-32 bg-festika-teal rounded-t-full z-0" />
+                <div className="relative w-[280px] sm:w-[320px] lg:w-[380px]" style={{ height: "460px" }}>
 
-                  {/* Photo with teal frame */}
-                  <div className="relative border-[3px] border-festika-teal z-10">
-                    <div className="w-[280px] h-[340px] sm:w-[320px] sm:h-[380px] lg:w-[360px] lg:h-[420px] bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 flex items-center justify-center relative overflow-hidden">
+                  {/* Dot grid decoration top-left */}
+                  <div className="absolute -top-6 -left-6 w-24 h-24 z-0" style={{
+                    backgroundImage: "radial-gradient(circle, #F5A623 1.5px, transparent 1.5px)",
+                    backgroundSize: "10px 10px",
+                    opacity: 0.35,
+                  }} />
+
+                  {/* Rotated background layers */}
+                  <div className="absolute inset-0 bg-festika-teal rounded-2xl z-0" style={{ transform: "rotate(-5deg) translate(-10px, 8px)", opacity: 0.7 }} />
+                  <div className="absolute inset-0 bg-festika-orange rounded-2xl z-0" style={{ transform: "rotate(-2deg) translate(-5px, 4px)", opacity: 0.85 }} />
+
+                  {/* Main photo card */}
+                  <div className="absolute inset-0 rounded-2xl overflow-hidden z-10 shadow-2xl border-2 border-white/20">
+                    <div className="w-full h-full bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 flex items-center justify-center relative">
                       {aboutImage ? (
                         <Image src={aboutImage} alt="About Festika" fill className="object-cover" />
                       ) : (
-                        <span className="text-gray-500 text-sm font-medium">
-                          Photo Placeholder
-                        </span>
+                        <span className="text-gray-500 text-sm font-medium">Photo Placeholder</span>
                       )}
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-festika-teal/40 via-transparent to-transparent pointer-events-none" />
                     </div>
                   </div>
 
-                  {/* 26 Badge */}
-                  <div className="absolute -bottom-5 -left-5 w-16 h-16 bg-festika-orange flex items-center justify-center z-20 shadow-lg">
-                    <span className="font-[family-name:var(--font-space-grotesk)] text-white text-2xl font-bold">
-                      26
-                    </span>
+                  {/* Floating label badge */}
+                  <div className="absolute -bottom-4 -right-6 z-20 bg-festika-teal rounded-xl px-4 py-2 shadow-[4px_4px_0_0_#F5A623] border-2 border-festika-orange">
+                    <span className="font-[family-name:var(--font-space-grotesk)] text-white text-sm font-bold tracking-widest uppercase">Festika</span>
                   </div>
+
+                  {/* Small floating accent */}
+                  <div className="absolute -top-3 right-8 z-20 w-8 h-8 bg-festika-orange rounded-full border-2 border-white shadow-md flex items-center justify-center">
+                    <div className="w-3 h-3 rounded-full bg-white" />
+                  </div>
+
+                  {/* Bottom-left decorative lines */}
+                  <div className="absolute -bottom-8 left-4 w-16 h-[3px] bg-festika-orange z-0" />
+                  <div className="absolute -bottom-12 left-4 w-10 h-[3px] bg-festika-teal z-0" />
                 </div>
               </div>
 
@@ -221,7 +256,7 @@ export default async function Home() {
         <CompetitionSection competitions={competitions} />
 
         {/* ═══════════ TIMELINE / ROADMAP ═══════════ */}
-        <section id="timeline" className="py-20 lg:py-28 bg-white">
+        <section id="timeline" className="py-20 lg:py-28 bg-white border-b border-gray-100">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             {/* Heading Row */}
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
@@ -293,6 +328,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* ═══════════ SPONSORS ═══════════ */}
+        <SponsorSection sponsors={sponsors} />
       </main>
     </>
   );

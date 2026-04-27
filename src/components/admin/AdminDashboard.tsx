@@ -2,10 +2,11 @@
 
 import StaffPanel from "./StaffPanel";
 import SitePanel from "./SitePanel";
+import SponsorPanel from "./SponsorPanel";
 import { useNotification } from "@/context/NotificationContext";
 import { useState, useEffect, useCallback } from "react";
 import { signOut } from "next-auth/react";
-import { LogOut, Users, Trophy, ArrowLeft, Layout } from "lucide-react";
+import { LogOut, Users, Trophy, ArrowLeft, Layout, Handshake } from "lucide-react";
 
 // Sub-components
 import StatsOverview from "./dashboard/StatsOverview";
@@ -23,7 +24,7 @@ import { Competition, Registrant, User } from "@/types/admin";
 
 export default function AdminDashboard({ user }: { user: User | undefined }) {
   const { showNotification } = useNotification();
-  const [activeTab, setActiveTab] = useState<"competitions" | "staff" | "site">("competitions");
+  const [activeTab, setActiveTab] = useState<"competitions" | "staff" | "site" | "sponsors">("competitions");
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [selectedComp, setSelectedComp] = useState<Competition | null>(null);
   const [registrants, setRegistrants] = useState<Registrant[]>([]);
@@ -216,6 +217,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
     if (activeTab === "site") return <SitePanel />;
+    if (activeTab === "sponsors") return <SponsorPanel />;
 
     if (!selectedComp) {
       return (
@@ -287,6 +289,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           {[
             { id: "competitions", label: "Lomba", icon: Trophy, activeColor: "border-festika-orange" },
             { id: "staff", label: "Panitia", icon: Users, activeColor: "border-festika-teal" },
+            { id: "sponsors", label: "Sponsor", icon: Handshake, activeColor: "border-festika-orange" },
             { id: "site", label: "Situs", icon: Layout, activeColor: "border-festika-navy" },
           ].map((tab) => (
             <button

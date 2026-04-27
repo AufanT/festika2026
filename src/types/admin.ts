@@ -31,6 +31,14 @@ export type Division = {
   isCore?: boolean;
 };
 
+export type Sponsor = {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  link: string | null;
+  tier: string | null;
+};
+
 export type User = {
   name?: string | null;
   email?: string | null;

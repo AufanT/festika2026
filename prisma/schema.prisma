@@ -31,7 +31,7 @@ model Registrant {
   competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
 
-  @@index([competitionId])
+  @@index([competitionId], map: "registrants_competitionId_idx")
   @@map("registrants")
 }
 
@@ -73,7 +73,7 @@ model Staff {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  @@index([divisionId])
+  @@index([divisionId], map: "staff_divisionId_fkey")
   @@map("staff")
 }
 
@@ -84,4 +84,17 @@ model SiteSetting {
   updatedAt DateTime @updatedAt
 
   @@map("site_settings")
+}
+
+// Sponsor acara
+model Sponsor {
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String?
+  link      String?
+  tier      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sponsors")
 }
