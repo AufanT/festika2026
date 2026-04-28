@@ -7,11 +7,9 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          `SELECT c.id, c.title, c.description, c.createdAt, c.updatedAt, COUNT(r.id) as registrant_count 
-           FROM competitions c 
-           LEFT JOIN registrants r ON c.id = r.competitionId 
-           GROUP BY c.id 
-           ORDER BY c.createdAt ASC`
+          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, createdAt, updatedAt 
+           FROM competitions 
+           ORDER BY createdAt ASC`
         );
         return rows;
       } catch (err: any) {
@@ -31,7 +29,7 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          "SELECT id, title, description, createdAt, updatedAt FROM competitions WHERE id = ? LIMIT 1",
+          "SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, createdAt, updatedAt FROM competitions WHERE id = ? LIMIT 1",
           [id]
         );
         return (rows && rows.length > 0) ? rows[0] : null;
@@ -49,7 +47,14 @@ export class CompetitionRepository {
   static async create(data: {
     id: string;
     title: string;
-    description: string;
+    theme?: string | null;
+    description?: string | null;
+    registrationStartDate?: Date | null;
+    registrationEndDate?: Date | null;
+    registrationLink: string;
+    contacts?: any;
+    tags?: string | null;
+    imageUrl?: string | null;
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -58,14 +63,67 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         await pool.query(
-          "INSERT INTO competitions (id, title, description, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)",
-          [data.id, data.title, data.description, data.createdAt, data.updatedAt]
+          "INSERT INTO competitions (id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            data.id, 
+            data.title, 
+            data.theme, 
+            data.description, 
+            data.registrationStartDate, 
+            data.registrationEndDate, 
+            data.registrationLink, 
+            data.contacts ? JSON.stringify(data.contacts) : null, 
+            data.tags, 
+            data.imageUrl, 
+            data.createdAt, 
+            data.updatedAt
+          ]
         );
         return data;
       } catch (err: any) {
         attempts++;
         if ((err.code === "ECONNRESET" || err.code === "ETIMEDOUT" || err.fatal) && attempts < maxAttempts) {
           console.warn(`Database connection error during create. Retrying attempt ${attempts}...`);
+          continue;
+        }
+        throw err;
+      }
+    }
+  }
+
+  static async update(id: string, data: any) {
+    let attempts = 0;
+    const maxAttempts = 3;
+    while (attempts < maxAttempts) {
+      try {
+        const fields = [];
+        const values = [];
+        
+        for (const [key, value] of Object.entries(data)) {
+          if (key === 'id') continue;
+          fields.push(`${key} = ?`);
+          if (key === 'contacts') {
+            values.push(value ? JSON.stringify(value) : null);
+          } else if (key === 'registrationStartDate' || key === 'registrationEndDate') {
+            values.push(value ? new Date(value as string) : null);
+          } else {
+            values.push(value);
+          }
+        }
+        
+        fields.push("updatedAt = ?");
+        values.push(new Date());
+        values.push(id);
+
+        await pool.query(
+          `UPDATE competitions SET ${fields.join(", ")} WHERE id = ?`,
+          values
+        );
+        return true;
+      } catch (err: any) {
+        attempts++;
+        if ((err.code === "ECONNRESET" || err.code === "ETIMEDOUT" || err.fatal) && attempts < maxAttempts) {
+          console.warn(`Database connection error during update. Retrying attempt ${attempts}...`);
           continue;
         }
         throw err;

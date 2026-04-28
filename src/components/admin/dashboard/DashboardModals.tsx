@@ -7,32 +7,162 @@ import { Competition } from "@/types/admin";
 // ---------------------------------------------------------------------------
 // AddCompetitionModal
 // ---------------------------------------------------------------------------
-type AddModalProps = {
+// ---------------------------------------------------------------------------
+// CompetitionModal (Add & Edit)
+// ---------------------------------------------------------------------------
+type CompetitionModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (e: React.FormEvent) => void;
-  title: string;
-  onTitleChange: (val: string) => void;
-  description: string;
-  onDescriptionChange: (val: string) => void;
+  onSubmit: (data: any) => void;
+  initialData?: any;
   isLoading: boolean;
+  mode: "add" | "edit";
 };
 
-export function AddCompetitionModal({
-  isOpen, onClose, onSubmit, title, onTitleChange, description, onDescriptionChange, isLoading
-}: AddModalProps) {
+export function CompetitionModal({
+  isOpen, onClose, onSubmit, initialData, isLoading, mode
+}: CompetitionModalProps) {
+  const [formData, setFormData] = useState({
+    title: "",
+    theme: "",
+    description: "",
+    registrationStartDate: "",
+    registrationEndDate: "",
+    registrationLink: "",
+    tags: "",
+    imageUrl: "",
+    contacts: [{ name: "", phone: "" }]
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || "",
+        theme: initialData.theme || "",
+        description: initialData.description || "",
+        registrationStartDate: initialData.registrationStartDate ? new Date(initialData.registrationStartDate).toISOString().split('T')[0] : "",
+        registrationEndDate: initialData.registrationEndDate ? new Date(initialData.registrationEndDate).toISOString().split('T')[0] : "",
+        registrationLink: initialData.registrationLink || "",
+        tags: initialData.tags || "",
+        imageUrl: initialData.imageUrl || "",
+        contacts: initialData.contacts && initialData.contacts.length > 0 ? initialData.contacts : [{ name: "", phone: "" }]
+      });
+    } else {
+      setFormData({
+        title: "",
+        theme: "",
+        description: "",
+        registrationStartDate: "",
+        registrationEndDate: "",
+        registrationLink: "",
+        tags: "",
+        imageUrl: "",
+        contacts: [{ name: "", phone: "" }]
+      });
+    }
+  }, [initialData, isOpen]);
+
   if (!isOpen) return null;
+
+  const handleAddContact = () => {
+    setFormData(prev => ({
+      ...prev,
+      contacts: [...prev.contacts, { name: "", phone: "" }]
+    }));
+  };
+
+  const handleRemoveContact = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      contacts: prev.contacts.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleContactChange = (index: number, field: "name" | "phone", value: string) => {
+    const newContacts = [...formData.contacts];
+    newContacts[index][field] = value;
+    setFormData(prev => ({ ...prev, contacts: newContacts }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white border-4 border-festika-navy p-6 w-full max-w-md shadow-[12px_12px_0_0_#F5A623]">
-        <h2 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy mb-4">Tambah Lomba Baru</h2>
-        <form onSubmit={onSubmit} className="space-y-4">
-          <input required value={title} onChange={e => onTitleChange(e.target.value)} placeholder="Nama Lomba" className="w-full px-4 py-3 border-2 border-festika-navy outline-none focus:border-festika-orange transition-colors" />
-          <textarea value={description} onChange={e => onDescriptionChange(e.target.value)} placeholder="Deskripsi" className="w-full px-4 py-3 border-2 border-festika-navy outline-none focus:border-festika-orange transition-colors h-32" />
-          <div className="flex gap-3 pt-2">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in overflow-y-auto">
+      <div className="bg-white border-4 border-festika-navy p-6 w-full max-w-2xl my-8 shadow-[12px_12px_0_0_#F5A623] relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-festika-navy"><X size={24} /></button>
+        <h2 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-festika-navy mb-6">
+          {mode === "add" ? "Tambah Lomba Baru" : "Edit Lomba"}
+        </h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-festika-navy">Nama Lomba*</label>
+              <input required value={formData.title} onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))} placeholder="Contoh: Lomba Karya Tulis Ilmiah" className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-festika-navy">Tema</label>
+              <input value={formData.theme} onChange={e => setFormData(prev => ({ ...prev, theme: e.target.value }))} placeholder="Contoh: NextGen Tech" className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-festika-navy">Deskripsi</label>
+            <textarea value={formData.description} onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))} placeholder="Jelaskan detail lomba..." className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange h-32" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-festika-navy">Tanggal Buka Pendaftaran</label>
+              <input type="date" value={formData.registrationStartDate} onChange={e => setFormData(prev => ({ ...prev, registrationStartDate: e.target.value }))} className="w-full px-4 py-2 border-2 border-festika-navy outline-none" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-festika-navy">Tanggal Tutup Pendaftaran</label>
+              <input type="date" value={formData.registrationEndDate} onChange={e => setFormData(prev => ({ ...prev, registrationEndDate: e.target.value }))} className="w-full px-4 py-2 border-2 border-festika-navy outline-none" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-festika-navy">Link Google Form*</label>
+            <input required type="url" value={formData.registrationLink} onChange={e => setFormData(prev => ({ ...prev, registrationLink: e.target.value }))} placeholder="https://forms.gle/..." className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-festika-navy">Hashtag/Tags</label>
+              <input value={formData.tags} onChange={e => setFormData(prev => ({ ...prev, tags: e.target.value }))} placeholder="#FESTIKA2026 #Innovation" className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange" />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-festika-navy">URL Poster (Opsional)</label>
+              <input value={formData.imageUrl} onChange={e => setFormData(prev => ({ ...prev, imageUrl: e.target.value }))} placeholder="https://example.com/poster.jpg" className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange" />
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-bold text-festika-navy">Contact Persons</label>
+              <button type="button" onClick={handleAddContact} className="text-xs bg-festika-teal text-white px-2 py-1 font-bold"> + Tambah CP</button>
+            </div>
+            {formData.contacts.map((contact, index) => (
+              <div key={index} className="flex gap-2 items-end">
+                <div className="flex-1 space-y-1">
+                  <input value={contact.name} onChange={e => handleContactChange(index, "name", e.target.value)} placeholder="Nama CP" className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <input value={contact.phone} onChange={e => handleContactChange(index, "phone", e.target.value)} placeholder="No WhatsApp (08...)" className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm" />
+                </div>
+                <button type="button" onClick={() => handleRemoveContact(index)} className="p-2 text-red-500 hover:bg-red-50 transition-colors"><Trash2 size={18} /></button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-3 pt-4">
             <button type="button" onClick={onClose} className="flex-1 py-3 border-2 border-gray-200 font-bold hover:bg-gray-50 transition-colors">Batal</button>
             <button type="submit" disabled={isLoading} className="flex-1 py-3 bg-festika-navy text-white font-bold hover:bg-festika-navy/90 transition-colors flex items-center justify-center gap-2 shadow-[4px_4px_0_0_#F5A623] disabled:opacity-50">
-              {isLoading && <Loader2 size={16} className="animate-spin" />} Simpan
+              {isLoading && <Loader2 size={16} className="animate-spin" />} {mode === "add" ? "Simpan" : "Perbarui"}
             </button>
           </div>
         </form>

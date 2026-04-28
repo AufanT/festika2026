@@ -53,3 +53,28 @@ export async function DELETE(req: NextRequest) {
     return ApiResponse.error(error.message || "Gagal menghapus lomba", 500);
   }
 }
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const session = await auth();
+
+    if (!session) {
+      return ApiResponse.error("Unauthorized", 401);
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return ApiResponse.error("ID lomba wajib disertakan", 400);
+    }
+
+    const body = await req.json();
+    await CompetitionService.updateCompetition(id, body);
+
+    return ApiResponse.success(null, "Lomba berhasil diperbarui!");
+  } catch (error: any) {
+    console.error("Error updating competition:", error);
+    return ApiResponse.error(error.message || "Gagal memperbarui lomba", 500);
+  }
+}

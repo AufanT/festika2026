@@ -1,17 +1,19 @@
+export type Contact = {
+  name: string;
+  phone: string;
+};
+
 export type Competition = {
   id: string;
   title: string;
-  description: string;
-  registrant_count: number;
-};
-
-export type Registrant = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  major: string;
-  year: number;
+  theme?: string | null;
+  description: string | null;
+  registrationStartDate?: string | null;
+  registrationEndDate?: string | null;
+  registrationLink: string;
+  contacts?: Contact[] | null;
+  tags?: string | null;
+  imageUrl?: string | null;
   createdAt: string;
 };
 

@@ -8,31 +8,20 @@ datasource db {
 
 // Lomba yang tersedia
 model Competition {
-  id          String       @id @default(cuid())
-  title       String
-  description String?      @db.Text
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  registrants Registrant[]
+  id                    String    @id @default(cuid())
+  title                 String
+  theme                 String?
+  description           String?   @db.Text
+  registrationStartDate DateTime?
+  registrationEndDate   DateTime?
+  registrationLink      String    @default("")
+  contacts              Json?     // Array of objects: [{ name, phone }]
+  tags                  String?   // Hashtags
+  imageUrl              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   @@map("competitions")
-}
-
-// Peserta yang mendaftar ke event
-model Registrant {
-  id            String      @id @default(cuid())
-  name          String
-  email         String      @unique
-  phone         String
-  major         String      // Jurusan / prodi
-  year          Int         // Angkatan (misal: 2022)
-  competitionId String
-  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
-  createdAt     DateTime    @default(now())
-
-  @@index([competitionId], map: "registrants_competitionId_idx")
-  @@map("registrants")
 }
 
 // Admin yang bisa login ke dashboard

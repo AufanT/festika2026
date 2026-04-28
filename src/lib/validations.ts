@@ -1,22 +1,20 @@
 import { z } from "zod";
 
-// --- Registration (Public) ---
-export const registerSchema = z.object({
-  name: z.string().min(2, "Nama wajib diisi (minimal 2 karakter)").max(100),
-  email: z.string().email("Format email tidak valid"),
-  phone: z.string().min(10, "Nomor HP wajib diisi dengan benar").max(16, "Nomor HP terlalu panjang"),
-  major: z.string().min(2, "Jurusan wajib diisi").max(100),
-  year: z.coerce.number().min(2020, "Tahun angkatan terlalu lama").max(2026, "Tahun angkatan belum dibuka"),
-  competitionId: z.string().min(1, "Lomba wajib dipilih"),
-});
-
-export type RegisterFormData = z.infer<typeof registerSchema>;
-
 // --- Admin Schemas ---
 
 export const competitionSchema = z.object({
   title: z.string().min(3, "Judul lomba minimal 3 karakter").max(100),
-  description: z.string().max(1000, "Deskripsi terlalu panjang").optional().nullable(),
+  theme: z.string().max(200).optional().nullable(),
+  description: z.string().max(2000, "Deskripsi terlalu panjang").optional().nullable(),
+  registrationStartDate: z.string().optional().nullable(),
+  registrationEndDate: z.string().optional().nullable(),
+  registrationLink: z.string().url("Link pendaftaran harus berupa URL Google Form yang valid").or(z.literal("")),
+  contacts: z.array(z.object({
+    name: z.string().min(1, "Nama CP wajib diisi"),
+    phone: z.string().min(1, "Nomor WA wajib diisi"),
+  })).optional().nullable(),
+  tags: z.string().max(500).optional().nullable(),
+  imageUrl: z.string().url("Format URL gambar tidak valid").optional().nullable().or(z.literal("")),
 });
 
 export const divisionSchema = z.object({

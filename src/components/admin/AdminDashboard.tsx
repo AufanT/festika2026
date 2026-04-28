@@ -11,42 +11,30 @@ import { LogOut, Users, Trophy, ArrowLeft, Layout, Handshake } from "lucide-reac
 // Sub-components
 import StatsOverview from "./dashboard/StatsOverview";
 import CompetitionGrid from "./dashboard/CompetitionGrid";
-import RegistrantTable from "./dashboard/RegistrantTable";
 import {
-  AddCompetitionModal,
+  CompetitionModal,
   DeleteCompetitionModal,
   DeleteMultipleModal,
   DeleteMultipleTarget,
 } from "./dashboard/DashboardModals";
 
 // Types
-import { Competition, Registrant, User } from "@/types/admin";
+import { Competition, User } from "@/types/admin";
 
 export default function AdminDashboard({ user }: { user: User | undefined }) {
   const { showNotification } = useNotification();
   const [activeTab, setActiveTab] = useState<"competitions" | "staff" | "site" | "sponsors">("competitions");
   const [competitions, setCompetitions] = useState<Competition[]>([]);
-  const [selectedComp, setSelectedComp] = useState<Competition | null>(null);
-  const [registrants, setRegistrants] = useState<Registrant[]>([]);
-  const [pagination, setPagination] = useState({ total: 0, totalPages: 0, page: 1, topM: "-", topY: "-" });
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  // Debounce search
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 500);
-    return () => clearTimeout(timer);
-  }, [search]);
+  // ── Modal: Competition (Add & Edit) ──────────────────────────────────────
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
+  const [editingComp, setEditingComp] = useState<Competition | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
-  // ── Modal: Tambah Lomba ──────────────────────────────────────────────────
-  const [isAdding, setIsAdding] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
-  const [newDesc, setNewDesc] = useState("");
-  const [addLoading, setAddLoading] = useState(false);
-
-  // ── Modal: Hapus satu lomba (legacy — tidak dipakai dari UI utama, tetap tersedia) ──
+  // ── Modal: Hapus satu lomba (legacy) ──
   const [deletingComp, setDeletingComp] = useState<Competition | null>(null);
   const [deleteStep, setDeleteStep] = useState(1);
   const [deleteInput, setDeleteInput] = useState("");
@@ -66,28 +54,11 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   // ── Data Fetching ────────────────────────────────────────────────────────
   const fetchCompetitions = useCallback(async () => {
+    setIsLoading(true);
     try {
       const res = await fetch("/api/competitions");
       const json = await res.json();
       setCompetitions(json.data || []);
-    } catch { /* ignore */ }
-  }, []);
-
-  const fetchRegistrants = useCallback(async (compId: string, pageNum: number = 1, searchQuery: string = "") => {
-    setIsLoading(true);
-    try {
-      const res = await fetch(`/api/registrants?competitionId=${compId}&page=${pageNum}&limit=50&search=${searchQuery}`);
-      const json = await res.json();
-      if (json.success) {
-        setRegistrants(json.data.data || []);
-        setPagination({
-          total: json.data.total,
-          totalPages: json.data.totalPages,
-          page: json.data.page,
-          topM: json.data.topM,
-          topY: json.data.topY,
-        });
-      }
       setLastUpdated(new Date());
     } catch { /* ignore */ } finally {
       setIsLoading(false);
@@ -95,50 +66,59 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   }, []);
 
   useEffect(() => { fetchCompetitions(); }, [fetchCompetitions]);
-  useEffect(() => {
-    if (selectedComp) fetchRegistrants(selectedComp.id, pagination.page, debouncedSearch);
-  }, [selectedComp, fetchRegistrants, pagination.page, debouncedSearch]);
 
   // ── Handlers ─────────────────────────────────────────────────────────────
 
-  const handleCreateCompetition = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAddLoading(true);
-    try {
-      const res = await fetch("/api/competitions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newTitle, description: newDesc }),
-      });
-      if (res.ok) {
-        setNewTitle(""); setNewDesc(""); setIsAdding(false);
-        fetchCompetitions();
-        showNotification("success", "Berhasil", "Lomba baru berhasil ditambahkan!");
-      }
-    } catch {
-      showNotification("error", "Gagal", "Terjadi kesalahan saat menambah lomba.");
-    } finally { setAddLoading(false); }
+  const handleOpenAdd = () => {
+    setModalMode("add");
+    setEditingComp(null);
+    setIsModalOpen(true);
   };
 
-  /** Dipanggil oleh CompetitionGrid ketika user menekan tombol hapus di delete-mode */
+  const handleOpenEdit = (comp: Competition) => {
+    setModalMode("edit");
+    setEditingComp(comp);
+    setIsModalOpen(true);
+  };
+
+  const handleCompetitionSubmit = async (formData: any) => {
+    setModalLoading(true);
+    try {
+      const url = modalMode === "add" ? "/api/competitions" : `/api/competitions?id=${editingComp?.id}`;
+      const method = modalMode === "add" ? "POST" : "PATCH";
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setIsModalOpen(false);
+        fetchCompetitions();
+        showNotification("success", "Berhasil", `Lomba berhasil ${modalMode === "add" ? "ditambahkan" : "diperbarui"}!`);
+      } else {
+        const json = await res.json();
+        showNotification("error", "Gagal", json.message || "Terjadi kesalahan.");
+      }
+    } catch {
+      showNotification("error", "Gagal", "Terjadi kesalahan koneksi.");
+    } finally { setModalLoading(false); }
+  };
+
   const handleOpenBulkDelete = (selectedIds: string[]) => {
     const targets: DeleteMultipleTarget[] = competitions
       .filter(c => selectedIds.includes(c.id))
       .map(c => ({
         id: c.id,
         label: c.title,
-        subCount: c.registrant_count ?? 0,
-        subLabel: "pendaftar",
+        subCount: 0,
+        subLabel: "pendaftar (external)",
       }));
     setBulkDeleteTargets(targets);
     setIsBulkDeleteOpen(true);
   };
 
-  /**
-   * Eksekusi hapus banyak lomba secara paralel.
-   * Setiap request dikirim ke endpoint yang sudah memiliki auth-guard.
-   * Bila ada yang gagal, bulk selesai namun notifikasi menampilkan jumlah yang berhasil.
-   */
   const handleBulkDeleteCompetitions = async () => {
     if (bulkDeleteTargets.length === 0) return;
     setIsBulkDeleting(true);
@@ -153,7 +133,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
       setIsBulkDeleteOpen(false);
       setBulkDeleteTargets([]);
-      setSelectedComp(null);
       await fetchCompetitions();
 
       if (failCount === 0) {
@@ -166,50 +145,19 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     } finally { setIsBulkDeleting(false); }
   };
 
-  /** Hapus satu lomba (digunakan bila single-delete modal dipanggil — legacy flow) */
   const handleDeleteCompetition = async () => {
     if (!deletingComp) return;
     setIsDeleting(true);
     try {
       const res = await fetch(`/api/competitions?id=${deletingComp.id}`, { method: "DELETE" });
       if (res.ok) {
-        setDeletingComp(null); setSelectedComp(null);
+        setDeletingComp(null);
         fetchCompetitions();
         showNotification("success", "Terhapus", "Lomba berhasil dihapus.");
       }
     } catch {
       showNotification("error", "Error", "Gagal menghapus lomba.");
     } finally { setIsDeleting(false); }
-  };
-
-  const exportCSV = async () => {
-    if (!selectedComp) return;
-    setIsLoading(true);
-    showNotification("info", "Mengekspor", "Sedang mengunduh data pendaftar...");
-    try {
-      const res = await fetch(`/api/registrants?competitionId=${selectedComp.id}&export=true`);
-      const json = await res.json();
-      if (!json.success) throw new Error("Gagal mengambil data");
-
-      const allData: Registrant[] = json.data.data;
-      const headers = ["ID", "Nama", "Email", "No HP", "Jurusan", "Angkatan", "Tanggal Daftar"];
-      const rows = allData.map((r, i) => [
-        i + 1, r.name, r.email, r.phone, r.major, r.year,
-        new Date(r.createdAt).toLocaleString("id-ID"),
-      ]);
-      const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `pendaftar-${selectedComp.title}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showNotification("success", "Selesai", "Data berhasil diekspor.");
-    } catch {
-      showNotification("error", "Gagal", "Terjadi kesalahan saat mengekspor data.");
-    } finally { setIsLoading(false); }
   };
 
   // ── Render ───────────────────────────────────────────────────────────────
@@ -219,48 +167,23 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     if (activeTab === "site") return <SitePanel />;
     if (activeTab === "sponsors") return <SponsorPanel />;
 
-    if (!selectedComp) {
-      return (
-        <CompetitionGrid
-          competitions={competitions}
-          onSelect={setSelectedComp}
-          onAddRequest={() => setIsAdding(true)}
-          onDeleteMode={handleOpenBulkDelete}
-        />
-      );
-    }
-
     return (
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
-          <div>
-            <button onClick={() => setSelectedComp(null)} className="flex items-center gap-2 text-festika-teal font-medium hover:text-festika-orange text-sm mb-3 transition-colors">
-              <ArrowLeft size={16} /> Kembali ke Daftar Lomba
-            </button>
-            <h1 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-extrabold text-festika-navy">
-              Pendaftar: <span className="text-festika-orange">{selectedComp.title}</span>
-            </h1>
-            <p className="text-gray-500 text-sm mt-1">
-              {lastUpdated ? `Terakhir diperbarui: ${lastUpdated.toLocaleTimeString("id-ID")}` : "Memuat data..."}
-            </p>
-          </div>
+        <div className="mb-8">
+          <p className="text-gray-500 text-sm mb-4">
+            {lastUpdated ? `Terakhir diperbarui: ${lastUpdated.toLocaleTimeString("id-ID")}` : "Memuat data..."}
+          </p>
+          <StatsOverview 
+            totalCompetitions={competitions.length} 
+            activeLinks={competitions.filter(c => c.registrationLink).length} 
+          />
         </div>
 
-        <StatsOverview totalRegistrants={pagination.total} topMajor={pagination.topM} topYear={pagination.topY} />
-
-        <RegistrantTable
-          registrants={registrants}
-          filteredRegistrants={registrants}
-          search={search}
-          onSearchChange={setSearch}
-          onRefresh={() => fetchRegistrants(selectedComp.id, pagination.page)}
-          onExport={exportCSV}
-          isLoading={isLoading}
-          pagination={{
-            currentPage: pagination.page,
-            totalPages: pagination.totalPages,
-            onPageChange: (p) => setPagination(prev => ({ ...prev, page: p })),
-          }}
+        <CompetitionGrid
+          competitions={competitions}
+          onSelect={handleOpenEdit}
+          onAddRequest={handleOpenAdd}
+          onDeleteMode={handleOpenBulkDelete}
         />
       </div>
     );
@@ -294,7 +217,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => { setActiveTab(tab.id as any); setSelectedComp(null); }}
+              onClick={() => { setActiveTab(tab.id as any); }}
               className={`flex items-center gap-2 px-5 sm:px-6 py-4 font-bold transition-all border-b-4 shrink-0 whitespace-nowrap ${
                 activeTab === tab.id ? `${tab.activeColor} text-white bg-white/5` : "border-transparent text-gray-400 hover:text-white"
               }`}
@@ -311,13 +234,15 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       </main>
 
       {/* ── Modals ── */}
-      <AddCompetitionModal
-        isOpen={isAdding} onClose={() => setIsAdding(false)} onSubmit={handleCreateCompetition}
-        title={newTitle} onTitleChange={setNewTitle} description={newDesc} onDescriptionChange={setNewDesc}
-        isLoading={addLoading}
+      <CompetitionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCompetitionSubmit}
+        initialData={editingComp}
+        isLoading={modalLoading}
+        mode={modalMode}
       />
 
-      {/* Single-delete modal — legacy, tetap tersedia */}
       <DeleteCompetitionModal
         competition={deletingComp} step={deleteStep} input={deleteInput}
         onInputChange={setDeleteInput} onNextStep={() => setDeleteStep(2)}
@@ -325,13 +250,12 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
         isLoading={isDeleting}
       />
 
-      {/* Bulk delete modal untuk Lomba */}
       <DeleteMultipleModal
         isOpen={isBulkDeleteOpen}
         title="Hapus Lomba Terpilih"
         entityLabel="LOMBA"
         targets={bulkDeleteTargets}
-        cascadeWarning="Seluruh data pendaftar yang terdaftar pada lomba-lomba ini akan ikut terhapus secara permanen dari database. Tindakan ini tidak dapat dibatalkan."
+        cascadeWarning="Data lomba akan dihapus permanen dari database. Pendaftaran dilakukan secara eksternal melalui Google Form."
         onConfirm={handleBulkDeleteCompetitions}
         onClose={() => { setIsBulkDeleteOpen(false); setBulkDeleteTargets([]); }}
         isLoading={isBulkDeleting}

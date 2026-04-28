@@ -143,21 +143,39 @@ export default function CompetitionGrid({
                 <Trophy className={isSelected ? "text-red-500" : "text-festika-teal"} size={24} />
               </div>
 
-              <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy mb-2">
-                {comp.title}
-              </h3>
-              <p className="text-gray-600 text-xs flex-1 line-clamp-2">
-                {comp.description || "Tidak ada rincian."}
-              </p>
+              <div className="flex-1">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy mb-1">
+                  {comp.title}
+                </h3>
+                {comp.theme && (
+                  <p className="text-festika-orange text-xs font-bold mb-2 uppercase tracking-wider">
+                    "{comp.theme}"
+                  </p>
+                )}
+                <p className="text-gray-600 text-xs line-clamp-3 mb-4">
+                  {comp.description || "Tidak ada deskripsi."}
+                </p>
+                
+                {(comp.registrationStartDate || comp.registrationEndDate) && (
+                  <div className="text-[10px] text-gray-400 font-medium space-y-0.5">
+                    <p>Pendaftaran:</p>
+                    <p className="text-festika-navy font-bold">
+                      {comp.registrationStartDate ? new Date(comp.registrationStartDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : "?"} 
+                      {" - "}
+                      {comp.registrationEndDate ? new Date(comp.registrationEndDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : "Selesai"}
+                    </p>
+                  </div>
+                )}
+              </div>
 
               <div className="mt-4 pt-4 border-t border-gray-100 w-full flex justify-between items-center group-hover:border-festika-teal/30 transition-colors">
-                <div className="flex items-center gap-1.5 text-festika-navy font-bold text-xs bg-gray-100 px-2 py-1 rounded-sm border border-gray-200">
-                  <Users size={14} className="text-festika-teal" />
-                  <span>{comp.registrant_count || 0} Pendaftar</span>
+                <div className="flex items-center gap-1.5 text-festika-navy font-bold text-[10px] bg-gray-100 px-2 py-1 rounded-sm border border-gray-200">
+                  <CheckSquare size={12} className="text-festika-teal" />
+                  <span>Google Form Active</span>
                 </div>
                 {!isDeleteMode && (
                   <div className="flex items-center gap-1 text-festika-teal text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span>Detail</span> <ArrowLeft className="rotate-180" size={14} />
+                    <span>Edit</span> <ArrowLeft className="rotate-180" size={14} />
                   </div>
                 )}
                 {isDeleteMode && isSelected && (

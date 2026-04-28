@@ -50,7 +50,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/register">
+          <Link href="/#competitions">
             <Button
               className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-8 font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
             >
@@ -86,7 +86,7 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+          <Link href="/#competitions" onClick={() => setIsMenuOpen(false)}>
             <Button
               className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none w-full font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] transition-all cursor-pointer"
             >

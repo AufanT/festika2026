@@ -1,33 +1,32 @@
-import { Users, GraduationCap, Calendar } from "lucide-react";
+import { Trophy, Link, Info } from "lucide-react";
 
 type StatsProps = {
-  totalRegistrants: number;
-  topMajor?: string;
-  topYear?: string;
+  totalCompetitions: number;
+  activeLinks: number;
 };
 
-export default function StatsOverview({ totalRegistrants, topMajor, topYear }: StatsProps) {
+export default function StatsOverview({ totalCompetitions, activeLinks }: StatsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
       <div className="bg-white border-2 border-festika-navy shadow-[4px_4px_0_0_#F5A623] p-5">
-        <Users size={20} className="text-festika-orange mb-3" />
-        <p className="text-gray-500 text-xs uppercase font-semibold">Total Pendaftar</p>
+        <Trophy size={20} className="text-festika-orange mb-3" />
+        <p className="text-gray-500 text-xs uppercase font-semibold">Total Lomba</p>
         <p className="font-[family-name:var(--font-space-grotesk)] text-4xl font-extrabold text-festika-navy mt-1">
-          {totalRegistrants}
+          {totalCompetitions}
         </p>
       </div>
       <div className="bg-white border-2 border-festika-navy shadow-[4px_4px_0_0_#1A6B73] p-5">
-        <GraduationCap size={20} className="text-festika-teal mb-3" />
-        <p className="text-gray-500 text-xs uppercase font-semibold">Jurusan Terbanyak</p>
-        <p className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy mt-1 truncate">
-          {topMajor || "-"}
+        <Link size={20} className="text-festika-teal mb-3" />
+        <p className="text-gray-500 text-xs uppercase font-semibold">Link Google Form</p>
+        <p className="font-[family-name:var(--font-space-grotesk)] text-4xl font-extrabold text-festika-navy mt-1">
+          {activeLinks}
         </p>
       </div>
       <div className="bg-white border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] p-5">
-        <Calendar size={20} className="text-festika-navy mb-3" />
-        <p className="text-gray-500 text-xs uppercase font-semibold">Angkatan Terbanyak</p>
-        <p className="font-[family-name:var(--font-space-grotesk)] text-4xl font-extrabold text-festika-navy mt-1">
-          {topYear || "-"}
+        <Info size={20} className="text-festika-navy mb-3" />
+        <p className="text-gray-500 text-xs uppercase font-semibold">Status Sistem</p>
+        <p className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy mt-1 uppercase">
+          External
         </p>
       </div>
     </div>
