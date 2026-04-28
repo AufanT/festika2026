@@ -19,7 +19,6 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
 
   return (
     <div className="min-h-screen bg-gray-50 font-[family-name:var(--font-plus-jakarta-sans)]">
-      <Navbar />
       
       <main className="pt-24 pb-20">
         <div className="max-w-5xl mx-auto px-6">
@@ -143,8 +142,6 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

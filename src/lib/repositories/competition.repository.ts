@@ -11,7 +11,10 @@ export class CompetitionRepository {
            FROM competitions 
            ORDER BY createdAt ASC`
         );
-        return rows;
+        return rows.map((row: any) => ({
+          ...row,
+          contacts: typeof row.contacts === 'string' ? JSON.parse(row.contacts) : (row.contacts || [])
+        }));
       } catch (err: any) {
         attempts++;
         if ((err.code === "ECONNRESET" || err.code === "ETIMEDOUT" || err.fatal) && attempts < maxAttempts) {
@@ -32,7 +35,14 @@ export class CompetitionRepository {
           "SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, createdAt, updatedAt FROM competitions WHERE id = ? LIMIT 1",
           [id]
         );
-        return (rows && rows.length > 0) ? rows[0] : null;
+        if (rows && rows.length > 0) {
+          const row = rows[0];
+          return {
+            ...row,
+            contacts: typeof row.contacts === 'string' ? JSON.parse(row.contacts) : (row.contacts || [])
+          };
+        }
+        return null;
       } catch (err: any) {
         attempts++;
         if ((err.code === "ECONNRESET" || err.code === "ETIMEDOUT" || err.fatal) && attempts < maxAttempts) {
