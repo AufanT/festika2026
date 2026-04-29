@@ -19,8 +19,8 @@ export function AddSponsorModal({
 }: AddSponsorModalProps) {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white border-2 border-festika-navy p-6 w-full max-w-md shadow-[8px_8px_0_0_#F5A623] max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex justify-center items-start p-4 bg-black/50 backdrop-blur-sm animate-in fade-in overflow-y-auto py-8">
+      <div className="bg-white border-2 border-festika-navy p-6 w-full max-w-md shadow-[8px_8px_0_0_#F5A623] my-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy">Tambah Sponsor</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-red-500"><X size={20}/></button>

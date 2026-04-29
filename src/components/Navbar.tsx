@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/#competitions", label: "Competitions" },
   { href: "/#timeline", label: "Timeline" },
   { href: "/staff", label: "Staff" },
+  { href: "/past-events", label: "Past Events" },
 ];
 
 export default function Navbar() {
@@ -25,9 +26,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm"
-          : "bg-transparent"
+        isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 h-16 lg:px-8">
@@ -51,9 +50,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link href="/#competitions">
-            <Button
-              className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-8 font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
-            >
+            <Button className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-8 font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer">
               Register
             </Button>
           </Link>
@@ -87,9 +84,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link href="/#competitions" onClick={() => setIsMenuOpen(false)}>
-            <Button
-              className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none w-full font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] transition-all cursor-pointer"
-            >
+            <Button className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none w-full font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] transition-all cursor-pointer">
               Register
             </Button>
           </Link>

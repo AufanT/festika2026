@@ -14,6 +14,13 @@ export type Competition = {
   contacts?: Contact[] | null;
   tags?: string | null;
   imageUrl?: string | null;
+  year?: number;
+  isArchived?: boolean;
+  participants?: number | null;
+  winner?: string | null;
+  runnerUp?: string | null;
+  thirdPlace?: string | null;
+  galleryUrls?: string[] | null;
   createdAt: string;
 };
 
