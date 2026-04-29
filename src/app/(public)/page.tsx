@@ -79,34 +79,21 @@ export default async function Home() {
                   IT Festival 2026
                 </span>
 
-                {/* Logo + Title */}
-                <div className="flex items-center gap-6 mt-8 justify-center lg:justify-start">
-                  {/* Logo Icon */}
-                  <div className="w-32 h-32 lg:w-48 lg:h-48 xl:w-56 xl:h-56 bg-festika-orange rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0 p-5 lg:p-7 xl:p-8">
-                    <Image
-                      src="/Logo_Festika-04.webp"
-                      alt="Festika Logo"
-                      width={220}
-                      height={220}
-                      priority
-                      className="object-contain w-full h-full"
-                    />
-                  </div>
-                  <div>
-                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-7xl lg:text-8xl xl:text-9xl font-extrabold text-festika-teal leading-[0.85] tracking-tighter">
-                      FES
-                    </h1>
-                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-7xl lg:text-8xl xl:text-9xl font-extrabold text-festika-orange leading-[0.85] tracking-tighter">
-                      TIKA
-                    </h1>
-                  </div>
+                {/* New Styled Title */}
+                <div className="mt-8 mb-6 flex justify-center lg:justify-start overflow-visible">
+                  <h1 className="font-[family-name:var(--font-space-grotesk)] text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter flex items-center leading-none">
+                    <span className="text-festika-teal">FEST</span>
+                    <span className="bg-festika-teal text-[#FF9500] px-2 md:px-4 py-1 ml-1 md:ml-3 rounded-none inline-flex items-center justify-center">
+                      IKA
+                    </span>
+                  </h1>
                 </div>
 
                 {/* Tagline */}
-                <p className="text-festika-orange italic text-lg lg:text-xl mt-6">
+                <p className="text-festika-orange italic text-lg lg:text-xl mt-6 drop-shadow-sm">
                   Unleashing Innovation through
                 </p>
-                <p className="text-festika-teal font-bold text-lg lg:text-xl">
+                <p className="text-festika-teal font-bold text-lg lg:text-xl drop-shadow-sm">
                   Digital Creativity
                 </p>
 
@@ -132,11 +119,11 @@ export default async function Home() {
               </div>
 
               {/* Right - Hero Illustration (MEGA SIZE / Mobile Watermark) */}
-              <div className="absolute inset-0 lg:static flex-[1.6] flex justify-center lg:justify-end items-center overflow-visible z-0 opacity-25 sm:opacity-30 lg:opacity-100 pointer-events-none lg:pointer-events-auto">
+              <div className="absolute inset-0 lg:static flex-[1.6] flex justify-center lg:justify-end items-center overflow-visible z-0 opacity-[0.08] lg:opacity-100 pointer-events-none lg:pointer-events-auto">
                 {/* Background Glow behind SVG (Desktop only) */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-festika-orange/10 blur-[100px] rounded-full z-[-1] hidden lg:block" />
                 
-                <div className="relative w-full max-w-[600px] sm:max-w-[700px] lg:max-w-[1100px] xl:max-w-[1300px] lg:-mr-8 xl:-mr-12 transform scale-150 sm:scale-125 lg:scale-140 xl:scale-150 transition-all duration-700 animate-float">
+                <div className="relative w-full max-w-[600px] sm:max-w-[700px] lg:max-w-[1100px] xl:max-w-[1300px] lg:-mr-8 xl:-mr-12 transform scale-110 sm:scale-125 lg:scale-140 xl:scale-150 transition-all duration-700 animate-float">
                   <Image
                     src="/1.svg"
                     alt="Hero Festika Illustration"
@@ -178,14 +165,9 @@ export default async function Home() {
                     className="w-full h-auto object-contain drop-shadow-2xl"
                   />
                   {/* Floating badge: Since */}
-                  <div className="absolute -top-6 -left-6 bg-festika-orange rounded-2xl px-5 py-4 shadow-[5px_5px_0_0_#0F2A36] border-2 border-festika-navy z-20">
+                  <div className="absolute -bottom-6 -right-6 bg-festika-orange rounded-2xl px-5 py-4 shadow-[5px_5px_0_0_#0F2A36] border-2 border-festika-navy z-20">
                     <p className="text-white/80 text-[10px] font-bold uppercase tracking-widest">Since</p>
-                    <p className="text-white text-3xl font-extrabold font-[family-name:var(--font-space-grotesk)] leading-none">2018</p>
-                  </div>
-                  {/* Floating badge: Peserta */}
-                  <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl px-5 py-4 shadow-2xl border-2 border-festika-orange/20 z-20">
-                    <p className="text-festika-teal/70 text-[10px] font-bold uppercase tracking-widest">Peserta</p>
-                    <p className="text-festika-orange text-3xl font-extrabold font-[family-name:var(--font-space-grotesk)] leading-none">2000+</p>
+                    <p className="text-white text-3xl font-extrabold font-[family-name:var(--font-space-grotesk)] leading-none">2024</p>
                   </div>
                   {/* Accent dot */}
                   <div className="absolute top-1/2 -right-10 w-6 h-6 rounded-full bg-festika-orange/30 border-2 border-festika-orange/60 hidden lg:block" />

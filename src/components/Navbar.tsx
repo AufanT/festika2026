@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -33,9 +34,17 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-teal tracking-tight"
+          className="flex items-center"
         >
-          FESTIKA<span className="text-festika-orange">.</span>
+          <div className="relative h-16 w-56">
+            <Image
+              src="/logo-festika.svg"
+              alt="Festika Logo"
+              fill
+              className="object-contain object-left"
+              priority
+            />
+          </div>
         </Link>
 
         {/* Desktop Nav */}
@@ -49,11 +58,6 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/#competitions">
-            <Button className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-8 font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer">
-              Register
-            </Button>
-          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -83,11 +87,6 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/#competitions" onClick={() => setIsMenuOpen(false)}>
-            <Button className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none w-full font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] transition-all cursor-pointer">
-              Register
-            </Button>
-          </Link>
         </div>
       </div>
     </header>

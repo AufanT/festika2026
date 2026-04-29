@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Globe, MessageCircle, Briefcase, Code } from "lucide-react";
 import { formatWhatsAppLink } from "@/lib/utils";
 
@@ -28,9 +29,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Branding */}
           <div>
-            <h2 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold">
-              FESTIKA<span className="text-festika-orange">.</span>
-            </h2>
+            <div className="relative h-14 w-48 -ml-4 mb-4">
+              <Image
+                src="/logo-festika.svg"
+                alt="Festika Logo"
+                fill
+                className="object-contain grayscale invert"
+                priority
+              />
+            </div>
             <p className="text-gray-400 mt-4 text-sm leading-relaxed max-w-xs">
               Unleashing Innovation through Digital Creativity. Join us in
               shaping the future of technology and design at the premier IT

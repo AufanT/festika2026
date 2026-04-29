@@ -53,19 +53,16 @@ export default function AdminLoginPage() {
 
           {/* Logo & Title */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-festika-orange rounded-xl flex items-center justify-center overflow-hidden">
+            <div className="flex justify-center mb-6">
+              <div className="relative h-20 w-64">
                 <Image
-                  src="/Logo_Festika-04.webp"
+                  src="/logo-festika.svg"
                   alt="Festika Logo"
-                  width={48}
-                  height={48}
-                  className="object-contain w-full h-full scale-[1.4]"
+                  fill
+                  className="object-contain"
+                  priority
                 />
               </div>
-              <span className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold text-festika-teal tracking-tight">
-                FESTIKA<span className="text-festika-orange">.</span>
-              </span>
             </div>
             <h1 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy">
               Admin Panel

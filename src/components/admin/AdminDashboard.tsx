@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import StaffPanel from "./StaffPanel";
 import SponsorPanel from "./SponsorPanel";
 import { useNotification } from "@/context/NotificationContext";
@@ -400,10 +401,16 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-festika-navy sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <span className="text-white font-[family-name:var(--font-space-grotesk)] font-black text-2xl tracking-tighter">
-              FESTIKA<span className="text-festika-orange">.</span>
-            </span>
+          <div className="flex items-center">
+            <div className="relative h-12 w-44">
+              <Image
+                src="/logo-festika.svg"
+                alt="Festika Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="hidden sm:block text-right text-xs text-white">
