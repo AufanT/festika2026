@@ -11,7 +11,7 @@ const navLinks = [
   { href: "/#competitions", label: "Competitions" },
   { href: "/#timeline", label: "Timeline" },
   { href: "/staff", label: "Staff" },
-  { href: "/past-events", label: "Past Events" },
+  { href: "/past-events", label: "Our Journey" },
 ];
 
 export default function Navbar() {
