@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Globe, MessageCircle, Briefcase, Code } from "lucide-react";
+import { formatWhatsAppLink } from "@/lib/utils";
 
 const footerLinks = [
   { href: "#about", label: "About" },
@@ -63,8 +64,15 @@ export default function Footer() {
               Contact
             </h3>
             <div className="mt-4 space-y-3 text-sm text-gray-300">
-              <p>info@festika2026.tech</p>
-              <p>+62 123 4567 890</p>
+              <a href="mailto:info@festika2026.tech" className="block hover:text-festika-orange transition-colors">info@festika2026.tech</a>
+              <a 
+                href={formatWhatsAppLink("+62 123 4567 890", "Halo Festika, saya ingin bertanya...")} 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block hover:text-festika-orange transition-colors"
+              >
+                +62 123 4567 890
+              </a>
             </div>
             <div className="flex gap-3 mt-5">
               {socialLinks.map((social) => (

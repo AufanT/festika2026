@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { Trophy, Calendar, Link as LinkIcon, MessageSquare, ArrowLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { formatWhatsAppLink } from "@/lib/utils";
 
 export default async function CompetitionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -115,8 +116,9 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
                             <p className="text-xs text-gray-500">{cp.phone}</p>
                           </div>
                           <a 
-                            href={`https://wa.me/${cp.phone.replace(/[^0-9]/g, '')}`} 
+                            href={formatWhatsAppLink(cp.phone, `Halo, saya ingin bertanya tentang lomba ${competition.title} di Festika 2026.`)} 
                             target="_blank" 
+                            rel="noopener noreferrer"
                             className="w-10 h-10 bg-gray-100 flex items-center justify-center text-festika-navy hover:bg-festika-teal hover:text-white transition-colors border border-gray-200"
                           >
                             <MessageSquare size={18} />
