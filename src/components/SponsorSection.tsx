@@ -6,12 +6,12 @@ import { Handshake, ExternalLink } from "lucide-react";
 export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
   // Group sponsors by tier
   const tiers = [
-    { name: "Platinum", className: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto", itemClass: "h-48 sm:h-64" },
-    { name: "Gold", className: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-5xl mx-auto", itemClass: "h-32 sm:h-48" },
-    { name: "Silver", className: "grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 max-w-6xl mx-auto", itemClass: "h-24 sm:h-36" },
-    { name: "Bronze", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-20 sm:h-28" },
-    { name: "Media Partner", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-20 sm:h-28" },
-    { name: "Supported By", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-20 sm:h-28" },
+    { name: "Platinum", className: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto", itemClass: "h-64 sm:h-80" },
+    { name: "Gold", className: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-5xl mx-auto", itemClass: "h-44 sm:h-56" },
+    { name: "Silver", className: "grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 max-w-6xl mx-auto", itemClass: "h-32 sm:h-44" },
+    { name: "Bronze", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-24 sm:h-32" },
+    { name: "Media Partner", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-24 sm:h-32" },
+    { name: "Supported By", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-24 sm:h-32" },
   ];
 
   const sponsorsByTier = (tierName: string) => 
@@ -73,7 +73,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                       <img
                         src={spn.imageUrl || "/Logo_Festika-04.webp"}
                         alt={spn.name}
-                        className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-90 group-hover:scale-100"
+                        className="w-full h-full object-contain transition-all duration-500 scale-100 group-hover:scale-110"
                       />
                       
                       {/* Hover Effect Details */}

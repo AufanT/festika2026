@@ -16,7 +16,6 @@ const socialLinks = [
   { icon: Code, href: "#", label: "GitHub" },
 ];
 
-const partners = ["TechCorp", "InnovateLab", "DevStudio", "CloudSys"];
 
 export default function Footer() {
   return (
@@ -90,24 +89,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Partners Section */}
-      <div className="border-t border-gray-700/50">
-        <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
-          <p className="text-center text-xs uppercase tracking-[0.2em] text-gray-500 mb-6">
-            In Partnership With
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14">
-            {partners.map((partner) => (
-              <div key={partner} className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-gray-600" />
-                <span className="font-[family-name:var(--font-space-grotesk)] text-sm font-bold text-gray-400">
-                  {partner}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Copyright */}
       <div className="border-t border-gray-700/50">
