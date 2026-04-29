@@ -9,10 +9,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
-import { SettingRepository } from "@/lib/repositories/setting.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 import SponsorSection from "@/components/SponsorSection";
 import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
+
 
 // force-dynamic: Next.js tidak melakukan pre-render saat build.
 // Halaman di-render saat ada request nyata (SSR), bukan di build time.
@@ -51,14 +51,12 @@ const milestones = [
 
 /* ── Page ─────────────────────────────────────────── */
 
+const ABOUT_DESCRIPTION =
+  "Festika (Festival Informatika) adalah ajang tahunan bergengsi yang mewadahi kreativitas, inovasi, dan keahlian di bidang teknologi informasi. Kami hadir untuk menantang generasi muda dalam menciptakan solusi digital yang berdampak nyata bagi masyarakat. Bergabunglah dalam perayaan teknologi terbesar dan jadilah bagian dari revolusi masa depan.";
+
 export default async function Home() {
   const competitions = await CompetitionRepository.findAll();
-  const settings = await SettingRepository.findAll();
   const sponsors = await SponsorRepository.findAll();
-
-  const heroImage = settings.hero_image || null;
-  const aboutImage = settings.about_image || null;
-  const aboutDesc = settings.about_description || "Festika (Festival Informatika) adalah ajang tahunan bergengsi yang mewadahi kreativitas, inovasi, dan keahlian di bidang teknologi informasi. Kami hadir untuk menantang generasi muda dalam menciptakan solusi digital yang berdampak nyata bagi masyarakat. Bergabunglah dalam perayaan teknologi terbesar dan jadilah bagian dari revolusi masa depan.";
 
   return (
     <>
@@ -66,39 +64,39 @@ export default async function Home() {
         {/* ═══════════ HERO ═══════════ */}
         <section
           id="hero"
-          className="relative min-h-screen flex items-center overflow-hidden pt-16"
+          className="relative min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden pt-16"
           style={{
             background:
               "linear-gradient(135deg, #FFF8F0 0%, #FDE8CF 40%, #F8C88C 100%)",
           }}
         >
-          <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full py-16 lg:py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full py-12 lg:py-16">
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
               {/* Left Content */}
-              <div className="flex-1 text-center lg:text-left">
+              <div className="flex-1 text-center lg:text-left z-10">
                 {/* Badge */}
                 <span className="inline-block border border-festika-teal rounded-full px-5 py-1.5 text-xs font-semibold text-festika-teal tracking-wider uppercase">
                   IT Festival 2026
                 </span>
 
                 {/* Logo + Title */}
-                <div className="flex items-center gap-4 mt-8 justify-center lg:justify-start">
+                <div className="flex items-center gap-6 mt-8 justify-center lg:justify-start">
                   {/* Logo Icon */}
-                  <div className="w-28 h-28 lg:w-36 lg:h-36 xl:w-44 xl:h-44 bg-festika-orange rounded-2xl flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0 p-4 lg:p-5 xl:p-6">
+                  <div className="w-32 h-32 lg:w-48 lg:h-48 xl:w-56 xl:h-56 bg-festika-orange rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0 p-5 lg:p-7 xl:p-8">
                     <Image
                       src="/Logo_Festika-04.webp"
                       alt="Festika Logo"
-                      width={176}
-                      height={176}
+                      width={220}
+                      height={220}
                       priority
                       className="object-contain w-full h-full"
                     />
                   </div>
                   <div>
-                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-6xl lg:text-7xl xl:text-8xl font-extrabold text-festika-teal leading-[0.9] tracking-tight">
+                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-7xl lg:text-8xl xl:text-9xl font-extrabold text-festika-teal leading-[0.85] tracking-tighter">
                       FES
                     </h1>
-                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-6xl lg:text-7xl xl:text-8xl font-extrabold text-festika-orange leading-[0.9] tracking-tight">
+                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-7xl lg:text-8xl xl:text-9xl font-extrabold text-festika-orange leading-[0.85] tracking-tighter">
                       TIKA
                     </h1>
                   </div>
@@ -133,47 +131,20 @@ export default async function Home() {
                 </div>
               </div>
 
-              {/* Right - Photo Frame */}
-              <div className="flex-1 flex justify-center lg:justify-end">
-                <div className="relative w-[280px] sm:w-[340px] lg:w-[400px]" style={{ height: "480px" }}>
-
-                  {/* Dot grid decoration */}
-                  <div className="absolute -top-6 -right-6 w-28 h-28 z-0" style={{
-                    backgroundImage: "radial-gradient(circle, #0F2A36 1.5px, transparent 1.5px)",
-                    backgroundSize: "10px 10px",
-                    opacity: 0.2,
-                  }} />
-
-                  {/* Rotated background card */}
-                  <div className="absolute inset-0 bg-festika-orange rounded-2xl z-0" style={{ transform: "rotate(5deg) translate(10px, 8px)", opacity: 0.7 }} />
-                  <div className="absolute inset-0 bg-festika-teal rounded-2xl z-0" style={{ transform: "rotate(2deg) translate(5px, 4px)", opacity: 0.85 }} />
-
-                  {/* Main photo card */}
-                  <div className="absolute inset-0 rounded-2xl overflow-hidden z-10 shadow-2xl border-2 border-white/20">
-                    <div className="w-full h-full bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 flex items-center justify-center relative">
-                      {heroImage ? (
-                        <Image src={heroImage} alt="Hero Festika" fill className="object-cover" />
-                      ) : (
-                        <span className="text-gray-500 text-sm font-medium">Photo Placeholder</span>
-                      )}
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-festika-navy/40 via-transparent to-transparent pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Floating year badge */}
-                  <div className="absolute -bottom-4 -left-6 z-20 bg-festika-orange rounded-xl px-4 py-2 shadow-[4px_4px_0_0_#0F2A36] border-2 border-festika-navy flex items-center gap-1">
-                    <span className="font-[family-name:var(--font-space-grotesk)] text-white text-xl font-extrabold leading-none">2026</span>
-                  </div>
-
-                  {/* Small floating accent circle */}
-                  <div className="absolute -top-3 left-8 z-20 w-8 h-8 bg-white rounded-full border-2 border-festika-teal shadow-md flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-festika-orange" />
-                  </div>
-
-                  {/* Bottom-right decorative line */}
-                  <div className="absolute -bottom-8 right-4 w-16 h-[3px] bg-festika-teal z-0" />
-                  <div className="absolute -bottom-12 right-4 w-10 h-[3px] bg-festika-orange z-0" />
+              {/* Right - Hero Illustration (MEGA SIZE / Mobile Watermark) */}
+              <div className="absolute inset-0 lg:static flex-[1.6] flex justify-center lg:justify-end items-center overflow-visible z-0 opacity-25 sm:opacity-30 lg:opacity-100 pointer-events-none lg:pointer-events-auto">
+                {/* Background Glow behind SVG (Desktop only) */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-festika-orange/10 blur-[100px] rounded-full z-[-1] hidden lg:block" />
+                
+                <div className="relative w-full max-w-[600px] sm:max-w-[700px] lg:max-w-[1100px] xl:max-w-[1300px] lg:-mr-8 xl:-mr-12 transform scale-150 sm:scale-125 lg:scale-140 xl:scale-150 transition-all duration-700 animate-float">
+                  <Image
+                    src="/1.svg"
+                    alt="Hero Festika Illustration"
+                    width={1300}
+                    height={1000}
+                    priority
+                    className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.1)] lg:drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
+                  />
                 </div>
               </div>
             </div>
@@ -181,73 +152,82 @@ export default async function Home() {
         </section>
 
         {/* ═══════════ ABOUT ═══════════ */}
-        <section id="about" className="relative py-20 lg:py-28 overflow-hidden">
-          {/* Subtle radial glow */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(253,232,207,0.5) 0%, transparent 70%)",
-            }}
-          />
+        <section id="about" className="relative py-24 lg:py-32 overflow-hidden">
+          {/* Rich dark background */}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0F2A36 0%, #1B3A4B 55%, #0F2A36 100%)" }} />
+
+          {/* Decorative blobs */}
+          <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full opacity-10" style={{ background: "radial-gradient(circle, #F5A623, transparent 70%)" }} />
+          <div className="absolute -bottom-32 -right-20 w-96 h-96 rounded-full opacity-10" style={{ background: "radial-gradient(circle, #FDE8CF, transparent 70%)" }} />
+          <div className="absolute top-8 right-8 w-48 h-48 opacity-[0.08]" style={{
+            backgroundImage: "radial-gradient(circle, #FDE8CF 1.5px, transparent 1.5px)",
+            backgroundSize: "14px 14px",
+          }} />
 
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-              {/* Left - Photo Frame */}
-              <div className="flex-1 flex justify-center lg:justify-start">
-                <div className="relative w-[280px] sm:w-[320px] lg:w-[380px]" style={{ height: "460px" }}>
+            <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
 
-                  {/* Dot grid decoration top-left */}
-                  <div className="absolute -top-6 -left-6 w-24 h-24 z-0" style={{
-                    backgroundImage: "radial-gradient(circle, #F5A623 1.5px, transparent 1.5px)",
-                    backgroundSize: "10px 10px",
-                    opacity: 0.35,
-                  }} />
-
-                  {/* Rotated background layers */}
-                  <div className="absolute inset-0 bg-festika-teal rounded-2xl z-0" style={{ transform: "rotate(-5deg) translate(-10px, 8px)", opacity: 0.7 }} />
-                  <div className="absolute inset-0 bg-festika-orange rounded-2xl z-0" style={{ transform: "rotate(-2deg) translate(-5px, 4px)", opacity: 0.85 }} />
-
-                  {/* Main photo card */}
-                  <div className="absolute inset-0 rounded-2xl overflow-hidden z-10 shadow-2xl border-2 border-white/20">
-                    <div className="w-full h-full bg-gradient-to-br from-gray-300 via-gray-200 to-gray-400 flex items-center justify-center relative">
-                      {aboutImage ? (
-                        <Image src={aboutImage} alt="About Festika" fill className="object-cover" />
-                      ) : (
-                        <span className="text-gray-500 text-sm font-medium">Photo Placeholder</span>
-                      )}
-                      {/* Gradient overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-festika-teal/40 via-transparent to-transparent pointer-events-none" />
-                    </div>
+              {/* Left - Illustration + floating badges */}
+              <div className="flex-1 flex justify-center lg:justify-start items-center">
+                <div className="relative w-[300px] sm:w-[450px] lg:w-full lg:max-w-[650px] transform lg:scale-110 xl:scale-115 lg:-ml-12 xl:-ml-20">
+                  <Image
+                    src="/2.svg"
+                    alt="About Festika Illustration"
+                    width={650}
+                    height={550}
+                    className="w-full h-auto object-contain drop-shadow-2xl"
+                  />
+                  {/* Floating badge: Since */}
+                  <div className="absolute -top-6 -left-6 bg-festika-orange rounded-2xl px-5 py-4 shadow-[5px_5px_0_0_#0F2A36] border-2 border-festika-navy z-20">
+                    <p className="text-white/80 text-[10px] font-bold uppercase tracking-widest">Since</p>
+                    <p className="text-white text-3xl font-extrabold font-[family-name:var(--font-space-grotesk)] leading-none">2018</p>
                   </div>
-
-                  {/* Floating label badge */}
-                  <div className="absolute -bottom-4 -right-6 z-20 bg-festika-teal rounded-xl px-4 py-2 shadow-[4px_4px_0_0_#F5A623] border-2 border-festika-orange">
-                    <span className="font-[family-name:var(--font-space-grotesk)] text-white text-sm font-bold tracking-widest uppercase">Festika</span>
+                  {/* Floating badge: Peserta */}
+                  <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl px-5 py-4 shadow-2xl border-2 border-festika-orange/20 z-20">
+                    <p className="text-festika-teal/70 text-[10px] font-bold uppercase tracking-widest">Peserta</p>
+                    <p className="text-festika-orange text-3xl font-extrabold font-[family-name:var(--font-space-grotesk)] leading-none">2000+</p>
                   </div>
-
-                  {/* Small floating accent */}
-                  <div className="absolute -top-3 right-8 z-20 w-8 h-8 bg-festika-orange rounded-full border-2 border-white shadow-md flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-white" />
-                  </div>
-
-                  {/* Bottom-left decorative lines */}
-                  <div className="absolute -bottom-8 left-4 w-16 h-[3px] bg-festika-orange z-0" />
-                  <div className="absolute -bottom-12 left-4 w-10 h-[3px] bg-festika-teal z-0" />
+                  {/* Accent dot */}
+                  <div className="absolute top-1/2 -right-10 w-6 h-6 rounded-full bg-festika-orange/30 border-2 border-festika-orange/60 hidden lg:block" />
                 </div>
               </div>
 
-              {/* Right - About Card */}
+              {/* Right - Premium text block */}
               <div className="flex-1">
-                <div className="bg-festika-teal border border-festika-orange/30 rounded-2xl p-8 lg:p-10 shadow-xl">
-                  <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl lg:text-4xl font-bold text-festika-orange">
-                    About Festika!
+                <div className="relative pl-7">
+                  {/* Orange vertical accent line */}
+                  <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-festika-orange via-festika-orange/50 to-transparent rounded-full" />
+
+                  <p className="text-festika-orange text-xs font-bold uppercase tracking-[0.3em] mb-3">Tentang Kami</p>
+                  <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-[1.05]">
+                    About <span className="text-festika-orange">Festika!</span>
                   </h2>
-                  <p className="text-gray-300 mt-5 leading-relaxed text-sm lg:text-base">
-                    {aboutDesc}
+                  <div className="w-14 h-[3px] bg-festika-orange mt-5 mb-6 rounded-full" />
+
+                  <p className="text-gray-300 leading-relaxed text-base lg:text-lg">
+                    {ABOUT_DESCRIPTION}
                   </p>
+
+                  {/* Feature grid */}
+                  <div className="mt-8 grid grid-cols-2 gap-3">
+                    {[
+                      { icon: "🏆", label: "Kompetisi Bergengsi" },
+                      { icon: "💡", label: "Inovasi Digital" },
+                      { icon: "🤝", label: "Networking" },
+                      { icon: "🚀", label: "Teknologi Masa Depan" },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 hover:bg-white/10 hover:border-festika-orange/40 transition-all cursor-default"
+                      >
+                        <span className="text-lg">{item.icon}</span>
+                        <span className="text-gray-200 text-sm font-medium leading-tight">{item.label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         </section>

@@ -1,7 +1,6 @@
 "use client";
 
 import StaffPanel from "./StaffPanel";
-import SitePanel from "./SitePanel";
 import SponsorPanel from "./SponsorPanel";
 import { useNotification } from "@/context/NotificationContext";
 import { useState, useEffect, useCallback } from "react";
@@ -11,7 +10,6 @@ import {
   Users,
   Trophy,
   ArrowLeft,
-  Layout,
   Handshake,
 } from "lucide-react";
 
@@ -33,7 +31,7 @@ import { Competition, User } from "@/types/admin";
 export default function AdminDashboard({ user }: { user: User | undefined }) {
   const { showNotification } = useNotification();
   const [activeTab, setActiveTab] = useState<
-    "competitions" | "past-events" | "staff" | "site" | "sponsors"
+    "competitions" | "past-events" | "staff" | "sponsors"
   >("competitions");
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [pastEvents, setPastEvents] = useState<Competition[]>([]);
@@ -288,7 +286,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
-    if (activeTab === "site") return <SitePanel />;
     if (activeTab === "sponsors") return <SponsorPanel />;
 
     // Past Events Tab
@@ -446,12 +443,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
               label: "Sponsor",
               icon: Handshake,
               activeColor: "border-festika-orange",
-            },
-            {
-              id: "site",
-              label: "Situs",
-              icon: Layout,
-              activeColor: "border-festika-navy",
             },
           ].map((tab) => (
             <button
