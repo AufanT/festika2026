@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 import CompetitionSection from "@/components/CompetitionSection";
+import FaqSection from "@/components/FaqSection";
 import SponsorSection from "@/components/SponsorSection";
 import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
 
@@ -290,6 +291,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* ═══════════ FAQ ═══════════ */}
+        <FaqSection />
 
         {/* ═══════════ SPONSORS ═══════════ */}
         <SponsorSection sponsors={sponsors} />
