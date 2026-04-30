@@ -69,7 +69,7 @@ export default function Footer() {
             <div className="flex items-center gap-8 mb-8">
               <div className="relative h-16 w-16">
                 <Image
-                  src="/logo_festika-04.webp"
+                  src="/Logo_Festika-04.webp"
                   alt="Festika Logo"
                   fill
                   className="object-contain"
@@ -86,7 +86,7 @@ export default function Footer() {
               </div>
               <div className="relative h-16 w-16">
                 <Image
-                  src="/logo_unand.svg"
+                  src="/Logo_Unand.svg"
                   alt="Unand Logo"
                   fill
                   className="object-contain"
