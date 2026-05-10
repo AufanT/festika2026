@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 /* ── Page ─────────────────────────────────────────── */
 
 const ABOUT_DESCRIPTION =
-  "Festika (Festival Informatika) adalah ajang tahunan bergengsi yang mewadahi kreativitas, inovasi, dan keahlian di bidang teknologi informasi. Kami hadir untuk menantang generasi muda dalam menciptakan solusi digital yang berdampak nyata bagi masyarakat. Bergabunglah dalam perayaan teknologi terbesar dan jadilah bagian dari revolusi masa depan.";
+  "FESTIKA 2026 merupakan festival tahunan yang menjadi ajang kompetisi serta pengembangan potensi di bidang teknologi digital. Pada tahun ini, FESTIKA 2026 menghadirkan tiga kategori utama, yaitu Capture The Flag (CTF) Competition, Web Design Competition, dan Lomba Karya Tulis Ilmiah (KTI). Ketiga komptesi ini dirancang untuk menunjukan bakat, kreativitas, dan kemampuan dalam memanfaatkan teknologi secara optimal. Festika ini bertemakan \"TechSpark: Unleashing and Modern Creativity in the Technological World\". Kegiatan Festika ini bertemakan \"NextGen Tech : Creating the Future Today\".";
 
 export default async function Home() {
   const competitions = await CompetitionRepository.findAll();
@@ -130,7 +130,7 @@ export default async function Home() {
 
                   <p className="text-festika-orange text-xs font-bold uppercase tracking-[0.3em] mb-3">Tentang Kami</p>
                   <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-[1.05]">
-                    About <span className="text-festika-orange">Festika!</span>
+                    Festika <span className="text-festika-orange">2026</span>
                   </h2>
                   <div className="w-14 h-[3px] bg-festika-orange mt-5 mb-6 rounded-full" />
 

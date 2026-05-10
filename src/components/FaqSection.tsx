@@ -5,24 +5,83 @@ import { Plus, Minus, HelpCircle } from "lucide-react";
 
 const faqData = [
   {
-    question: "Apa itu Festika?",
-    answer: "Festival Informatika (yang disingkat sebagai Festika) merupakan sebuah festival komputer tahunan oleh Himpunan Mahasiswa Informatika Universitas Andalas yang bertujuan untuk meningkatkan minat dan bakat peserta dalam teknologi informasi."
+    question: "Apa itu Festika 2026?",
+    answer: (
+      <>
+        FESTIKA 2026 adalah festival tahunan yang menjadi wadah kompetisi sekaligus pengembangan potensi di bidang teknologi digital. Tahun ini, FESTIKA mengusung tema besar <span className="font-bold text-festika-navy">"NextGen Tech: Creating the Future Today"</span>.
+      </>
+    )
   },
   {
     question: "Siapa saja yang bisa mengikuti kompetisi di Festika?",
-    answer: "Kompetisi di Festika tahun ini berskala lokal dan diperuntukkan khusus bagi mahasiswa aktif di kota Padang."
+    answer: (
+      <div className="space-y-4">
+        <p>Ketentuan peserta bergantung pada jenis lomba yang diikuti:</p>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>
+            <span className="font-bold text-festika-navy">Lomba Karya Tulis Ilmiah (KTI):</span> Terbuka untuk pelajar SMA/sederajat, baik secara individu maupun tim.
+          </li>
+          <li>
+            <span className="font-bold text-festika-navy">Capture The Flag (CTF):</span> Terbuka untuk pelajar SMA/sederajat dalam bentuk tim yang terdiri dari 3 orang.
+          </li>
+          <li>
+            <span className="font-bold text-festika-navy">Desain Web:</span> Peserta mengerjakan proyek secara individu.
+          </li>
+        </ul>
+      </div>
+    )
   },
   {
     question: "Apa saja lomba yang ada di Festika 2026?",
-    answer: "Festika menghadirkan berbagai kompetisi menarik. Untuk daftar lengkap cabang perlombaan beserta tema dan deskripsinya, kamu bisa melihatnya langsung pada bagian 'Competitions' di halaman utama ini."
+    answer: (
+      <div className="space-y-4">
+        <p>Terdapat tiga kategori lomba utama tahun ini:</p>
+        <ol className="list-decimal pl-5 space-y-2">
+          <li>
+            <span className="font-bold text-festika-navy">Desain Web:</span> Kompetisi merancang antarmuka <span className="italic">website</span> yang kreatif dan responsif.
+          </li>
+          <li>
+            <span className="font-bold text-festika-navy">Lomba Karya Tulis Ilmiah (KTI):</span> Kompetisi inovasi dan penelitian ilmiah bertema tantangan era digital.
+          </li>
+          <li>
+            <span className="font-bold text-festika-navy">Capture The Flag (CTF):</span> Kompetisi di bidang keamanan siber menggunakan <span className="italic">platform</span> picoCTF.
+          </li>
+        </ol>
+      </div>
+    )
   },
   {
     question: "Bagaimana alur pendaftaran kompetisinya?",
-    answer: "Peserta dapat melihat informasi awal kompetisi pada bagian 'Competitions'. Dengan mengklik kartu lomba yang diminati, kamu akan diarahkan ke halaman detail lomba yang memuat persyaratan lengkap dan tautan untuk melakukan pendaftaran."
+    answer: (
+      <div className="space-y-4">
+        <p>Pendaftaran dilakukan secara <span className="italic">online</span> dalam rentang waktu berikut:</p>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>
+            <span className="font-bold text-festika-navy">Desain Web:</span> 27 April – 12 Mei 2026.
+          </li>
+          <li>
+            <span className="font-bold text-festika-navy">KTI:</span> 27 April – 15 Mei 2026.
+          </li>
+          <li>
+            <span className="font-bold text-festika-navy">CTF:</span> 27 Maret – 14 Mei 2026.
+          </li>
+        </ul>
+        <p>Setelah mendaftar, peserta akan mengikuti rangkaian babak penyisihan secara <span className="italic">online</span> sebelum terpilih untuk maju ke babak final secara <span className="italic">offline</span> pada 23–24 Mei 2026.</p>
+      </div>
+    )
   },
   {
     question: "Apakah ada biaya pendaftaran?",
-    answer: "Biaya pendaftaran bervariasi untuk tiap cabang lomba. Informasi detail mengenai biaya dan metode pembayaran dapat dilihat di buku panduan (guidebook) masing-masing kompetisi."
+    answer: (
+      <ul className="list-disc pl-5 space-y-2">
+        <li>
+          <span className="font-bold text-festika-navy">Desain Web & KTI:</span> Gratis (tidak dipungut biaya).
+        </li>
+        <li>
+          <span className="font-bold text-festika-navy">Capture The Flag (CTF):</span> Biaya pendaftaran sebesar Rp100.000 per tim.
+        </li>
+      </ul>
+    )
   }
 ];
 
@@ -67,7 +126,7 @@ export default function FaqSection() {
                   onClick={() => toggleAccordion(index)}
                   className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 group"
                 >
-                  <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-lg md:text-xl text-festika-navy group-hover:text-festika-teal transition-colors">
+                  <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-lg md:text-xl text-festika-navy group-hover:text-festika-teal transition-colors text-balance">
                     {item.question}
                   </span>
                   <div className={`
@@ -80,12 +139,12 @@ export default function FaqSection() {
                 
                 <div className={`
                   overflow-hidden transition-all duration-300 ease-in-out
-                  ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}
+                  ${isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}
                 `}>
                   <div className="px-6 pb-6 pt-0 border-t-2 border-dashed border-gray-100 mt-0">
-                    <p className="text-gray-600 leading-relaxed text-base md:text-lg pt-4">
+                    <div className="text-gray-600 leading-relaxed text-base md:text-lg pt-4">
                       {item.answer}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
