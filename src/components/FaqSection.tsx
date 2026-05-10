@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Minus, HelpCircle } from "lucide-react";
+import { formatWhatsAppLink } from "@/lib/utils";
 
 const faqData = [
   {
@@ -156,7 +157,9 @@ export default function FaqSection() {
         <div className="mt-16 text-center">
           <p className="text-gray-500 mb-6 font-medium">Masih punya pertanyaan lainnya?</p>
           <a 
-            href="/#contact" 
+            href={formatWhatsAppLink("+62-823-1148-8810", "Halo, saya ingin bertanya tentang Festika 2026.")}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-festika-teal text-white border-2 border-festika-navy px-8 py-3 font-bold shadow-[4px_4px_0_0_#F5A623] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
           >
             Hubungi Kami
