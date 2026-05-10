@@ -1,16 +1,11 @@
 import Image from "next/image";
-import {
-  ClipboardList,
-  Sparkles,
-  Trophy,
-  Award,
-} from "lucide-react";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 import FaqSection from "@/components/FaqSection";
 import SponsorSection from "@/components/SponsorSection";
 import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
 import HeroButtons from "@/components/HeroButtons";
+import TimelineSection from "@/components/TimelineSection";
 
 
 // force-dynamic: Next.js tidak melakukan pre-render saat build.
@@ -18,35 +13,6 @@ import HeroButtons from "@/components/HeroButtons";
 // Ini menghindari kebutuhan koneksi DB saat proses build di Hostinger,
 // sekaligus memastikan data selalu fresh.
 export const dynamic = "force-dynamic";
-
-/* ── Data ─────────────────────────────────────────── */
-
-const milestones = [
-  {
-    icon: ClipboardList,
-    date: "SEPT 15, 2026",
-    title: "Registration Opens",
-    description: "Early bird registration and team formation begins.",
-  },
-  {
-    icon: Sparkles,
-    date: "OCT 05, 2026",
-    title: "Opening Ceremony",
-    description: "Kickoff event featuring keynote speakers.",
-  },
-  {
-    icon: Trophy,
-    date: "OCT 15-20, 2026",
-    title: "Main Competitions",
-    description: "Intense week of coding, designing, and hacking.",
-  },
-  {
-    icon: Award,
-    date: "OCT 25, 2026",
-    title: "Awarding Night",
-    description: "Closing ceremony and winner announcements.",
-  },
-];
 
 /* ── Page ─────────────────────────────────────────── */
 
@@ -199,79 +165,8 @@ export default async function Home() {
         {/* ═══════════ COMPETITIONS ═══════════ */}
         <CompetitionSection competitions={competitions} />
 
-        {/* ═══════════ TIMELINE / ROADMAP ═══════════ */}
-        <section id="timeline" className="py-20 lg:py-28 bg-white border-b border-gray-100">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            {/* Heading Row */}
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-              <div>
-                <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl font-extrabold tracking-wider">
-                  <span className="text-festika-teal">ROADMAP </span>
-                  <span className="text-festika-orange">2026</span>
-                </h2>
-                <div className="w-16 h-1 bg-festika-teal mt-3" />
-              </div>
-              <p className="text-gray-500 text-sm lg:text-base max-w-xs lg:text-right">
-                Mark your calendars and prepare for a month of innovation.
-              </p>
-            </div>
-
-            {/* Timeline - Desktop */}
-            <div className="hidden md:block mt-20 relative">
-              {/* Horizontal line */}
-              <div className="absolute top-8 left-[8%] right-[8%] h-[2px] bg-gray-300" />
-
-              {/* Milestones */}
-              <div className="flex justify-between">
-                {milestones.map((m) => (
-                  <div
-                    key={m.title}
-                    className="flex flex-col items-center text-center max-w-[200px]"
-                  >
-                    {/* Icon box */}
-                    <div className="w-16 h-16 border-2 border-festika-teal bg-white flex items-center justify-center relative z-10">
-                      <m.icon size={22} className="text-festika-teal" />
-                    </div>
-                    <p className="text-festika-orange font-semibold text-xs uppercase tracking-wider mt-5">
-                      {m.date}
-                    </p>
-                    <h3 className="font-[family-name:var(--font-space-grotesk)] font-bold text-festika-teal text-sm mt-1">
-                      {m.title}
-                    </h3>
-                    <p className="text-gray-400 text-xs mt-1 leading-relaxed">
-                      {m.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Timeline - Mobile (vertical) */}
-            <div className="md:hidden mt-12">
-              <div className="relative pl-8 border-l-2 border-gray-200 space-y-10">
-                {milestones.map((m) => (
-                  <div key={m.title} className="relative">
-                    {/* Dot on the line */}
-                    <div className="absolute -left-[25px] top-0 w-12 h-12 border-2 border-festika-teal bg-white flex items-center justify-center">
-                      <m.icon size={18} className="text-festika-teal" />
-                    </div>
-                    <div className="pl-8">
-                      <p className="text-festika-orange font-semibold text-xs uppercase tracking-wider">
-                        {m.date}
-                      </p>
-                      <h3 className="font-[family-name:var(--font-space-grotesk)] font-bold text-festika-teal mt-1">
-                        {m.title}
-                      </h3>
-                      <p className="text-gray-400 text-sm mt-1">
-                        {m.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ═══════════ TIMELINE ═══════════ */}
+        <TimelineSection />
 
         {/* ═══════════ FAQ ═══════════ */}
         <FaqSection />
