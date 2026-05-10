@@ -55,9 +55,13 @@ export default async function Home() {
                 </div>
 
                 {/* Tagline */}
-                <p className="text-festika-orange italic text-lg lg:text-xl mt-6 drop-shadow-sm font-medium">
-                  "TechSpark: Unleashing and Modern Creativity in the Technological World"
-                </p>
+                <div className="mt-10">
+                  <div className="inline-block bg-festika-navy text-white border-2 border-white px-6 py-3 shadow-[6px_6px_0_0_#F5A623] -rotate-1 hover:rotate-0 transition-transform cursor-default">
+                    <p className="italic text-base lg:text-lg font-bold">
+                      "TechSpark: Unleashing and Modern Creativity in the Technological World"
+                    </p>
+                  </div>
+                </div>
 
                 {/* Buttons */}
                 <HeroButtons />
@@ -84,74 +88,76 @@ export default async function Home() {
         </section>
 
         {/* ═══════════ ABOUT ═══════════ */}
-        <section id="about" className="relative py-24 lg:py-32 overflow-hidden">
-          {/* Rich dark background */}
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0F2A36 0%, #1B3A4B 55%, #0F2A36 100%)" }} />
-
-          {/* Decorative blobs */}
-          <div className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full opacity-10" style={{ background: "radial-gradient(circle, #F5A623, transparent 70%)" }} />
-          <div className="absolute -bottom-32 -right-20 w-96 h-96 rounded-full opacity-10" style={{ background: "radial-gradient(circle, #FDE8CF, transparent 70%)" }} />
-          <div className="absolute top-8 right-8 w-48 h-48 opacity-[0.08]" style={{
-            backgroundImage: "radial-gradient(circle, #FDE8CF 1.5px, transparent 1.5px)",
-            backgroundSize: "14px 14px",
-          }} />
+        <section id="about" className="relative py-20 lg:py-32 bg-[#FFF8F0] border-y-4 border-festika-navy overflow-hidden">
+          {/* Decorative pattern */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#0F2A36 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
+          
+          {/* Decorative brutalist shapes */}
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-festika-teal/10 border-4 border-festika-navy rotate-12 hidden lg:block" />
+          <div className="absolute bottom-10 -right-10 w-40 h-40 bg-festika-orange/10 border-4 border-festika-navy -rotate-6 hidden lg:block" />
 
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
-              {/* Left - Illustration + floating badges */}
-              <div className="flex-1 flex justify-center lg:justify-start items-center">
-                <div className="relative w-[300px] sm:w-[450px] lg:w-full lg:max-w-[650px] transform lg:scale-110 xl:scale-115 lg:-ml-12 xl:-ml-20">
-                  <Image
-                    src="/2.svg"
-                    alt="About Festika Illustration"
-                    width={650}
-                    height={550}
-                    className="w-full h-auto object-contain drop-shadow-2xl"
-                  />
-                  {/* Floating badge: Since */}
-                  <div className="absolute -bottom-6 -right-6 bg-festika-orange rounded-2xl px-5 py-4 shadow-[5px_5px_0_0_#0F2A36] border-2 border-festika-navy z-20">
-                    <p className="text-white/80 text-[10px] font-bold uppercase tracking-widest">Since</p>
-                    <p className="text-white text-3xl font-extrabold font-[family-name:var(--font-space-grotesk)] leading-none">2024</p>
+              {/* Left - Illustration in a Brutalist Frame */}
+              <div className="flex-1 w-full max-w-[550px]">
+                <div className="relative group">
+                  {/* The Frame */}
+                  <div className="absolute inset-0 bg-festika-teal translate-x-3 translate-y-3 border-4 border-festika-navy group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-300" />
+                  <div className="relative bg-white border-4 border-festika-navy p-4 sm:p-8">
+                    <Image
+                      src="/2.svg"
+                      alt="About Festika Illustration"
+                      width={600}
+                      height={500}
+                      className="w-full h-auto object-contain"
+                    />
+                    
+                    {/* Floating Badge */}
+                    <div className="absolute -top-6 -right-6 bg-festika-orange border-4 border-festika-navy px-6 py-4 shadow-[6px_6px_0_0_#0F2A36] -rotate-3 hover:rotate-0 transition-transform">
+                      <p className="text-white text-[10px] font-black uppercase tracking-widest leading-none mb-1">Since</p>
+                      <p className="text-white text-4xl font-black font-[family-name:var(--font-space-grotesk)] leading-none">2024</p>
+                    </div>
                   </div>
-                  {/* Accent dot */}
-                  <div className="absolute top-1/2 -right-10 w-6 h-6 rounded-full bg-festika-orange/30 border-2 border-festika-orange/60 hidden lg:block" />
                 </div>
               </div>
 
-              {/* Right - Premium text block */}
-              <div className="flex-1">
-                <div className="relative pl-7">
-                  {/* Orange vertical accent line */}
-                  <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-festika-orange via-festika-orange/50 to-transparent rounded-full" />
-
-                  <p className="text-festika-orange text-xs font-bold uppercase tracking-[0.3em] mb-3">Tentang Kami</p>
-                  <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-[1.05]">
-                    Festika <span className="text-festika-orange">2026</span>
+              {/* Right - Text Content */}
+              <div className="flex-1 space-y-8">
+                <div className="space-y-4">
+                  <div className="inline-block bg-festika-teal border-2 border-festika-navy px-4 py-1 shadow-[3px_3px_0_0_#0F2A36]">
+                    <span className="text-white text-xs font-black uppercase tracking-widest">Tentang Kami</span>
+                  </div>
+                  
+                  <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-7xl font-black text-festika-navy leading-[0.9] uppercase italic tracking-tighter">
+                    Festika <br />
+                    <span className="text-festika-orange">2026</span>
                   </h2>
-                  <div className="w-14 h-[3px] bg-festika-orange mt-5 mb-6 rounded-full" />
+                </div>
 
-                  <p className="text-gray-300 leading-relaxed text-base lg:text-lg">
+                <div className="relative">
+                  <div className="absolute -left-6 top-0 bottom-0 w-2 bg-festika-orange border-l-2 border-r-2 border-festika-navy" />
+                  <p className="text-festika-navy font-bold text-lg lg:text-xl leading-relaxed pl-2">
                     {ABOUT_DESCRIPTION}
                   </p>
+                </div>
 
-                  {/* Feature grid */}
-                  <div className="mt-8 grid grid-cols-2 gap-3">
-                    {[
-                      { icon: "🏆", label: "Kompetisi Bergengsi" },
-                      { icon: "💡", label: "Inovasi Digital" },
-                      { icon: "🤝", label: "Networking" },
-                      { icon: "🚀", label: "Teknologi Masa Depan" },
-                    ].map((item) => (
-                      <div
-                        key={item.label}
-                        className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 hover:bg-white/10 hover:border-festika-orange/40 transition-all cursor-default"
-                      >
-                        <span className="text-lg">{item.icon}</span>
-                        <span className="text-gray-200 text-sm font-medium leading-tight">{item.label}</span>
-                      </div>
-                    ))}
-                  </div>
+                {/* Feature Grid - Brutalist Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { icon: "🏆", label: "Kompetisi Bergengsi", color: "bg-white" },
+                    { icon: "💡", label: "Inovasi Digital", color: "bg-white" },
+                    { icon: "🤝", label: "Networking", color: "bg-white" },
+                    { icon: "🚀", label: "Teknologi Masa Depan", color: "bg-white" },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className={`flex items-center gap-4 ${item.color} border-2 border-festika-navy p-4 shadow-[4px_4px_0_0_#0F2A36] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all`}
+                    >
+                      <div className="text-3xl filter drop-shadow-[2px_2px_0_rgba(0,0,0,0.2)]">{item.icon}</div>
+                      <span className="text-festika-navy text-sm font-black uppercase tracking-tight leading-none">{item.label}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
