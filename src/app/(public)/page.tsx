@@ -1,18 +1,16 @@
-import Link from "next/link";
 import Image from "next/image";
 import {
-  ArrowRight,
   ClipboardList,
   Sparkles,
   Trophy,
   Award,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 import FaqSection from "@/components/FaqSection";
 import SponsorSection from "@/components/SponsorSection";
 import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
+import HeroButtons from "@/components/HeroButtons";
 
 
 // force-dynamic: Next.js tidak melakukan pre-render saat build.
@@ -99,24 +97,7 @@ export default async function Home() {
                 </p>
 
                 {/* Buttons */}
-                <div className="flex flex-col sm:flex-row gap-5 mt-10 justify-center lg:justify-start">
-                  <Link href="/#competitions">
-                    <Button
-                      className="bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-8 h-12 text-base font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer gap-2"
-                    >
-                      Join the Festival
-                      <ArrowRight size={18} />
-                    </Button>
-                  </Link>
-                  <a href="#competitions">
-                    <Button
-                      variant="outline"
-                      className="bg-white border-2 border-festika-navy text-festika-navy hover:bg-gray-50 hover:text-festika-navy rounded-none px-8 h-12 text-base font-bold shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
-                    >
-                      Learn More
-                    </Button>
-                  </a>
-                </div>
+                <HeroButtons />
               </div>
 
               {/* Right - Hero Illustration (MEGA SIZE / Mobile Watermark) */}
