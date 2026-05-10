@@ -55,11 +55,8 @@ export default async function Home() {
                 </div>
 
                 {/* Tagline */}
-                <p className="text-festika-orange italic text-lg lg:text-xl mt-6 drop-shadow-sm">
-                  Unleashing Innovation through
-                </p>
-                <p className="text-festika-teal font-bold text-lg lg:text-xl drop-shadow-sm">
-                  Digital Creativity
+                <p className="text-festika-orange italic text-lg lg:text-xl mt-6 drop-shadow-sm font-medium">
+                  "TechSpark: Unleashing and Modern Creativity in the Technological World"
                 </p>
 
                 {/* Buttons */}
