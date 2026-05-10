@@ -5,6 +5,7 @@ import { Trophy, Calendar, Link as LinkIcon, MessageSquare, ArrowLeft, Sparkles 
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatWhatsAppLink } from "@/lib/utils";
+import GuidebookCalloutCard from "@/components/GuidebookCalloutCard";
 
 export default async function CompetitionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -103,6 +104,9 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
                     *Anda akan diarahkan ke Google Form eksternal
                   </p>
                 </div>
+
+                {/* Guidebook Callout Card */}
+                <GuidebookCalloutCard />
 
                 {/* Contact Persons */}
                 {competition.contacts && Array.isArray(competition.contacts) && competition.contacts.length > 0 && (
