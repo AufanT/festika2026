@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, Minus, HelpCircle } from "lucide-react";
 import { formatWhatsAppLink } from "@/lib/utils";
+import Reveal from "@/components/Reveal";
 
 const faqData = [
   {
@@ -97,6 +98,7 @@ export default function FaqSection() {
     <section id="faq" className="py-20 lg:py-28 bg-white border-b border-gray-100">
       <div className="mx-auto max-w-4xl px-6 lg:px-8">
         {/* Heading Area */}
+        <Reveal>
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16">
           <div>
             <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl font-extrabold tracking-wider uppercase">
@@ -110,14 +112,15 @@ export default function FaqSection() {
             <p>Punya pertanyaan? Temukan jawabannya di sini.</p>
           </div>
         </div>
+        </Reveal>
 
         {/* Accordion List */}
         <div className="space-y-6">
           {faqData.map((item, index) => {
             const isOpen = openIndex === index;
             return (
+              <Reveal key={index} delay={index * 80}>
               <div 
-                key={index}
                 className={`
                   border-2 border-festika-navy transition-all duration-300
                   ${isOpen ? "bg-festika-peach/10 shadow-none translate-x-[2px] translate-y-[2px]" : "bg-white shadow-[4px_4px_0_0_#0F2A36] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"}
@@ -149,6 +152,7 @@ export default function FaqSection() {
                   </div>
                 </div>
               </div>
+              </Reveal>
             );
           })}
         </div>

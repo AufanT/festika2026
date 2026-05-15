@@ -5,6 +5,7 @@
  */
 
 import { ClipboardList, Swords, Trophy, Flag } from "lucide-react";
+import Reveal from "@/components/Reveal";
 
 interface MilestoneDetail { label: string; date: string; }
 interface Milestone {
@@ -67,6 +68,7 @@ export default function TimelineSection() {
       <div className="mx-auto max-w-6xl px-6 lg:px-8 relative z-10">
 
         {/* ── Heading ── */}
+        <Reveal>
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-12 lg:mb-16">
           <div>
             <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-6xl font-black tracking-tighter uppercase">
@@ -79,6 +81,7 @@ export default function TimelineSection() {
             Catat tanggalnya dan bersiaplah untuk kompetisi paling mendebarkan tahun ini.
           </p>
         </div>
+        </Reveal>
 
         {/* ── Desktop ── */}
         <div className="hidden md:block">
@@ -93,10 +96,10 @@ export default function TimelineSection() {
             {/* Horizontal line */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[4px] bg-festika-navy rounded-full z-0" />
 
-            {milestones.map((m) => {
+            {milestones.map((m, i) => {
               const isTop = m.position === "top";
               return (
-                <div key={m.title} className="flex-1 flex flex-col items-center">
+                <Reveal key={m.title} delay={i * 100} className="flex-1 flex flex-col items-center">
                   {/* Top zone */}
                   <div className="h-[120px] flex flex-col items-center justify-end pb-3 w-full">
                     {isTop && <DesktopCard milestone={m} />}
@@ -114,7 +117,7 @@ export default function TimelineSection() {
                   <div className="h-[120px] flex flex-col items-center justify-start pt-3 w-full">
                     {!isTop && <DesktopCard milestone={m} />}
                   </div>
-                </div>
+                </Reveal>
               );
             })}
           </div>
@@ -123,8 +126,8 @@ export default function TimelineSection() {
         {/* ── Mobile ── */}
         <div className="md:hidden">
           <div className="relative pl-10 border-l-[4px] border-festika-navy space-y-10 ml-4">
-            {milestones.map((m) => (
-              <div key={m.title} className="relative">
+            {milestones.map((m, i) => (
+              <Reveal key={m.title} delay={i * 100} className="relative">
                 <div className={`absolute -left-[54px] top-0 w-11 h-11 rounded-full border-[3px] border-festika-navy flex items-center justify-center shadow-[3px_3px_0_0_#0F2A36] z-10 ${m.accent}`}>
                   <m.icon size={18} className="text-white" />
                 </div>
@@ -139,10 +142,10 @@ export default function TimelineSection() {
                           ? <><span className="inline-block min-w-[52px] font-black text-festika-navy">{d.label}</span><span className="mx-0.5 text-festika-navy/50">:</span>{d.date}</>
                           : d.date}
                       </p>
-                    ))}
+                ))}
                   </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

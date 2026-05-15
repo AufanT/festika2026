@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Trophy, Sparkles } from "lucide-react";
+import Reveal from "@/components/Reveal";
 
 type Competition = {
   id: string;
@@ -17,6 +18,7 @@ export default function CompetitionSection({ competitions }: { competitions: Com
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         
         {/* Heading Area - Matching Timeline Section Style */}
+        <Reveal>
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-16">
           <div>
             <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl font-extrabold tracking-wider uppercase">
@@ -29,12 +31,13 @@ export default function CompetitionSection({ competitions }: { competitions: Com
             Tunjukkan bakatmu, berinovasi di bawah tekanan, dan berkompetisi dengan pikiran-pikiran cerdas di bidang teknologi.
           </p>
         </div>
+        </Reveal>
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {competitions.map((comp) => (
+          {competitions.map((comp, i) => (
+            <Reveal key={comp.id} delay={i * 100}>
             <Link
-              key={comp.id}
               href={`/competitions/${comp.id}`}
               className="group bg-white border-2 border-gray-200 p-6 flex flex-col transition-all duration-300 hover:border-festika-navy hover:shadow-[8px_8px_0_0_#0F2A36] hover:-translate-y-1 hover:-translate-x-1"
             >
@@ -80,6 +83,7 @@ export default function CompetitionSection({ competitions }: { competitions: Com
                 </div>
               </div>
             </Link>
+            </Reveal>
           ))}
           
           {competitions.length === 0 && (

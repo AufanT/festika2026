@@ -2,6 +2,7 @@
 
 import { Sponsor } from "@/lib/repositories/sponsor.repository";
 import { Handshake, ExternalLink } from "lucide-react";
+import Reveal from "@/components/Reveal";
 
 export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
   // Group sponsors by tier
@@ -28,6 +29,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         {/* Heading */}
+        <Reveal>
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-3 bg-festika-navy/5 border border-festika-navy/10 px-4 py-2 rounded-full mb-4">
             <Handshake size={18} className="text-festika-orange" />
@@ -38,15 +40,16 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
           </h2>
           <div className="w-24 h-1.5 bg-festika-teal mx-auto" />
         </div>
+        </Reveal>
 
         {/* Tiered Grid */}
         <div className="space-y-24">
-          {tiers.map((tier) => {
+          {tiers.map((tier, ti) => {
             const tierSponsors = sponsorsByTier(tier.name);
             if (tierSponsors.length === 0) return null;
 
             return (
-              <div key={tier.name} className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+              <Reveal key={tier.name} delay={ti * 100} className="animate-in fade-in slide-in-from-bottom-8 duration-700">
                 <div className="flex items-center gap-4 mb-10 justify-center">
                    <div className="h-[2px] flex-1 bg-gradient-to-r from-transparent to-gray-200" />
                    <h3 className="font-[family-name:var(--font-space-grotesk)] text-sm lg:text-base font-black text-gray-400 uppercase tracking-[0.4em] px-4">
@@ -92,7 +95,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                     </a>
                   ))}
                 </div>
-              </div>
+              </Reveal>
             );
           })}
         </div>

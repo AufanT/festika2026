@@ -98,10 +98,10 @@ export default function PastEventsPage() {
   return (
     <main className="min-h-screen bg-white pt-24 pb-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <Reveal>
         {/* Header Section */}
         <section className="mb-16">
           <div className="mb-8">
+            <Reveal delay={0}>
             <div className="flex items-center gap-3 mb-4">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-festika-orange flex items-center justify-center">
@@ -112,22 +112,29 @@ export default function PastEventsPage() {
                 Past Events
               </h1>
             </div>
+            </Reveal>
+            <Reveal delay={100}>
             <div className="w-12 h-1 bg-festika-orange mb-4" />
+            </Reveal>
+            <Reveal delay={150}>
             <h2 className="font-[family-name:var(--font-space-grotesk)] text-2xl lg:text-3xl font-bold text-festika-navy uppercase tracking-tight mb-4">
               Lihat Kesuksesan Kami
             </h2>
+            </Reveal>
+            <Reveal delay={200}>
             <p className="text-gray-600 max-w-2xl text-base lg:text-lg leading-relaxed font-medium">
               Berikut adalah acara-acara FESTIKA dari tahun-tahun sebelumnya.
               Jadilah bagian dari kesuksesan kami di tahun {currentYear}!
             </p>
+            </Reveal>
           </div>
 
           {/* Year Filter Tabs */}
           {years.length > 0 && (
             <div className="flex flex-wrap gap-3 mb-8">
               {years.map((year) => (
+                <Reveal key={year} delay={0}>
                 <button
-                  key={year}
                   onClick={() => handleYearChange(year)}
                   className={`px-6 py-3 border-2 font-bold transition-all flex items-center gap-2 ${
                     selectedYear === year
@@ -138,6 +145,7 @@ export default function PastEventsPage() {
                   <Calendar size={18} />
                   FESTIKA {year}
                 </button>
+                </Reveal>
               ))}
             </div>
           )}
@@ -146,6 +154,7 @@ export default function PastEventsPage() {
           {!isLoading && selectedYear !== null && (
             <div className="mb-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Reveal delay={0}>
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-4 border-blue-300 p-6 text-center">
                   <p className="text-[10px] font-black text-blue-700 uppercase tracking-widest mb-2">
                     Total Acara
@@ -154,6 +163,8 @@ export default function PastEventsPage() {
                     {(groupedEvents[selectedYear] || []).length}
                   </p>
                 </div>
+                </Reveal>
+                <Reveal delay={100}>
                 <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-4 border-yellow-300 p-6 text-center">
                   <p className="text-[10px] font-black text-yellow-700 uppercase tracking-widest mb-2">
                     Total Peserta
@@ -167,6 +178,8 @@ export default function PastEventsPage() {
                     ).toLocaleString()}
                   </p>
                 </div>
+                </Reveal>
+                <Reveal delay={200}>
                 <div className="bg-gradient-to-br from-orange-50 to-orange-100 border-4 border-orange-300 p-6 text-center">
                   <p className="text-[10px] font-black text-orange-700 uppercase tracking-widest mb-2">
                     Tahun
@@ -175,11 +188,11 @@ export default function PastEventsPage() {
                     {selectedYear}
                   </p>
                 </div>
+                </Reveal>
               </div>
             </div>
           )}
         </section>
-        </Reveal>
 
         {/* Loading State */}
         {isLoading && (
@@ -193,8 +206,8 @@ export default function PastEventsPage() {
 
         {/* Events Grid */}
         {!isLoading && events.length > 0 && (
-          <Reveal>
           <div>
+            <Reveal>
             <div className="mb-8">
               <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy uppercase tracking-tight mb-2">
                 📊 FESTIKA {selectedYear}
@@ -204,20 +217,21 @@ export default function PastEventsPage() {
                 {selectedYear}
               </p>
             </div>
+            </Reveal>
 
             <div className="grid grid-cols-1 gap-8 mb-12">
-              {events.map((event) => (
+              {events.map((event, i) => (
+                <Reveal key={event.id} delay={i * 80}>
                 <PastEventCard
-                  key={event.id}
                   event={event}
                   onDetailsClick={handleEventClick}
                 />
+                </Reveal>
               ))}
             </div>
 
             {/* Summary shown above */}
           </div>
-          </Reveal>
         )}
 
         {/* Empty State */}
