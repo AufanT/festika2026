@@ -77,7 +77,7 @@ export default function GuidebookCalloutCard({
         <GuidebookButton
           filePath={filePath}
           label={label}
-          className="w-full !bg-festika-orange !border-white !text-white !shadow-[3px_3px_0_0_rgba(255,255,255,0.5)] hover:!bg-white hover:!text-festika-navy hover:!shadow-none !h-11 !text-xs !tracking-widest justify-center"
+          className="w-full !bg-festika-orange !border-white !text-white !shadow-[3px_3px_0_0_rgba(255,255,255,0.5)] hover:!bg-white hover:!text-festika-navy hover:!shadow-none !px-4 sm:!px-6 !py-4 !text-xs !tracking-widest justify-center"
         />
       </div>
     </div>

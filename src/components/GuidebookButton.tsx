@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { downloadFile } from "@/lib/utils";
 
@@ -45,29 +46,32 @@ export default function GuidebookButton({
   label = "Guidebook",
   className = "",
 }: GuidebookButtonProps) {
-  // Implement label truncation logic: max 50 chars, truncate to 47 + "..."
+  const isDownloading = useRef(false);
+
   const truncatedLabel = label.length > 50 
     ? label.substring(0, 47) + "..." 
     : label;
 
-  const handleClick = () => {
+  const triggerDownload = () => {
+    if (isDownloading.current) return;
+    isDownloading.current = true;
     try {
       downloadFile(filePath);
     } catch {
       // Error is already logged by downloadFile function
-      // Button remains clickable for retry
+    } finally {
+      isDownloading.current = false;
     }
+  };
+
+  const handleClick = () => {
+    triggerDownload();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      try {
-        downloadFile(filePath);
-      } catch {
-        // Error is already logged by downloadFile function
-        // Button remains clickable for retry
-      }
+      triggerDownload();
     }
   };
 
