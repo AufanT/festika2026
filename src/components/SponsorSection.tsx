@@ -6,12 +6,12 @@ import { Handshake, ExternalLink } from "lucide-react";
 export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
   // Group sponsors by tier
   const tiers = [
-    { name: "Platinum", className: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto", itemClass: "h-64 sm:h-80" },
-    { name: "Gold", className: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-5xl mx-auto", itemClass: "h-44 sm:h-56" },
-    { name: "Silver", className: "grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 max-w-6xl mx-auto", itemClass: "h-32 sm:h-44" },
-    { name: "Bronze", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-24 sm:h-32" },
-    { name: "Media Partner", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-24 sm:h-32" },
-    { name: "Supported By", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-24 sm:h-32" },
+    { name: "Platinum", className: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-4xl mx-auto", itemClass: "h-80 sm:h-96" },
+    { name: "Gold", className: "grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 max-w-5xl mx-auto", itemClass: "h-60 sm:h-72" },
+    { name: "Silver", className: "grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 max-w-6xl mx-auto", itemClass: "h-44 sm:h-56" },
+    { name: "Bronze", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-36 sm:h-44" },
+    { name: "Media Partner", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-36 sm:h-44" },
+    { name: "Supported By", className: "grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 max-w-7xl mx-auto", itemClass: "h-36 sm:h-44" },
   ];
 
   const sponsorsByTier = (tierName: string) => 
