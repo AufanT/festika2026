@@ -1,4 +1,5 @@
 import StaffView from "@/components/staff/StaffView";
+import Reveal from "@/components/Reveal";
 
 export const metadata = {
   title: "Our Staff - Festika",
@@ -25,6 +26,7 @@ export default async function StaffPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Reveal>
       {/* Header */}
       <div className="text-center py-12 bg-white">
         <h1 
@@ -34,9 +36,10 @@ export default async function StaffPage() {
           Our<br/>Staff!
         </h1>
       </div>
+      </Reveal>
       
       {/* Container */}
-      <StaffView divisions={divisions} coreLeaders={coreLeaders} />
+      <Reveal><StaffView divisions={divisions} coreLeaders={coreLeaders} /></Reveal>
     </div>
   );
 }

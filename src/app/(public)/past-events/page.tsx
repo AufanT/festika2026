@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Zap, Loader, Calendar } from "lucide-react";
 import PastEventCard from "@/components/PastEventCard";
 import PastEventModal from "@/components/PastEventModal";
+import Reveal from "@/components/Reveal";
 
 interface PastEvent {
   id: string;
@@ -97,6 +98,7 @@ export default function PastEventsPage() {
   return (
     <main className="min-h-screen bg-white pt-24 pb-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <Reveal>
         {/* Header Section */}
         <section className="mb-16">
           <div className="mb-8">
@@ -177,6 +179,7 @@ export default function PastEventsPage() {
             </div>
           )}
         </section>
+        </Reveal>
 
         {/* Loading State */}
         {isLoading && (
@@ -190,6 +193,7 @@ export default function PastEventsPage() {
 
         {/* Events Grid */}
         {!isLoading && events.length > 0 && (
+          <Reveal>
           <div>
             <div className="mb-8">
               <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-bold text-festika-navy uppercase tracking-tight mb-2">
@@ -213,6 +217,7 @@ export default function PastEventsPage() {
 
             {/* Summary shown above */}
           </div>
+          </Reveal>
         )}
 
         {/* Empty State */}

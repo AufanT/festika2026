@@ -22,9 +22,9 @@ const milestones: Milestone[] = [
     position: "top",
     accent: "bg-festika-teal",
     details: [
-      { label: "CTF",    date: "27 Apr – 21 Mei" },
-      { label: "KTI",    date: "27 Apr – 15 Mei" },
-      { label: "DesWeb", date: "27 Apr – 12 Mei" },
+      { label: "CTF",    date: "27 Apr – 21 Mei (EXTEND)" },
+      { label: "KTI",    date: "27 Apr – 19 Mei (EXTEND)" },
+      { label: "DesWeb", date: "27 Apr – 19 Mei (EXTEND)" },
     ],
   },
   {

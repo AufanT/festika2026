@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatWhatsAppLink } from "@/lib/utils";
 import GuidebookCalloutCard from "@/components/GuidebookCalloutCard";
+import Reveal from "@/components/Reveal";
 
 export default async function CompetitionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -24,6 +25,7 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
       
       <main className="pt-24 pb-20">
         <div className="max-w-5xl mx-auto px-6">
+          <Reveal>
           {/* Breadcrumb / Back */}
           <Link href="/#competitions" className="inline-flex items-center gap-2 text-gray-500 hover:text-festika-navy mb-8 transition-colors group">
             <div className="w-8 h-8 border-2 border-gray-200 flex items-center justify-center group-hover:border-festika-navy transition-colors">
@@ -146,6 +148,7 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
               </div>
             </div>
           </div>
+        </Reveal>
         </div>
       </main>
     </div>

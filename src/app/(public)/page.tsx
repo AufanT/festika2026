@@ -6,6 +6,7 @@ import SponsorSection from "@/components/SponsorSection";
 import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
 import HeroButtons from "@/components/HeroButtons";
 import TimelineSection from "@/components/TimelineSection";
+import Reveal from "@/components/Reveal";
 
 
 // force-dynamic: Next.js tidak melakukan pre-render saat build.
@@ -37,8 +38,7 @@ export default async function Home() {
         >
           <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full py-12 lg:py-16">
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-              {/* Left Content */}
-              <div className="flex-1 text-center lg:text-left z-10">
+              <Reveal className="flex-1 text-center lg:text-left z-10">
                 {/* Badge */}
                 <span className="inline-block border border-festika-teal rounded-full px-5 py-1.5 text-xs font-semibold text-festika-teal tracking-wider uppercase">
                   IT Festival 2026
@@ -56,16 +56,14 @@ export default async function Home() {
 
                 {/* Tagline */}
                 <div className="mt-10">
-                  <div className="inline-block bg-festika-navy text-white border-2 border-white px-6 py-3 shadow-[6px_6px_0_0_#F5A623] -rotate-1 hover:rotate-0 transition-transform cursor-default">
-                    <p className="italic text-base lg:text-lg font-bold">
-                      "TechSpark: Unleashing and Modern Creativity in the Technological World"
-                    </p>
-                  </div>
+                  <p className="text-festika-navy/80 text-base lg:text-lg font-bold italic leading-relaxed max-w-xl">
+                    "TechSpark: Unleashing and Modern Creativity in the Technological World"
+                  </p>
                 </div>
 
                 {/* Buttons */}
                 <HeroButtons />
-              </div>
+              </Reveal>
 
               {/* Right - Hero Illustration (MEGA SIZE / Mobile Watermark) */}
               <div className="absolute inset-0 lg:static flex-[1.6] flex justify-center lg:justify-end items-center overflow-visible z-0 opacity-[0.08] lg:opacity-100 pointer-events-none lg:pointer-events-auto">
@@ -88,7 +86,7 @@ export default async function Home() {
         </section>
 
         {/* ═══════════ ABOUT ═══════════ */}
-        <section id="about" className="relative py-20 lg:py-32 bg-[#FFF8F0] border-y-4 border-festika-navy overflow-hidden">
+        <Reveal><section id="about" className="relative py-20 lg:py-32 bg-[#FFF8F0] border-y-4 border-festika-navy overflow-hidden">
           {/* Decorative pattern */}
           <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#0F2A36 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
           
@@ -163,19 +161,19 @@ export default async function Home() {
 
             </div>
           </div>
-        </section>
+        </section></Reveal>
 
         {/* ═══════════ COMPETITIONS ═══════════ */}
-        <CompetitionSection competitions={competitions} />
+        <Reveal><CompetitionSection competitions={competitions} /></Reveal>
 
         {/* ═══════════ TIMELINE ═══════════ */}
-        <TimelineSection />
+        <Reveal><TimelineSection /></Reveal>
 
         {/* ═══════════ FAQ ═══════════ */}
-        <FaqSection />
+        <Reveal><FaqSection /></Reveal>
 
         {/* ═══════════ SPONSORS ═══════════ */}
-        <SponsorSection sponsors={sponsors} />
+        <Reveal><SponsorSection sponsors={sponsors} /></Reveal>
       </main>
     </>
   );

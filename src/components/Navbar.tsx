@@ -10,6 +10,8 @@ const navLinks = [
   { href: "/#about", label: "About" },
   { href: "/#competitions", label: "Competitions" },
   { href: "/#timeline", label: "Timeline" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/#sponsors", label: "Sponsors" },
   { href: "/staff", label: "Staff" },
   { href: "/past-events", label: "Our Journey" },
 ];
