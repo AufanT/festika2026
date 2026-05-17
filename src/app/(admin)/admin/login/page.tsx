@@ -18,19 +18,23 @@ export default function AdminLoginPage() {
     setIsLoading(true);
     setError("");
 
-    const result = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
 
-    setIsLoading(false);
-
-    if (result?.error) {
-      setError("Username atau password salah. Coba lagi.");
-    } else {
-      router.push("/admin");
-      router.refresh();
+      if (result?.error) {
+        setError("Username atau password salah. Coba lagi.");
+      } else {
+        router.push("/admin");
+        router.refresh();
+      }
+    } catch {
+      setError("Terjadi kesalahan koneksi. Silakan coba lagi.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
