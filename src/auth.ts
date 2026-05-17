@@ -5,6 +5,7 @@ import pool from "@/lib/mysql";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
+  useSecureCookies: false,
   providers: [
     Credentials({
       credentials: {

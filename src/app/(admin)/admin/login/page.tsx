@@ -25,17 +25,13 @@ export default function AdminLoginPage() {
         redirect: false,
       });
 
-      console.log("signIn result:", result);
-
       if (result?.error) {
         setError("Username atau password salah. Coba lagi.");
-      } else if (result?.url) {
-        window.location.href = result.url;
       } else {
-        window.location.href = "/admin";
+        router.push("/admin");
+        router.refresh();
       }
-    } catch (err) {
-      console.error("signIn error:", err);
+    } catch {
       setError("Terjadi kesalahan koneksi. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
@@ -104,6 +100,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Masukkan username admin"
                 required
+                autoComplete="username"
                 className="w-full border-2 border-gray-300 focus:border-festika-teal focus:outline-none px-3 py-2.5 text-sm rounded-none transition-colors"
               />
             </div>
@@ -122,6 +119,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                autoComplete="current-password"
                 className="w-full border-2 border-gray-300 focus:border-festika-teal focus:outline-none px-3 py-2.5 text-sm rounded-none transition-colors"
               />
             </div>
