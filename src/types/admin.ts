@@ -3,6 +3,18 @@ export type Contact = {
   phone: string;
 };
 
+export type TimelineItem = {
+  label: string;
+  date: string;
+  description?: string | null;
+};
+
+export type PrizeItem = {
+  position: string;
+  prize: string;
+  description?: string | null;
+};
+
 export type Competition = {
   id: string;
   title: string;
@@ -14,6 +26,8 @@ export type Competition = {
   contacts?: Contact[] | null;
   tags?: string | null;
   imageUrl?: string | null;
+  timeline?: TimelineItem[] | null;
+  prizeList?: PrizeItem[] | null;
   year?: number;
   isArchived?: boolean;
   participants?: number | null;
@@ -46,6 +60,14 @@ export type Sponsor = {
   imageUrl: string | null;
   link: string | null;
   tier: string | null;
+};
+
+export type Faq = {
+  id: string;
+  question: string;
+  answer: string;
+  orderIndex: number;
+  createdAt: string;
 };
 
 export type User = {

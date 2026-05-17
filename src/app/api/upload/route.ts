@@ -22,9 +22,11 @@ export async function POST(req: NextRequest) {
 
     console.log(`[API Upload] Memproses file: ${file.name} (${file.type}, ${file.size} bytes)`);
 
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ success: false, message: "Must be an image" }, { status: 400 });
+    // Validate file type — accept images and PDFs
+    const allowedTypes = ["image/", "application/pdf"];
+    const isValidType = allowedTypes.some((t) => file.type.startsWith(t));
+    if (!isValidType) {
+      return NextResponse.json({ success: false, message: "Must be an image or PDF" }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();

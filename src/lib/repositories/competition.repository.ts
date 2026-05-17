@@ -7,7 +7,7 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, createdAt, updatedAt 
+          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, timeline, prizeList, createdAt, updatedAt 
            FROM competitions 
            WHERE isArchived = false AND year = 2026
            ORDER BY createdAt ASC`,
@@ -22,6 +22,14 @@ export class CompetitionRepository {
             typeof row.galleryUrls === "string"
               ? JSON.parse(row.galleryUrls)
               : row.galleryUrls || [],
+          timeline:
+            typeof row.timeline === "string"
+              ? JSON.parse(row.timeline)
+              : row.timeline || [],
+          prizeList:
+            typeof row.prizeList === "string"
+              ? JSON.parse(row.prizeList)
+              : row.prizeList || [],
         }));
       } catch (err: any) {
         attempts++;
@@ -47,7 +55,7 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, createdAt, updatedAt 
+          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, timeline, prizeList, createdAt, updatedAt 
            FROM competitions 
            WHERE isArchived = true AND year = 2025
            ORDER BY createdAt DESC`,
@@ -62,6 +70,14 @@ export class CompetitionRepository {
             typeof row.galleryUrls === "string"
               ? JSON.parse(row.galleryUrls)
               : row.galleryUrls || [],
+          timeline:
+            typeof row.timeline === "string"
+              ? JSON.parse(row.timeline)
+              : row.timeline || [],
+          prizeList:
+            typeof row.prizeList === "string"
+              ? JSON.parse(row.prizeList)
+              : row.prizeList || [],
         }));
       } catch (err: any) {
         attempts++;
@@ -87,7 +103,7 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, createdAt, updatedAt 
+          `SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, timeline, prizeList, createdAt, updatedAt 
            FROM competitions 
            WHERE year = ? AND isArchived = false
            ORDER BY createdAt ASC`,
@@ -103,6 +119,14 @@ export class CompetitionRepository {
             typeof row.galleryUrls === "string"
               ? JSON.parse(row.galleryUrls)
               : row.galleryUrls || [],
+          timeline:
+            typeof row.timeline === "string"
+              ? JSON.parse(row.timeline)
+              : row.timeline || [],
+          prizeList:
+            typeof row.prizeList === "string"
+              ? JSON.parse(row.prizeList)
+              : row.prizeList || [],
         }));
       } catch (err: any) {
         attempts++;
@@ -128,7 +152,7 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          "SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, createdAt, updatedAt FROM competitions WHERE id = ? LIMIT 1",
+          "SELECT id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, timeline, prizeList, createdAt, updatedAt FROM competitions WHERE id = ? LIMIT 1",
           [id],
         );
         if (rows && rows.length > 0) {
@@ -143,6 +167,14 @@ export class CompetitionRepository {
               typeof row.galleryUrls === "string"
                 ? JSON.parse(row.galleryUrls)
                 : row.galleryUrls || [],
+            timeline:
+              typeof row.timeline === "string"
+                ? JSON.parse(row.timeline)
+                : row.timeline || [],
+            prizeList:
+              typeof row.prizeList === "string"
+                ? JSON.parse(row.prizeList)
+                : row.prizeList || [],
           };
         }
         return null;
@@ -182,6 +214,8 @@ export class CompetitionRepository {
     runnerUp?: string | null;
     thirdPlace?: string | null;
     galleryUrls?: any;
+    timeline?: any;
+    prizeList?: any;
     createdAt: Date;
     updatedAt: Date;
   }) {
@@ -190,7 +224,7 @@ export class CompetitionRepository {
     while (attempts < maxAttempts) {
       try {
         await pool.query(
-          "INSERT INTO competitions (id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "INSERT INTO competitions (id, title, theme, description, registrationStartDate, registrationEndDate, registrationLink, contacts, tags, imageUrl, year, isArchived, participants, winner, runnerUp, thirdPlace, galleryUrls, timeline, prizeList, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
           [
             data.id,
             data.title,
@@ -209,6 +243,8 @@ export class CompetitionRepository {
             data.runnerUp || null,
             data.thirdPlace || null,
             data.galleryUrls ? JSON.stringify(data.galleryUrls) : null,
+            data.timeline ? JSON.stringify(data.timeline) : null,
+            data.prizeList ? JSON.stringify(data.prizeList) : null,
             data.createdAt,
             data.updatedAt,
           ],
@@ -244,6 +280,12 @@ export class CompetitionRepository {
           if (key === "id") continue;
           fields.push(`${key} = ?`);
           if (key === "contacts") {
+            values.push(value ? JSON.stringify(value) : null);
+          } else if (key === "galleryUrls") {
+            values.push(value ? JSON.stringify(value) : null);
+          } else if (key === "timeline") {
+            values.push(value ? JSON.stringify(value) : null);
+          } else if (key === "prizeList") {
             values.push(value ? JSON.stringify(value) : null);
           } else if (
             key === "registrationStartDate" ||

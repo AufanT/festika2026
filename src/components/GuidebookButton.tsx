@@ -1,62 +1,49 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { downloadFile } from "@/lib/utils";
 
-/**
- * Props interface for the Guidebook button component
- */
 interface GuidebookButtonProps {
-  /**
-   * Path to the guidebook file in the public directory
-   * @default "/Guidebook FESTIKA - 2.pdf"
-   */
   filePath?: string;
-  
-  /**
-   * Label text to display on the button (max 50 characters)
-   * @default "Guidebook"
-   */
   label?: string;
-  
-  /**
-   * Additional CSS classes to apply to the button
-   */
   className?: string;
 }
 
-/**
- * Guidebook download button component with configurable file path and label.
- * Implements label truncation for labels exceeding 50 characters.
- * 
- * @example
- * // Default usage
- * <GuidebookButton />
- * 
- * @example
- * // Custom file path and label
- * <GuidebookButton 
- *   filePath="/Guidebook FESTIKA - 3.pdf" 
- *   label="Download Festival Guide" 
- * />
- */
+const DEFAULT_PATH = "/Guidebook FESTIKA - 2.pdf";
+
 export default function GuidebookButton({
-  filePath = "/Guidebook FESTIKA - 2.pdf",
+  filePath,
   label = "Guidebook",
   className = "",
 }: GuidebookButtonProps) {
+  const [resolvedPath, setResolvedPath] = useState<string>(filePath || DEFAULT_PATH);
   const isDownloading = useRef(false);
 
-  const truncatedLabel = label.length > 50 
-    ? label.substring(0, 47) + "..." 
+  useEffect(() => {
+    if (filePath) {
+      setResolvedPath(filePath);
+      return;
+    }
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.data?.guidebook_url) {
+          setResolvedPath(json.data.guidebook_url);
+        }
+      })
+      .catch(() => {});
+  }, [filePath]);
+
+  const truncatedLabel = label.length > 50
+    ? label.substring(0, 47) + "..."
     : label;
 
   const triggerDownload = () => {
     if (isDownloading.current) return;
     isDownloading.current = true;
     try {
-      downloadFile(filePath);
+      downloadFile(resolvedPath);
     } catch {
       // Error is already logged by downloadFile function
     } finally {

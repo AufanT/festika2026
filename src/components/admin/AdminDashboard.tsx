@@ -12,11 +12,15 @@ import {
   Trophy,
   ArrowLeft,
   Handshake,
+  HelpCircle,
+  Settings,
 } from "lucide-react";
 
 // Sub-components
 import StatsOverview from "./dashboard/StatsOverview";
 import CompetitionGrid from "./dashboard/CompetitionGrid";
+import FaqPanel from "./faq/FaqPanel";
+import SettingsPanel from "./SettingsPanel";
 import {
   CompetitionModal,
   AdminPastEventModal,
@@ -32,7 +36,7 @@ import { Competition, User } from "@/types/admin";
 export default function AdminDashboard({ user }: { user: User | undefined }) {
   const { showNotification } = useNotification();
   const [activeTab, setActiveTab] = useState<
-    "competitions" | "past-events" | "staff" | "sponsors"
+    "competitions" | "past-events" | "staff" | "sponsors" | "faq" | "settings"
   >("competitions");
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [pastEvents, setPastEvents] = useState<Competition[]>([]);
@@ -288,6 +292,8 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
     if (activeTab === "sponsors") return <SponsorPanel />;
+    if (activeTab === "faq") return <FaqPanel />;
+    if (activeTab === "settings") return <SettingsPanel />;
 
     // Past Events Tab
     if (activeTab === "past-events") {
@@ -437,18 +443,30 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
               id: "past-events",
               label: "Past Events",
               icon: Trophy,
-              activeColor: "border-festika-teal",
+              activeColor: "border-festika-orange",
             },
             {
               id: "staff",
               label: "Panitia",
               icon: Users,
-              activeColor: "border-festika-teal",
+              activeColor: "border-festika-orange",
             },
             {
               id: "sponsors",
               label: "Sponsor",
               icon: Handshake,
+              activeColor: "border-festika-orange",
+            },
+            {
+              id: "faq",
+              label: "FAQ",
+              icon: HelpCircle,
+              activeColor: "border-festika-orange",
+            },
+            {
+              id: "settings",
+              label: "Pengaturan",
+              icon: Settings,
               activeColor: "border-festika-orange",
             },
           ].map((tab) => (
@@ -477,6 +495,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       {/* ── Modals ── */}
       {modalType === "competition" ? (
         <CompetitionModal
+          key={`${isModalOpen}-${modalMode}-${modalInitialData?.id || "new"}`}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleCompetitionSubmit}
@@ -486,6 +505,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
         />
       ) : (
         <AdminPastEventModal
+          key={`${isModalOpen}-${modalMode}-${modalInitialData?.id || "new"}`}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSubmit={handleCompetitionSubmit}
@@ -496,6 +516,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       )}
 
       <AddYearModal
+        key="add-year-modal"
         isOpen={isAddYearOpen}
         onClose={() => setIsAddYearOpen(false)}
         onConfirm={handleConfirmAddYear}
@@ -514,6 +535,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       />
 
       <DeleteMultipleModal
+        key="delete-multiple-modal"
         isOpen={isBulkDeleteOpen}
         title={bulkDeleteTargets.length > 5 ? `Hapus ${bulkDeleteTargets.length} Lomba` : "Hapus Lomba Terpilih"}
         entityLabel="LOMBA"

@@ -26,12 +26,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    // Allow bypassing auth for local debugging by sending header `x-skip-auth: 1`
-    const skipAuth = req.headers.get("x-skip-auth") === "1";
-    if (!skipAuth) {
-      const session = await auth();
-      if (!session) return ApiResponse.error("Unauthorized", 401);
-    }
+    const session = await auth();
+    if (!session) return ApiResponse.error("Unauthorized", 401);
 
     const body = await req.json();
 

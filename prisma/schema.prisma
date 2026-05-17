@@ -18,6 +18,9 @@ model Competition {
   contacts              Json?     // Array of objects: [{ name, phone }]
   tags                  String?   // Hashtags
   imageUrl              String?
+  guidebook             String?   // URL ke file PDF guidebook
+  timeline              Json?     // Array of timeline items: [{ label, date, description }]
+  prizeList              Json?     // Array of prize items: [{ position, prize, description }]
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
@@ -96,6 +99,18 @@ model SiteSetting {
   updatedAt DateTime @updatedAt
 
   @@map("site_settings")
+}
+
+// FAQ items
+model Faq {
+  id          String   @id @default(cuid())
+  question    String   @db.Text
+  answer      String   @db.Text
+  orderIndex  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("faqs")
 }
 
 // Sponsor acara

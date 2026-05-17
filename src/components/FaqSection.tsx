@@ -1,94 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Minus, HelpCircle } from "lucide-react";
 import { formatWhatsAppLink } from "@/lib/utils";
 import Reveal from "@/components/Reveal";
 
-const faqData = [
+type FaqItem = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+const fallbackFaqs: FaqItem[] = [
   {
+    id: "1",
     question: "Apa itu Festika 2026?",
-    answer: (
-      <>
-        FESTIKA 2026 adalah festival tahunan yang menjadi wadah kompetisi sekaligus pengembangan potensi di bidang teknologi digital. Tahun ini, FESTIKA mengusung tema besar <span className="font-bold text-festika-navy">"NextGen Tech: Creating the Future Today"</span>.
-      </>
-    )
+    answer:
+      'FESTIKA 2026 adalah festival tahunan yang menjadi wadah kompetisi sekaligus pengembangan potensi di bidang teknologi digital. Tahun ini, FESTIKA mengusung tema besar "NextGen Tech: Creating the Future Today".',
   },
   {
+    id: "2",
     question: "Siapa saja yang bisa mengikuti kompetisi di Festika?",
-    answer: (
-      <div className="space-y-4">
-        <p>Ketentuan peserta bergantung pada jenis lomba yang diikuti:</p>
-        <ul className="list-disc pl-5 space-y-2">
-          <li>
-            <span className="font-bold text-festika-navy">Lomba Karya Tulis Ilmiah (KTI):</span> Terbuka untuk pelajar SMA/sederajat, baik secara individu maupun tim.
-          </li>
-          <li>
-            <span className="font-bold text-festika-navy">Capture The Flag (CTF):</span> Terbuka untuk pelajar SMA/sederajat dalam bentuk tim yang terdiri dari 3 orang.
-          </li>
-          <li>
-            <span className="font-bold text-festika-navy">Desain Web:</span> Peserta mengerjakan proyek secara individu.
-          </li>
-        </ul>
-      </div>
-    )
+    answer:
+      "Ketentuan peserta bergantung pada jenis lomba yang diikuti:\n\nLomba Karya Tulis Ilmiah (KTI): Terbuka untuk pelajar SMA/sederajat, baik secara individu maupun tim.\n\nCapture The Flag (CTF): Terbuka untuk pelajar SMA/sederajat dalam bentuk tim yang terdiri dari 3 orang.\n\nDesain Web: Peserta mengerjakan proyek secara individu.",
   },
   {
+    id: "3",
     question: "Apa saja lomba yang ada di Festika 2026?",
-    answer: (
-      <div className="space-y-4">
-        <p>Terdapat tiga kategori lomba utama tahun ini:</p>
-        <ol className="list-decimal pl-5 space-y-2">
-          <li>
-            <span className="font-bold text-festika-navy">Desain Web:</span> Kompetisi merancang antarmuka <span className="italic">website</span> yang kreatif dan responsif.
-          </li>
-          <li>
-            <span className="font-bold text-festika-navy">Lomba Karya Tulis Ilmiah (KTI):</span> Kompetisi inovasi dan penelitian ilmiah bertema tantangan era digital.
-          </li>
-          <li>
-            <span className="font-bold text-festika-navy">Capture The Flag (CTF):</span> Kompetisi di bidang keamanan siber menggunakan <span className="italic">platform</span> picoCTF.
-          </li>
-        </ol>
-      </div>
-    )
+    answer:
+      "Terdapat tiga kategori lomba utama tahun ini:\n\n1. Desain Web: Kompetisi merancang antarmuka website yang kreatif dan responsif.\n\n2. Lomba Karya Tulis Ilmiah (KTI): Kompetisi inovasi dan penelitian ilmiah bertema tantangan era digital.\n\n3. Capture The Flag (CTF): Kompetisi di bidang keamanan siber menggunakan platform picoCTF.",
   },
   {
+    id: "4",
     question: "Bagaimana alur pendaftaran kompetisinya?",
-    answer: (
-      <div className="space-y-4">
-        <p>Pendaftaran dilakukan secara <span className="italic">online</span> dalam rentang waktu berikut:</p>
-        <ul className="list-disc pl-5 space-y-2">
-          <li>
-            <span className="font-bold text-festika-navy">Desain Web:</span> 27 April – 12 Mei 2026.
-          </li>
-          <li>
-            <span className="font-bold text-festika-navy">KTI:</span> 27 April – 15 Mei 2026.
-          </li>
-          <li>
-            <span className="font-bold text-festika-navy">CTF:</span> 27 Maret – 14 Mei 2026.
-          </li>
-        </ul>
-        <p>Setelah mendaftar, peserta akan mengikuti rangkaian babak penyisihan secara <span className="italic">online</span> sebelum terpilih untuk maju ke babak final secara <span className="italic">offline</span> pada 23–24 Mei 2026.</p>
-      </div>
-    )
+    answer:
+      "Pendaftaran dilakukan secara online dalam rentang waktu berikut:\n\n- Desain Web: 27 April – 12 Mei 2026.\n- KTI: 27 April – 15 Mei 2026.\n- CTF: 27 Maret – 14 Mei 2026.\n\nSetelah mendaftar, peserta akan mengikuti rangkaian babak penyisihan secara online sebelum terpilih untuk maju ke babak final secara offline pada 23–24 Mei 2026.",
   },
   {
+    id: "5",
     question: "Apakah ada biaya pendaftaran?",
-    answer: (
-      <ul className="list-disc pl-5 space-y-2">
-        <li>
-          <span className="font-bold text-festika-navy">Desain Web & KTI:</span> Gratis (tidak dipungut biaya).
-        </li>
-        <li>
-          <span className="font-bold text-festika-navy">Capture The Flag (CTF):</span> Biaya pendaftaran sebesar Rp100.000 per tim.
-        </li>
-      </ul>
-    )
-  }
+    answer:
+      "- Desain Web & KTI: Gratis (tidak dipungut biaya).\n- Capture The Flag (CTF): Biaya pendaftaran sebesar Rp100.000 per tim.",
+  },
 ];
 
+function renderAnswer(text: string) {
+  return text.split("\n\n").map((paragraph, i) => (
+    <p key={i} className="mb-2 last:mb-0">
+      {paragraph.split("\n").map((line, j) => (
+        <span key={j}>
+          {line}
+          {j < paragraph.split("\n").length - 1 && <br />}
+        </span>
+      ))}
+    </p>
+  ));
+}
+
 export default function FaqSection() {
+  const [faqs, setFaqs] = useState<FaqItem[]>(fallbackFaqs);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/faqs")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.data && json.data.length > 0) {
+          setFaqs(json.data);
+        }
+      })
+      .catch(() => {
+        /* fallback to hardcoded */
+      });
+  }, []);
 
   const toggleAccordion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -116,10 +100,10 @@ export default function FaqSection() {
 
         {/* Accordion List */}
         <div className="space-y-6">
-          {faqData.map((item, index) => {
+          {faqs.map((item, index) => {
             const isOpen = openIndex === index;
             return (
-              <Reveal key={index} delay={index * 80}>
+              <Reveal key={item.id} delay={index * 80}>
               <div 
                 className={`
                   border-2 border-festika-navy transition-all duration-300
@@ -147,7 +131,7 @@ export default function FaqSection() {
                 `}>
                   <div className="px-6 pb-6 pt-0 border-t-2 border-dashed border-gray-100 mt-0">
                     <div className="text-gray-600 leading-relaxed text-base md:text-lg pt-4">
-                      {item.answer}
+                      {renderAnswer(item.answer)}
                     </div>
                   </div>
                 </div>

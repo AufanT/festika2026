@@ -2,6 +2,18 @@ import { z } from "zod";
 
 // --- Admin Schemas ---
 
+const timelineItemSchema = z.object({
+  label: z.string().min(1, "Label event wajib diisi"),
+  date: z.string().min(1, "Tanggal event wajib diisi"),
+  description: z.string().optional().nullable(),
+});
+
+const prizeItemSchema = z.object({
+  position: z.string().min(1, "Posisi/juara wajib diisi"),
+  prize: z.string().min(1, "Hadiah wajib diisi"),
+  description: z.string().optional().nullable(),
+});
+
 export const competitionSchema = z.object({
   title: z.string().min(3, "Judul lomba minimal 3 karakter").max(100),
   theme: z.string().max(200).optional().nullable(),
@@ -15,6 +27,14 @@ export const competitionSchema = z.object({
   })).optional().nullable(),
   tags: z.string().max(500).optional().nullable(),
   imageUrl: z.string().url("Format URL gambar tidak valid").optional().nullable().or(z.literal("")),
+  timeline: z.array(timelineItemSchema).optional().nullable(),
+  prizeList: z.array(prizeItemSchema).optional().nullable(),
+});
+
+export const faqSchema = z.object({
+  question: z.string().min(3, "Pertanyaan minimal 3 karakter").max(500),
+  answer: z.string().min(3, "Jawaban minimal 3 karakter").max(5000),
+  orderIndex: z.number().int().optional().default(0),
 });
 
 export const divisionSchema = z.object({
@@ -45,6 +65,7 @@ export const sponsorSchema = z.object({
 });
 
 export type CompetitionFormData = z.infer<typeof competitionSchema>;
+export type FaqFormData = z.infer<typeof faqSchema>;
 export type DivisionFormData = z.infer<typeof divisionSchema>;
 export type StaffFormData = z.infer<typeof staffSchema>;
 export type SponsorFormData = z.infer<typeof sponsorSchema>;

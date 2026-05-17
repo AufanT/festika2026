@@ -169,3 +169,12 @@
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
+
+@keyframes fade-pulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.97); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-pulse {
+  animation: fade-pulse 2s ease-in-out infinite;
+}

@@ -144,6 +144,7 @@ export default function SponsorPanel() {
       />
 
       <DeleteMultipleModal
+        key="bulk-delete-sponsor"
         isOpen={isDeleteOpen}
         title="Hapus Sponsor Terpilih"
         entityLabel="SPONSOR"

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 import CompetitionSection from "@/components/CompetitionSection";
@@ -7,6 +8,18 @@ import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
 import HeroButtons from "@/components/HeroButtons";
 import TimelineSection from "@/components/TimelineSection";
 import Reveal from "@/components/Reveal";
+
+export const metadata: Metadata = {
+  title: "FESTIKA UA 2026 — IT Festival",
+  description:
+    "Unleashing Innovation through Digital Creativity. Festival Teknologi Informasi terbesar di Universitas Andalas — kompetisi CTF, Web Design, dan KTI.",
+  openGraph: {
+    title: "FESTIKA UA 2026",
+    description:
+      "TechSpark: Unleashing and Modern Creativity in the Technological World.",
+    type: "website",
+  },
+};
 
 
 // force-dynamic: Next.js tidak melakukan pre-render saat build.
@@ -175,7 +188,7 @@ export default async function Home() {
         <Reveal><CompetitionSection competitions={competitions} /></Reveal>
 
         {/* ═══════════ TIMELINE ═══════════ */}
-        <Reveal><TimelineSection /></Reveal>
+        <Reveal><TimelineSection competitions={competitions} /></Reveal>
 
         {/* ═══════════ SPONSORS ═══════════ */}
         <Reveal><SponsorSection sponsors={sponsors} /></Reveal>

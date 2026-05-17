@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -21,42 +21,36 @@ function useActiveSection() {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
-    if (pathname !== "/") {
-      setActiveSection(pathname);
-      return;
-    }
+    if (pathname !== "/") return;
 
-    const sectionIds = navLinks
+    const sectionEntries = navLinks
       .filter((l) => l.href.startsWith("/#"))
-      .map((l) => l.href.slice(2));
+      .map((l) => ({ id: l.href.slice(2), href: l.href }));
 
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
+    const computeActive = () => {
+      if (window.scrollY <= 80) {
+        setActiveSection("");
+        return;
+      }
 
-    if (sections.length === 0) return;
+      let currentHref = "";
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let best: string | null = null;
-        let bestRatio = 0;
+      for (const { id, href } of sectionEntries) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top > 80) break;
+        currentHref = href;
+      }
 
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
-            best = entry.target.id;
-            bestRatio = entry.intersectionRatio;
-          }
-        }
+      setActiveSection(currentHref);
+    };
 
-        if (best) setActiveSection(`/#${best}`);
-      },
-      { threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-
-    sections.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    computeActive();
+    window.addEventListener("scroll", computeActive, { passive: true });
+    return () => window.removeEventListener("scroll", computeActive);
   }, [pathname]);
 
+  if (pathname !== "/") return pathname;
   return activeSection;
 }
 
@@ -94,15 +88,13 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {
-            const isActive = link.href.startsWith("/#")
-              ? activeSection === link.href
-              : activeSection === link.href;
+            const isActive = activeSection === link.href;
 
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`group relative text-sm font-medium transition-all w-24 text-center py-1 ${
+                className={`group relative text-sm font-medium transition-all text-center py-1 ${
                   isActive
                     ? "text-festika-navy font-bold"
                     : "text-festika-navy/70 hover:text-festika-navy hover:font-bold"
@@ -137,9 +129,7 @@ export default function Navbar() {
       >
         <div className="mx-auto max-w-7xl px-6 py-4 flex flex-col gap-3">
           {navLinks.map((link) => {
-            const isActive = link.href.startsWith("/#")
-              ? activeSection === link.href
-              : activeSection === link.href;
+            const isActive = activeSection === link.href;
 
             return (
               <Link

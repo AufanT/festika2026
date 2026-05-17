@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, LayoutDashboard } from "lucide-react";
 
 type Staff = {
@@ -23,19 +23,18 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
   const [staffList, setStaffList] = useState<Staff[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (selectedDiv) {
-      setIsLoading(true);
-      fetch(`/api/staff?divisionId=${selectedDiv.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setStaffList(data.data || []);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [selectedDiv]);
+  const handleDivClick = (div: Division) => {
+    setSelectedDiv(div);
+    setIsLoading(true);
+    fetch(`/api/staff?divisionId=${div.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStaffList(data.data || []);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   // LEVEL 3: Detail Anggota
   if (selectedStaff) {
@@ -212,7 +211,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
           {divisions.map((div, i) => (
             <div 
               key={div.id} 
-              onClick={() => setSelectedDiv(div)}
+              onClick={() => handleDivClick(div)}
               className="relative group cursor-pointer animate-in fade-in zoom-in-95 duration-[800ms]"
               style={{ animationDelay: `${i * 100}ms` }}
             >

@@ -1,28 +1,19 @@
+import type { Metadata } from "next";
 import StaffView from "@/components/staff/StaffView";
 import Reveal from "@/components/Reveal";
+import { DivisionService } from "@/lib/services/division.service";
+import { StaffService } from "@/lib/services/staff.service";
 
-export const metadata = {
-  title: "Our Staff - Festika",
+export const metadata: Metadata = {
+  title: "Our Staff — FESTIKA UA 2026",
   description: "Daftar susunan kepanitiaan Festival Informatika.",
 };
 
-async function getData() {
-  const [divRes, coreRes] = await Promise.all([
-    fetch(process.env.NEXTAUTH_URL + "/api/divisions", { cache: "no-store" }),
-    fetch(process.env.NEXTAUTH_URL + "/api/staff?divisionId=core", { cache: "no-store" })
-  ]);
-  
-  const divJson = await divRes.json();
-  const coreJson = await coreRes.json();
-  
-  return {
-    divisions: divJson.data || [],
-    coreLeaders: coreJson.data || []
-  };
-}
-
 export default async function StaffPage() {
-  const { divisions, coreLeaders } = await getData();
+  const [divisions, coreLeaders] = await Promise.all([
+    DivisionService.getAllDivisions(),
+    StaffService.getCoreLeaders(),
+  ]);
 
   return (
     <div className="min-h-screen bg-white">

@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { auth } from "@/auth";
 import { ApiResponse } from "@/lib/api-response";
 import { v2 as cloudinary } from "cloudinary";
 
@@ -11,6 +12,9 @@ cloudinary.config({
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth();
+    if (!session) return ApiResponse.error("Unauthorized", 401);
+
     const formData = await req.formData();
     const file = formData.get("file") as any;
 

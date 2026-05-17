@@ -252,6 +252,7 @@ export default function StaffPanel() {
 
       {/* ── Modal: Bulk Delete Divisi ── */}
       <DeleteMultipleModal
+        key="bulk-delete-divisi"
         isOpen={isDivDeleteOpen}
         title="Hapus Divisi Terpilih"
         entityLabel="DIVISI"
@@ -264,6 +265,7 @@ export default function StaffPanel() {
 
       {/* ── Modal: Bulk Delete Anggota ── */}
       <DeleteMultipleModal
+        key="bulk-delete-staff"
         isOpen={isStaffDeleteOpen}
         title="Hapus Anggota Terpilih"
         entityLabel="ANGGOTA"

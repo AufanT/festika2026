@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CompetitionService } from "@/lib/services/competition.service";
 import { MessageSquare, ArrowLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -8,12 +9,29 @@ import RegistrationCard from "@/components/RegistrationCard";
 import FloatingRegisterButton from "@/components/FloatingRegisterButton";
 import Reveal from "@/components/Reveal";
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const competition = await CompetitionService.getCompetitionById(id);
+    return {
+      title: `${competition.title} — FESTIKA UA 2026`,
+      description: competition.description?.slice(0, 160) || `Detail lomba ${competition.title} di FESTIKA UA 2026.`,
+      openGraph: {
+        title: competition.title,
+        description: competition.theme || competition.description?.slice(0, 160),
+      },
+    };
+  } catch {
+    return { title: "Lomba Tidak Ditemukan — FESTIKA UA 2026" };
+  }
+}
+
 export default async function CompetitionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let competition;
   try {
     competition = await CompetitionService.getCompetitionById(id);
-  } catch (error) {
+  } catch {
     return notFound();
   }
 
@@ -96,6 +114,73 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
               </div>
             </div>
           </Reveal>
+
+          {/* Card 1b: Timeline */}
+          {competition.timeline && competition.timeline.length > 0 && (
+            <Reveal delay={350}>
+              <div className="bg-white border-2 border-festika-navy p-8 lg:p-10 shadow-[8px_8px_0_0_#F5A623] mb-8">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
+                  Timeline Lomba
+                </h3>
+                <div className="relative pl-8 border-l-[3px] border-festika-navy space-y-8 ml-2">
+                  {competition.timeline.map((event: any, idx: number) => (
+                    <div key={idx} className="relative">
+                      <div className="absolute -left-[25px] top-1 w-5 h-5 rounded-full border-[3px] border-festika-navy bg-festika-teal z-10" />
+                      <div className="pl-2">
+                        <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-base leading-tight">
+                          {event.label}
+                        </p>
+                        <p className="text-sm text-festika-navy/70 font-semibold mt-0.5">
+                          {event.date}
+                        </p>
+                        {event.description && (
+                          <p className="text-sm text-gray-500 mt-1">
+                            {event.description}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          )}
+
+          {/* Card 1c: Prize List */}
+          {competition.prizeList && competition.prizeList.length > 0 && (
+            <Reveal delay={400}>
+              <div className="bg-white border-2 border-festika-navy p-8 lg:p-10 shadow-[8px_8px_0_0_#F5A623] mb-8">
+                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
+                  Prize List
+                </h3>
+                <div className="space-y-4">
+                  {competition.prizeList.map((prize: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-full bg-festika-orange/10 border-2 border-festika-orange flex items-center justify-center text-festika-navy font-black text-sm shrink-0">
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <p className="font-bold text-festika-navy text-sm">
+                            {prize.position}
+                          </p>
+                          {prize.description && (
+                            <p className="text-xs text-gray-500">{prize.description}</p>
+                          )}
+                        </div>
+                      </div>
+                      <p className="font-extrabold text-festika-teal text-sm text-right">
+                        {prize.prize}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          )}
 
           {/* Card 2: Guidebook */}
           <div className="mb-8">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Loader2, AlertTriangle, X, CheckCircle2, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Competition } from "@/types/admin";
 
@@ -29,76 +29,60 @@ export function CompetitionModal({
   mode,
   modalType = "competition",
 }: CompetitionModalProps) {
-  const [formData, setFormData] = useState({
-    title: "",
-    theme: "",
-    description: "",
-    registrationStartDate: "",
-    registrationEndDate: "",
-    registrationLink: "",
-    tags: "",
-    imageUrl: "",
-    contacts: [{ name: "", phone: "" }],
-    isArchived: false,
-    year: 2025,
-    participants: "",
-    winner: "",
-    runnerUp: "",
-    thirdPlace: "",
-  });
-
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        title: initialData.title || "",
-        theme: initialData.theme || "",
-        description: initialData.description || "",
-        registrationStartDate: initialData.registrationStartDate
-          ? new Date(initialData.registrationStartDate)
-              .toISOString()
-              .split("T")[0]
-          : "",
-        registrationEndDate: initialData.registrationEndDate
-          ? new Date(initialData.registrationEndDate)
-              .toISOString()
-              .split("T")[0]
-          : "",
-        registrationLink: initialData.registrationLink || "",
-        tags: initialData.tags || "",
-        imageUrl: initialData.imageUrl || "",
-        contacts:
-          initialData.contacts && initialData.contacts.length > 0
-            ? initialData.contacts
-            : [{ name: "", phone: "" }],
-        isArchived: initialData.isArchived || false,
-        year: initialData.year || 2025,
-        participants: initialData.participants || "",
-        winner: initialData.winner || "",
-        runnerUp: initialData.runnerUp || "",
-        thirdPlace: initialData.thirdPlace || "",
-      });
-    } else {
-      setFormData({
-        title: "",
-        theme: "",
-        description: "",
-        registrationStartDate: "",
-        registrationEndDate: "",
-        registrationLink: "",
-        tags: "",
-        imageUrl: "",
-        contacts: [{ name: "", phone: "" }],
-        isArchived: false,
-        year: 2025,
-        participants: "",
-        winner: "",
-        runnerUp: "",
-        thirdPlace: "",
-      });
-    }
-  }, [initialData, isOpen]);
-
-  if (!isOpen) return null;
+  const [formData, setFormData] = useState(() =>
+    initialData
+      ? {
+          title: initialData.title || "",
+          theme: initialData.theme || "",
+          description: initialData.description || "",
+          registrationStartDate: initialData.registrationStartDate
+            ? new Date(initialData.registrationStartDate).toISOString().split("T")[0]
+            : "",
+          registrationEndDate: initialData.registrationEndDate
+            ? new Date(initialData.registrationEndDate).toISOString().split("T")[0]
+            : "",
+          registrationLink: initialData.registrationLink || "",
+          tags: initialData.tags || "",
+          imageUrl: initialData.imageUrl || "",
+          contacts:
+            initialData.contacts && initialData.contacts.length > 0
+              ? initialData.contacts
+              : [{ name: "", phone: "" }],
+          timeline:
+            initialData.timeline && initialData.timeline.length > 0
+              ? initialData.timeline
+              : [],
+          prizeList:
+            initialData.prizeList && initialData.prizeList.length > 0
+              ? initialData.prizeList
+              : [],
+          isArchived: initialData.isArchived || false,
+          year: initialData.year || 2025,
+          participants: initialData.participants || "",
+          winner: initialData.winner || "",
+          runnerUp: initialData.runnerUp || "",
+          thirdPlace: initialData.thirdPlace || "",
+        }
+      : {
+          title: "",
+          theme: "",
+          description: "",
+          registrationStartDate: "",
+          registrationEndDate: "",
+          registrationLink: "",
+          tags: "",
+          imageUrl: "",
+          contacts: [{ name: "", phone: "" }],
+          timeline: [],
+          prizeList: [],
+          isArchived: false,
+          year: 2025,
+          participants: "",
+          winner: "",
+          runnerUp: "",
+          thirdPlace: "",
+        },
+  );
 
   const handleAddContact = () => {
     setFormData((prev: any) => ({
@@ -124,10 +108,60 @@ export function CompetitionModal({
     setFormData((prev: any) => ({ ...prev, contacts: newContacts }));
   };
 
+  const handleAddTimeline = () => {
+    setFormData((prev: any) => ({
+      ...prev,
+      timeline: [...prev.timeline, { label: "", date: "", description: "" }],
+    }));
+  };
+
+  const handleRemoveTimeline = (index: number) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      timeline: prev.timeline.filter((_: any, i: number) => i !== index),
+    }));
+  };
+
+  const handleTimelineChange = (
+    index: number,
+    field: "label" | "date" | "description",
+    value: string,
+  ) => {
+    const newTimeline = [...formData.timeline];
+    newTimeline[index] = { ...newTimeline[index], [field]: value };
+    setFormData((prev: any) => ({ ...prev, timeline: newTimeline }));
+  };
+
+  const handleAddPrize = () => {
+    setFormData((prev: any) => ({
+      ...prev,
+      prizeList: [...prev.prizeList, { position: "", prize: "", description: "" }],
+    }));
+  };
+
+  const handleRemovePrize = (index: number) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      prizeList: prev.prizeList.filter((_: any, i: number) => i !== index),
+    }));
+  };
+
+  const handlePrizeChange = (
+    index: number,
+    field: "position" | "prize" | "description",
+    value: string,
+  ) => {
+    const newPrizes = [...formData.prizeList];
+    newPrizes[index] = { ...newPrizes[index], [field]: value };
+    setFormData((prev: any) => ({ ...prev, prizeList: newPrizes }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-start p-4 bg-black/60 backdrop-blur-sm animate-in fade-in overflow-y-auto py-8">
@@ -330,6 +364,104 @@ export function CompetitionModal({
             ))}
           </div>
 
+          {/* ── Timeline Lomba ── */}
+          {modalType !== "past-event" && (
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <label className="text-sm font-bold text-festika-navy">
+                  Timeline Lomba
+                </label>
+                <button
+                  type="button"
+                  onClick={handleAddTimeline}
+                  className="text-xs bg-festika-teal text-white px-2 py-1 font-bold"
+                >
+                  + Tambah Event
+                </button>
+              </div>
+              {formData.timeline.map((item: any, index: number) => (
+                <div key={index} className="flex gap-2 items-start border border-gray-200 p-3">
+                  <div className="flex-1 space-y-2">
+                    <input
+                      value={item.label}
+                      onChange={(e) => handleTimelineChange(index, "label", e.target.value)}
+                      placeholder="Nama Event (cth: Pendaftaran)"
+                      className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
+                    />
+                    <input
+                      value={item.date}
+                      onChange={(e) => handleTimelineChange(index, "date", e.target.value)}
+                      placeholder="Tanggal (cth: 15-20 Mar 2026)"
+                      className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
+                    />
+                    <input
+                      value={item.description || ""}
+                      onChange={(e) => handleTimelineChange(index, "description", e.target.value)}
+                      placeholder="Deskripsi (opsional)"
+                      className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTimeline(index)}
+                    className="p-2 text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ── Prize List ── */}
+          {modalType !== "past-event" && (
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <label className="text-sm font-bold text-festika-navy">
+                  Prize List
+                </label>
+                <button
+                  type="button"
+                  onClick={handleAddPrize}
+                  className="text-xs bg-festika-teal text-white px-2 py-1 font-bold"
+                >
+                  + Tambah Prize
+                </button>
+              </div>
+              {formData.prizeList.map((item: any, index: number) => (
+                <div key={index} className="flex gap-2 items-start border border-gray-200 p-3">
+                  <div className="flex-1 space-y-2">
+                    <input
+                      value={item.position}
+                      onChange={(e) => handlePrizeChange(index, "position", e.target.value)}
+                      placeholder="Posisi (cth: Juara 1, Harapan)"
+                      className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
+                    />
+                    <input
+                      value={item.prize}
+                      onChange={(e) => handlePrizeChange(index, "prize", e.target.value)}
+                      placeholder="Hadiah (cth: Rp 3.000.000)"
+                      className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
+                    />
+                    <input
+                      value={item.description || ""}
+                      onChange={(e) => handlePrizeChange(index, "description", e.target.value)}
+                      placeholder="Deskripsi (opsional)"
+                      className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemovePrize(index)}
+                    className="p-2 text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Archive option removed: past-event flow is handled in dedicated Past Event modal */}
 
           <div className="flex gap-3 pt-4">
@@ -369,10 +501,6 @@ export function AddYearModal({
   existingYears = [],
 }: AddYearModalProps) {
   const [yearStr, setYearStr] = useState("");
-
-  useEffect(() => {
-    if (isOpen) setYearStr("");
-  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -442,25 +570,10 @@ export function AdminPastEventModal({
   isLoading,
   mode,
 }: CompetitionModalProps) {
-  const currentYear = new Date().getFullYear();
-  const [formData, setFormData] = useState<any>({
-    title: "",
-    theme: "",
-    description: "",
-    eventDate: "",
-    imageUrl: "",
-    galleryUrls: [] as string[],
-    year: currentYear - 1,
-    participants: "",
-    winner: "",
-    runnerUp: "",
-    thirdPlace: "",
-    orderIndex: 0,
-  });
-
-  useEffect(() => {
+  const [formData, setFormData] = useState(() => {
+    const defaultYear = new Date().getFullYear() - 1;
     if (initialData) {
-      setFormData({
+      return {
         title: initialData.title || "",
         theme: initialData.theme || "",
         description: initialData.description || "",
@@ -471,32 +584,29 @@ export function AdminPastEventModal({
         galleryUrls: Array.isArray(initialData.galleryUrls)
           ? initialData.galleryUrls
           : initialData.galleryUrls || [],
-        year: initialData.year || currentYear - 1,
-        participants: initialData.participants
-          ? String(initialData.participants)
-          : "",
+        year: initialData.year || defaultYear,
+        participants: initialData.participants ? String(initialData.participants) : "",
         winner: initialData.winner || "",
         runnerUp: initialData.runnerUp || "",
         thirdPlace: initialData.thirdPlace || "",
         orderIndex: initialData.orderIndex || 0,
-      });
-    } else {
-      setFormData({
-        title: "",
-        theme: "",
-        description: "",
-        eventDate: "",
-        imageUrl: "",
-        galleryUrls: [],
-        year: currentYear - 1,
-        participants: "",
-        winner: "",
-        runnerUp: "",
-        thirdPlace: "",
-        orderIndex: 0,
-      });
+      };
     }
-  }, [initialData, isOpen]);
+    return {
+      title: "",
+      theme: "",
+      description: "",
+      eventDate: "",
+      imageUrl: "",
+      galleryUrls: [] as string[],
+      year: defaultYear,
+      participants: "",
+      winner: "",
+      runnerUp: "",
+      thirdPlace: "",
+      orderIndex: 0,
+    };
+  });
 
   const galleryRef = useRef<HTMLDivElement | null>(null);
 
@@ -1079,14 +1189,6 @@ export function DeleteMultipleModal({
 }: DeleteMultipleModalProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [input, setInput] = useState("");
-
-  // Reset internal state setiap kali modal dibuka ulang
-  useEffect(() => {
-    if (isOpen) {
-      setStep(1);
-      setInput("");
-    }
-  }, [isOpen]);
 
   if (!isOpen || targets.length === 0) return null;
 

@@ -11,12 +11,8 @@ export default function FloatingRegisterButton() {
     if (!card) return;
 
     const onScroll = () => {
-      if (window.scrollY > 500) {
-        const rect = card.getBoundingClientRect();
-        setIsVisible(rect.top > 100);
-      } else {
-        setIsVisible(false);
-      }
+      const rect = card.getBoundingClientRect();
+      setIsVisible(rect.top > 80);
     };
 
     onScroll();
@@ -25,9 +21,11 @@ export default function FloatingRegisterButton() {
   }, []);
 
   const handleClick = () => {
-    document
-      .getElementById("registration-card")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const el = document.getElementById("registration-card");
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
   };
 
   return (
