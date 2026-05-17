@@ -331,7 +331,7 @@ export function CompetitionModal({
                 + Tambah CP
               </button>
             </div>
-            {formData.contacts.map((contact, index) => (
+            {formData.contacts.map((contact: any, index: number) => (
               <div key={index} className="flex gap-2 items-end">
                 <div className="flex-1 space-y-1">
                   <input
