@@ -25,13 +25,17 @@ export default function AdminLoginPage() {
         redirect: false,
       });
 
+      console.log("signIn result:", result);
+
       if (result?.error) {
         setError("Username atau password salah. Coba lagi.");
+      } else if (result?.url) {
+        window.location.href = result.url;
       } else {
-        router.push("/admin");
-        router.refresh();
+        window.location.href = "/admin";
       }
-    } catch {
+    } catch (err) {
+      console.error("signIn error:", err);
       setError("Terjadi kesalahan koneksi. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
