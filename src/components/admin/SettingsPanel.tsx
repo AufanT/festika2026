@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Upload, Check, ExternalLink } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import { useNotification } from "@/context/NotificationContext";
 
 export default function SettingsPanel() {
   const { showNotification } = useNotification();
-  const [guidebookUrl, setGuidebookUrl] = useState("");
+  const [uploaded, setUploaded] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -16,32 +15,12 @@ export default function SettingsPanel() {
       .then((res) => res.json())
       .then((json) => {
         if (json.data?.guidebook_url) {
-          setGuidebookUrl(json.data.guidebook_url);
+          setUploaded(true);
         }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      const res = await fetch("/api/settings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ guidebook_url: guidebookUrl }),
-      });
-      if (res.ok) {
-        showNotification("success", "Berhasil", "Guidebook berhasil disimpan!");
-      } else {
-        showNotification("error", "Gagal", "Gagal menyimpan guidebook.");
-      }
-    } catch {
-      showNotification("error", "Error", "Terjadi kesalahan koneksi.");
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -53,18 +32,17 @@ export default function SettingsPanel() {
       const res = await fetch("/api/upload", { method: "POST", body: fd });
       const json = await res.json();
       if (json.url) {
-        setGuidebookUrl(json.url);
-        // Auto-save to settings
         await fetch("/api/settings", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ guidebook_url: json.url }),
         });
+        setUploaded(true);
         showNotification("success", "Berhasil", "Guidebook berhasil diupload!");
       } else {
         showNotification("error", "Gagal", json.message || "Gagal mengupload file");
       }
-    } catch (err) {
+    } catch {
       showNotification("error", "Error", "Terjadi kesalahan koneksi.");
     } finally {
       setUploading(false);
@@ -97,6 +75,13 @@ export default function SettingsPanel() {
         </p>
 
         <div className="space-y-4">
+          {uploaded && (
+            <div className="bg-green-50 border-2 border-green-200 p-3 flex items-center gap-3">
+              <Check size={18} className="text-green-600 shrink-0" />
+              <p className="text-xs font-bold text-green-700">Guidebook tersimpan</p>
+            </div>
+          )}
+
           <div>
             <label className="text-sm font-bold text-festika-navy block mb-2">
               Upload File PDF
@@ -114,45 +99,6 @@ export default function SettingsPanel() {
               </p>
             )}
           </div>
-
-          <div className="border-t border-gray-200 pt-4">
-            <label className="text-sm font-bold text-festika-navy block mb-2">
-              Atau masukkan URL langsung
-            </label>
-            <input
-              value={guidebookUrl}
-              onChange={(e) => setGuidebookUrl(e.target.value)}
-              placeholder="https://res.cloudinary.com/..."
-              className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange text-sm"
-            />
-          </div>
-
-          {guidebookUrl && (
-            <div className="bg-green-50 border-2 border-green-200 p-3 flex items-center gap-3">
-              <Check size={18} className="text-green-600 shrink-0" />
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-bold text-green-700">Guidebook tersimpan</p>
-                <a
-                  href={guidebookUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-green-600 underline truncate block flex items-center gap-1"
-                >
-                  {guidebookUrl} <ExternalLink size={12} />
-                </a>
-              </div>
-            </div>
-          )}
-
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="flex items-center gap-2 bg-festika-navy text-white px-6 py-3 font-bold hover:bg-festika-navy/90 transition-colors shadow-[4px_4px_0_0_#F5A623] disabled:opacity-50"
-          >
-            {saving && <Loader2 size={16} className="animate-spin" />}
-            {!saving && <Upload size={16} />}
-            Simpan Guidebook
-          </button>
         </div>
       </div>
     </div>
