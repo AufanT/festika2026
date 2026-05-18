@@ -27,7 +27,7 @@ export default function GuidebookCalloutCard({
   title = "Info Lebih Lengkap",
   message = "Temukan semua detail teknis, aturan, timeline, dan prize di Guidebook resmi FESTIKA 2026.",
   label = "Download Guidebook",
-  filePath = "/Guidebook FESTIKA - 2.pdf",
+  filePath,
 }: GuidebookCalloutCardProps) {
   return (
     <div className="relative overflow-hidden border-[3px] border-festika-navy shadow-[8px_8px_0_0_#0F2A36] bg-gradient-to-br from-festika-teal to-[#0d7a6f]">
