@@ -48,29 +48,37 @@ export function downloadFile(filePath: string, filename?: string): void {
     throw new TypeError(errorMessage);
   }
 
-  // Normalize path to ensure root-relative format (prepend "/" if missing)
+  // For absolute URLs (http/https), use directly; for relative paths, ensure root-relative
   let normalizedPath = filePath.trim();
-  if (!normalizedPath.startsWith("/")) {
+  const isAbsolute = /^https?:\/\//i.test(normalizedPath);
+  if (!isAbsolute && !normalizedPath.startsWith("/")) {
     normalizedPath = "/" + normalizedPath;
-  }
-
-  // Check for unsafe characters (outside [a-zA-Z0-9._/\- ])
-  const safeCharPattern = /^[a-zA-Z0-9._/\- ]+$/;
-  if (!safeCharPattern.test(normalizedPath)) {
-    console.warn(`[Guidebook Download] Warning: File path contains potentially unsafe characters: ${normalizedPath}`);
   }
 
   // Extract filename from path if not provided (substring after last "/")
   const extractedFilename = filename || normalizedPath.substring(normalizedPath.lastIndexOf("/") + 1);
 
-  // Check for non-standard filename format (not matching "Guidebook FESTIKA - [number].pdf")
-  const standardFilenamePattern = /^Guidebook FESTIKA - \d+\.pdf$/;
-  if (!standardFilenamePattern.test(extractedFilename)) {
-    console.warn(`[Guidebook Download] Warning: Non-standard filename format: ${extractedFilename}`);
+  // Skip validation checks for absolute URLs (Cloudinary paths have colons, slashes, etc.)
+  if (!isAbsolute) {
+    const safeCharPattern = /^[a-zA-Z0-9._/\- ]+$/;
+    if (!safeCharPattern.test(normalizedPath)) {
+      console.warn(`[Guidebook Download] Warning: File path contains potentially unsafe characters: ${normalizedPath}`);
+    }
+    const standardFilenamePattern = /^Guidebook FESTIKA - \d+\.pdf$/;
+    if (!standardFilenamePattern.test(extractedFilename)) {
+      console.warn(`[Guidebook Download] Warning: Non-standard filename format: ${extractedFilename}`);
+    }
   }
 
   try {
-    // Create temporary anchor element with href and download attributes
+    if (isAbsolute) {
+      // For cross-origin URLs (Cloudinary), open in new tab
+      // The browser's PDF viewer will display it, user can save from there
+      window.open(normalizedPath, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    // Create temporary anchor element with href and download attributes for same-origin files
     const anchor = document.createElement("a");
     anchor.href = normalizedPath;
     anchor.download = extractedFilename;
