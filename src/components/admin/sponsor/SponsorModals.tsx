@@ -6,8 +6,6 @@ type AddSponsorModalProps = {
   onSubmit: (e: React.FormEvent) => void;
   name: string;
   onNameChange: (val: string) => void;
-  link: string;
-  onLinkChange: (val: string) => void;
   tier: string;
   onTierChange: (val: string) => void;
   onFileChange: (file: File | null) => void;
@@ -15,7 +13,7 @@ type AddSponsorModalProps = {
 };
 
 export function AddSponsorModal({
-  isOpen, onClose, onSubmit, name, onNameChange, link, onLinkChange, tier, onTierChange, onFileChange, isLoading
+  isOpen, onClose, onSubmit, name, onNameChange, tier, onTierChange, onFileChange, isLoading
 }: AddSponsorModalProps) {
   if (!isOpen) return null;
   return (
@@ -31,18 +29,10 @@ export function AddSponsorModal({
             <input required value={name} onChange={e => onNameChange(e.target.value)} className="w-full px-3 py-2 border-2 border-gray-200 focus:border-festika-teal focus:outline-none" placeholder="Cth: PT. Teknologi Indonesia" />
           </div>
           <div>
-            <label className="text-sm font-bold text-festika-navy block mb-1">Link Website (Opsional)</label>
-            <input type="url" value={link} onChange={e => onLinkChange(e.target.value)} className="w-full px-3 py-2 border-2 border-gray-200 focus:border-festika-teal focus:outline-none" placeholder="https://example.com" />
-          </div>
-          <div>
             <label className="text-sm font-bold text-festika-navy block mb-1">Tier / Kategori</label>
             <select value={tier} onChange={e => onTierChange(e.target.value)} className="w-full px-3 py-2 border-2 border-gray-200 focus:border-festika-teal focus:outline-none bg-white">
-              <option value="Platinum">Platinum</option>
-              <option value="Gold">Gold</option>
-              <option value="Silver">Silver</option>
-              <option value="Bronze">Bronze</option>
-              <option value="Media Partner">Media Partner</option>
               <option value="Supported By">Supported By</option>
+              <option value="Media Partner">Media Partner</option>
             </select>
           </div>
           <div>
