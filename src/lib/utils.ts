@@ -72,14 +72,11 @@ export function downloadFile(filePath: string, filename?: string): void {
 
   try {
     if (isAbsolute) {
-      // Convert Cloudinary URL to raw + fl_attachment for reliable PDF download.
-      // Works for both old (/image/upload/) and new (/raw/upload/) style uploads.
+      // Try opening the raw URL directly (without fl_attachment) first
       let downloadUrl = normalizedPath;
       if (downloadUrl.includes("res.cloudinary.com")) {
         if (downloadUrl.includes("/image/upload/")) {
-          downloadUrl = downloadUrl.replace("/image/upload/", "/raw/upload/fl_attachment/");
-        } else if (downloadUrl.includes("/raw/upload/")) {
-          downloadUrl = downloadUrl.replace("/raw/upload/", "/raw/upload/fl_attachment/");
+          downloadUrl = downloadUrl.replace("/image/upload/", "/raw/upload/");
         }
       }
       window.open(downloadUrl, "_blank", "noopener,noreferrer");
