@@ -1,7 +1,7 @@
 "use client";
 
 import { Sponsor } from "@/lib/repositories/sponsor.repository";
-import { Handshake, ExternalLink } from "lucide-react";
+import { Handshake } from "lucide-react";
 import Reveal from "@/components/Reveal";
 
 export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
@@ -60,16 +60,12 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                 
                 <div className={`grid ${tier.className} gap-6 sm:gap-10`}>
                   {tierSponsors.map((spn) => (
-                    <a
+                    <div
                       key={spn.id}
-                      href={spn.link || "#"}
-                      target={spn.link ? "_blank" : undefined}
-                      rel={spn.link ? "noopener noreferrer" : undefined}
                       className={`
                         group relative flex items-center justify-center bg-white p-6 sm:p-10 transition-all duration-500
                         border-2 border-transparent hover:border-festika-navy/10 hover:shadow-[12px_12px_0_0_rgba(15,42,54,0.05)]
                         ${tier.itemClass}
-                        ${!spn.link ? "cursor-default" : "cursor-pointer"}
                       `}
                     >
                       {/* Logo */}
@@ -78,13 +74,6 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                         alt={spn.name}
                         className="w-full h-full object-contain transition-all duration-500 scale-100 group-hover:scale-110"
                       />
-                      
-                      {/* Hover Effect Details */}
-                      {spn.link && (
-                        <div className="absolute inset-0 bg-festika-navy/0 group-hover:bg-festika-navy/5 transition-colors flex items-end justify-end p-2 opacity-0 group-hover:opacity-100">
-                          <ExternalLink size={14} className="text-festika-teal" />
-                        </div>
-                      )}
 
                       {/* Label on Hover */}
                       <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap">
@@ -92,7 +81,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                           {spn.name}
                         </span>
                       </div>
-                    </a>
+                    </div>
                   ))}
                 </div>
               </Reveal>
