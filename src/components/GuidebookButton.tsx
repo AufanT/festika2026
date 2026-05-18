@@ -39,11 +39,11 @@ export default function GuidebookButton({
     ? label.substring(0, 47) + "..."
     : label;
 
-  const triggerDownload = async () => {
+  const triggerDownload = () => {
     if (isDownloading.current) return;
     isDownloading.current = true;
     try {
-      await downloadFile(resolvedPath);
+      downloadFile(resolvedPath);
     } catch {
       // Error is already logged by downloadFile function
     } finally {

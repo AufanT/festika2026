@@ -40,7 +40,7 @@ export function formatWhatsAppLink(phone: string, message?: string) {
  * downloadFile("/Guidebook FESTIKA - 2.pdf");
  * downloadFile("/docs/guide.pdf", "Festival-Guide-2026.pdf");
  */
-export async function downloadFile(filePath: string, filename?: string): Promise<void> {
+export function downloadFile(filePath: string, filename?: string): void {
   // Validate file path - reject null, undefined, empty, or whitespace-only
   if (filePath == null || typeof filePath !== 'string' || filePath.trim().length === 0) {
     const errorMessage = "File path is required and cannot be empty";
@@ -72,30 +72,23 @@ export async function downloadFile(filePath: string, filename?: string): Promise
 
   try {
     if (isAbsolute) {
-      // For Cloudinary PDFs: fetch as blob, then trigger download via local object URL.
-      // This avoids the cross-origin download attribute restriction and gives us a clean filename.
-      // If that fails (CORS etc), we try adding fl_attachment to the URL as fallback.
-      try {
-        const response = await fetch(normalizedPath);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const anchor = document.createElement("a");
-        anchor.href = blobUrl;
-        anchor.download = extractedFilename;
-        document.body.appendChild(anchor);
-        anchor.click();
-        setTimeout(() => {
-          document.body.removeChild(anchor);
-          URL.revokeObjectURL(blobUrl);
-        }, 100);
-      } catch {
-        // Fallback: modify Cloudinary URL to force Content-Disposition: attachment
-        const downloadUrl = normalizedPath.includes("res.cloudinary.com")
-          ? normalizedPath.replace("/image/upload/", "/image/upload/fl_attachment/")
-          : normalizedPath;
-        window.open(downloadUrl, "_blank", "noopener,noreferrer");
-      }
+      // Add fl_attachment to Cloudinary URLs to force Content-Disposition: attachment.
+      // The anchor.click() happens synchronously (preserves user gesture), and Cloudinary
+      // responds with a download instead of an inline PDF preview.
+      const downloadUrl = normalizedPath.includes("res.cloudinary.com")
+        ? normalizedPath.replace("/image/upload/", "/image/upload/fl_attachment/")
+        : normalizedPath;
+
+      const anchor = document.createElement("a");
+      anchor.href = downloadUrl;
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      anchor.download = extractedFilename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      setTimeout(() => {
+        document.body.removeChild(anchor);
+      }, 100);
       return;
     }
 
