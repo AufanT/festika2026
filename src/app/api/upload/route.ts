@@ -38,9 +38,11 @@ export async function POST(req: NextRequest) {
     console.log("[API Upload] Mengirim data ke Cloudinary (Base64 method)...");
     
     // Direct upload using Base64 string
+    const resourceType = file.type === "application/pdf" ? "raw" : "auto";
+
     const result = await cloudinary.uploader.upload(base64Image, {
       folder: "festika-uploads",
-      resource_type: "auto",
+      resource_type: resourceType,
     });
 
     if (!result?.secure_url) {
