@@ -73,20 +73,12 @@ export function downloadFile(filePath: string, filename?: string): void {
   try {
     if (isAbsolute) {
       // Add fl_attachment to Cloudinary URLs to force Content-Disposition: attachment.
-      // The anchor.click() happens synchronously (preserves user gesture), and Cloudinary
-      // responds with a download instead of an inline PDF preview.
+      // window.open is called synchronously within user gesture (click handler),
+      // so the browser won't block it as a popup.
       const downloadUrl = normalizedPath.includes("res.cloudinary.com")
         ? normalizedPath.replace("/image/upload/", "/image/upload/fl_attachment/")
         : normalizedPath;
-
-      const anchor = document.createElement("a");
-      anchor.href = downloadUrl;
-      anchor.style.display = "none";
-      document.body.appendChild(anchor);
-      anchor.click();
-      setTimeout(() => {
-        document.body.removeChild(anchor);
-      }, 100);
+      window.open(downloadUrl, "_blank", "noopener,noreferrer");
       return;
     }
 
