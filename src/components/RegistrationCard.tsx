@@ -25,7 +25,7 @@ export default function RegistrationCard({
         id="registration-card"
         className="bg-festika-navy p-8 text-white border-4 border-festika-navy shadow-[8px_8px_0_0_#14B8A6]"
       >
-        <h4 className="font-black uppercase tracking-widest text-xs text-festika-orange mb-6">
+        <h4 className="font-black uppercase tracking-widest text-xs text-festika-orange mb-6 font-[family-name:var(--font-space-grotesk)]">
           Pendaftaran
         </h4>
 

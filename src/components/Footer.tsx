@@ -128,8 +128,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Column 1: Branding */}
           <div className="flex flex-col">
-            <div className="flex items-center gap-8 mb-8">
-              <div className="relative h-16 w-16">
+            <div className="flex items-center gap-4 sm:gap-8 mb-8">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16">
                 <Image
                   src="/Logo_Festika-04.webp"
                   alt="Festika Logo"
@@ -138,7 +138,7 @@ export default function Footer() {
                   priority
                 />
               </div>
-              <div className="relative h-16 w-16">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16">
                 <Image
                   src="/logo-hmif.svg"
                   alt="HMIF Logo"
@@ -146,7 +146,7 @@ export default function Footer() {
                   className="object-contain"
                 />
               </div>
-              <div className="relative h-16 w-16">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16">
                 <Image
                   src="/LOGO_FTI.svg"
                   alt="FTI Logo"
@@ -154,7 +154,7 @@ export default function Footer() {
                   className="object-contain"
                 />
               </div>
-              <div className="relative h-16 w-16">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16">
                 <Image
                   src="/Logo_Unand.svg"
                   alt="Unand Logo"
@@ -176,7 +176,7 @@ export default function Footer() {
 
           {/* Column 2: Quick Links */}
           <div className="flex flex-col lg:pl-8">
-            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-8">
+            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-8 font-[family-name:var(--font-space-grotesk)]">
               QUICK LINKS
             </h3>
             <ul className="space-y-4">
@@ -195,7 +195,7 @@ export default function Footer() {
 
           {/* Column 3: Website */}
           <div className="flex flex-col">
-            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-8">
+            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-8 font-[family-name:var(--font-space-grotesk)]">
               WEBSITE
             </h3>
             <ul className="space-y-6">
@@ -224,7 +224,7 @@ export default function Footer() {
 
           {/* Column 4: Follow Us & Contact */}
           <div className="flex flex-col">
-            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-6">
+            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-6 font-[family-name:var(--font-space-grotesk)]">
               FOLLOW US
             </h3>
             <div className="flex flex-wrap gap-4 mb-10 w-full max-w-[200px]">
@@ -242,7 +242,7 @@ export default function Footer() {
               ))}
             </div>
 
-            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-6">
+            <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-6 font-[family-name:var(--font-space-grotesk)]">
               CONTACT US
             </h3>
             <div className="flex flex-col space-y-3">

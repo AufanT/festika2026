@@ -77,7 +77,7 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
                   Competition 2026
                 </span>
               </div>
-              <h1 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-6xl font-black text-festika-navy leading-none uppercase">
+              <h1 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-6xl font-black text-festika-navy leading-none uppercase tracking-tighter">
                 {competition.title}
               </h1>
               {competition.theme && (

@@ -74,7 +74,7 @@ export default function Navbar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 h-16 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <div className="relative h-16 w-56">
+          <div className="relative h-12 w-40 sm:h-16 sm:w-56">
             <Image
               src="/logo-festika.svg"
               alt="Festika Logo"

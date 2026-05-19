@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import StaffPanel from "./StaffPanel";
-import SponsorPanel from "./SponsorPanel";
 import { useNotification } from "@/context/NotificationContext";
 import { useState, useEffect, useCallback } from "react";
 import { signOut } from "next-auth/react";
@@ -10,17 +8,14 @@ import {
   LogOut,
   Users,
   Trophy,
-  ArrowLeft,
-  Handshake,
-  HelpCircle,
-  Settings,
+  Globe,
+  ExternalLink,
+  Map,
 } from "lucide-react";
 
 // Sub-components
-import StatsOverview from "./dashboard/StatsOverview";
 import CompetitionGrid from "./dashboard/CompetitionGrid";
-import FaqPanel from "./faq/FaqPanel";
-import SettingsPanel from "./SettingsPanel";
+import SitePanel from "./SitePanel";
 import {
   CompetitionModal,
   AdminPastEventModal,
@@ -36,7 +31,7 @@ import { Competition, User } from "@/types/admin";
 export default function AdminDashboard({ user }: { user: User | undefined }) {
   const { showNotification } = useNotification();
   const [activeTab, setActiveTab] = useState<
-    "competitions" | "past-events" | "staff" | "sponsors" | "faq" | "settings"
+    "competitions" | "our-journey" | "staff" | "site"
   >("competitions");
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [pastEvents, setPastEvents] = useState<Competition[]>([]);
@@ -44,7 +39,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   const [adminSelectedYear, setAdminSelectedYear] = useState<number | "all" | null>(null);
   const [modalInitialData, setModalInitialData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // ── Modal: Competition (Add & Edit) ──────────────────────────────────────
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,7 +77,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       const res = await fetch("/api/competitions");
       const json = await res.json();
       setCompetitions(json.data || []);
-      setLastUpdated(new Date());
     } catch {
       /* ignore */
     } finally {
@@ -109,7 +102,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       } catch (err) {
         /* ignore */
       }
-      setLastUpdated(new Date());
     } catch {
       /* ignore */
     } finally {
@@ -120,7 +112,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   useEffect(() => {
     if (activeTab === "competitions") {
       fetchCompetitions();
-    } else if (activeTab === "past-events") {
+    } else if (activeTab === "our-journey") {
       fetchPastEvents();
     }
   }, [activeTab, fetchCompetitions, fetchPastEvents]);
@@ -147,7 +139,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     setModalMode("edit");
     setEditingComp(comp);
     // if we're in the past-events tab, always open the PastEvent modal
-    if (activeTab === "past-events") setModalType("past-event");
+    if (activeTab === "our-journey") setModalType("past-event");
     else setModalType(comp.isArchived ? "past-event" : "competition");
     setModalInitialData(comp);
     setIsModalOpen(true);
@@ -208,7 +200,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
   };
 
   const handleOpenBulkDelete = (selectedIds: string[]) => {
-    const sourceList = activeTab === "past-events" ? pastEvents : competitions;
+    const sourceList = activeTab === "our-journey" ? pastEvents : competitions;
     const targets: DeleteMultipleTarget[] = sourceList
       .filter((c) => selectedIds.includes(c.id))
       .map((c) => ({
@@ -226,7 +218,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     setIsBulkDeleting(true);
     try {
       const base =
-        activeTab === "past-events" ? "/api/past-events" : "/api/competitions";
+        activeTab === "our-journey" ? "/api/past-events" : "/api/competitions";
       const results = await Promise.allSettled(
         bulkDeleteTargets.map((t) =>
           fetch(`${base}?id=${t.id}`, { method: "DELETE" }),
@@ -240,7 +232,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       setIsBulkDeleteOpen(false);
       setBulkDeleteTargets([]);
 
-      if (activeTab === "past-events") {
+      if (activeTab === "our-journey") {
         fetchPastEvents();
       } else {
         fetchCompetitions();
@@ -271,7 +263,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     setIsDeleting(true);
     try {
       const base =
-        activeTab === "past-events" ? "/api/past-events" : "/api/competitions";
+        activeTab === "our-journey" ? "/api/past-events" : "/api/competitions";
       const res = await fetch(`${base}?id=${deletingComp.id}`, {
         method: "DELETE",
       });
@@ -291,21 +283,12 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   const renderDashboardContent = () => {
     if (activeTab === "staff") return <StaffPanel />;
-    if (activeTab === "sponsors") return <SponsorPanel />;
-    if (activeTab === "faq") return <FaqPanel />;
-    if (activeTab === "settings") return <SettingsPanel />;
+    if (activeTab === "site") return <SitePanel />;
 
     // Past Events Tab
-    if (activeTab === "past-events") {
+    if (activeTab === "our-journey") {
       return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="mb-8">
-            <p className="text-gray-500 text-sm mb-4">
-              {lastUpdated
-                ? `Terakhir diperbarui: ${lastUpdated.toLocaleTimeString("id-ID")}`
-                : "Memuat data..."}
-            </p>
-          </div>
           {/* Year selector for admin */}
           <div className="mb-4 flex flex-wrap gap-3 items-center">
             <button
@@ -369,8 +352,8 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
             onSelect={handleOpenEdit}
             onAddRequest={handleOpenAddPastEvent}
             onDeleteMode={handleOpenBulkDelete}
-            title={`Past Events ${adminSelectedYear && adminSelectedYear !== "all" ? `(${adminSelectedYear})` : "(All Years)"}`}
-            addButtonLabel="Tambah Past Event"
+            title={`Our Journey ${adminSelectedYear && adminSelectedYear !== "all" ? `(${adminSelectedYear})` : ""}`}
+            addButtonLabel="Tambah Moment"
           />
         </div>
       );
@@ -379,18 +362,6 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
     // Competitions Tab (Active)
     return (
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="mb-8">
-          <p className="text-gray-500 text-sm mb-4">
-            {lastUpdated
-              ? `Terakhir diperbarui: ${lastUpdated.toLocaleTimeString("id-ID")}`
-              : "Memuat data..."}
-          </p>
-          <StatsOverview
-            totalCompetitions={competitions.length}
-            activeLinks={competitions.filter((c) => c.registrationLink).length}
-          />
-        </div>
-
         <CompetitionGrid
           competitions={competitions}
           onSelect={handleOpenEdit}
@@ -408,14 +379,13 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       <header className="bg-festika-navy sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center">
-            <div className="relative h-12 w-44">
-              <Image
-                src="/logo-festika.svg"
-                alt="Festika Logo"
-                fill
-                className="object-contain"
-                priority
-              />
+            <div className="flex items-center gap-0.5">
+              <span className="font-[family-name:var(--font-space-grotesk)] text-xl font-extrabold tracking-tighter text-festika-peach">
+                FEST
+              </span>
+              <span className="bg-festika-peach text-festika-teal px-1.5 font-[family-name:var(--font-space-grotesk)] text-xl font-extrabold tracking-tighter inline-flex items-center justify-center">
+                IKA
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -434,14 +404,14 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
         <div className="max-w-7xl mx-auto px-4 flex overflow-x-auto no-scrollbar scroll-smooth">
           {[
             {
-              id: "competitions",
-              label: "Lomba",
-              icon: Trophy,
+              id: "site",
+              label: "Situs",
+              icon: Globe,
               activeColor: "border-festika-orange",
             },
             {
-              id: "past-events",
-              label: "Past Events",
+              id: "competitions",
+              label: "Lomba",
               icon: Trophy,
               activeColor: "border-festika-orange",
             },
@@ -452,21 +422,9 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
               activeColor: "border-festika-orange",
             },
             {
-              id: "sponsors",
-              label: "Sponsor",
-              icon: Handshake,
-              activeColor: "border-festika-orange",
-            },
-            {
-              id: "faq",
-              label: "FAQ",
-              icon: HelpCircle,
-              activeColor: "border-festika-orange",
-            },
-            {
-              id: "settings",
-              label: "Pengaturan",
-              icon: Settings,
+              id: "our-journey",
+              label: "Our Journey",
+              icon: Map,
               activeColor: "border-festika-orange",
             },
           ].map((tab) => (
@@ -485,6 +443,15 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
               <span className="text-sm sm:text-base">{tab.label}</span>
             </button>
           ))}
+          <div className="w-px h-6 bg-white/20 mx-2 shrink-0 self-center" />
+          <a
+            href="/"
+            target="_blank"
+            className="flex items-center gap-2 px-5 sm:px-6 py-4 font-bold text-sm shrink-0 whitespace-nowrap text-gray-400 hover:text-white transition-colors"
+          >
+            <ExternalLink size={18} />
+            <span className="text-sm sm:text-base">Lihat Situs</span>
+          </a>
         </div>
       </header>
 

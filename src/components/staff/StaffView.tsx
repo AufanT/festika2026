@@ -69,7 +69,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
                 <div className="w-12 h-12 border-4 border-festika-navy flex items-center justify-center text-festika-teal">
                   <LayoutDashboard size={24} />
                 </div>
-                <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl lg:text-4xl font-extrabold text-festika-navy uppercase tracking-tighter">
+                <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl lg:text-4xl font-black text-festika-navy uppercase tracking-tighter">
                   {selectedStaff.role}
                 </h2>
               </div>
@@ -106,7 +106,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
          </div>
          
          <div className="text-center mb-16">
-            <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl md:text-6xl font-extrabold text-festika-navy uppercase tracking-tighter inline-block relative border-b-[6px] border-festika-teal pb-2">
+            <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl md:text-6xl font-black text-festika-navy uppercase tracking-tighter inline-block relative border-b-[6px] border-festika-teal pb-2">
               ANGGOTA
             </h2>
             <p className="text-gray-400 text-sm mt-4 uppercase tracking-wider">
@@ -160,7 +160,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
       {coreLeaders.length > 0 && (
         <div className="mb-24">
           <div className="text-center mb-12">
-            <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-black text-festika-navy uppercase tracking-widest">
+            <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-black text-festika-navy uppercase tracking-tighter">
               Badan Pengurus Harian
             </h2>
             <div className="h-1.5 w-24 bg-festika-orange mx-auto mt-2"></div>
@@ -196,7 +196,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
 
       {/* DIVISI SECTION */}
       <div className="text-center mb-12">
-        <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-black text-festika-navy uppercase tracking-widest">
+        <h2 className="font-[family-name:var(--font-space-grotesk)] text-3xl font-black text-festika-navy uppercase tracking-tighter">
           Divisi Panitia
         </h2>
         <div className="h-1.5 w-24 bg-festika-teal mx-auto mt-2"></div>

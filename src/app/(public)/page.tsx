@@ -31,7 +31,16 @@ export const dynamic = "force-dynamic";
 /* ── Page ─────────────────────────────────────────── */
 
 const ABOUT_DESCRIPTION =
-  "FESTIKA 2026 merupakan festival tahunan yang menjadi ajang kompetisi serta pengembangan potensi di bidang teknologi digital. Pada tahun ini, FESTIKA 2026 menghadirkan tiga kategori utama, yaitu Capture The Flag (CTF) Competition, Web Design Competition, dan Lomba Karya Tulis Ilmiah (KTI). Ketiga komptesi ini dirancang untuk menunjukan bakat, kreativitas, dan kemampuan dalam memanfaatkan teknologi secara optimal. Festika ini bertemakan \"TechSpark: Unleashing and Modern Creativity in the Technological World\". Kegiatan Festika ini bertemakan \"NextGen Tech : Creating the Future Today\".";
+  "FESTIKA 2026 merupakan festival tahunan yang menjadi ajang kompetisi serta pengembangan potensi di bidang teknologi digital. Pada tahun ini, FESTIKA 2026 menghadirkan tiga kategori utama, yaitu ";
+
+const ABOUT_COMPETITIONS = [
+  "Capture The Flag (CTF) Competition",
+  "Web Design Competition",
+  "Lomba Karya Tulis Ilmiah (KTI)",
+] as const;
+
+const ABOUT_DESCRIPTION_2 =
+  ". Ketiga komptesi ini dirancang untuk menunjukan bakat, kreativitas, dan kemampuan dalam memanfaatkan teknologi secara optimal. Festika ini bertemakan \"TechSpark: Unleashing and Modern Creativity in the Technological World\". Kegiatan Festika ini bertemakan \"NextGen Tech : Creating the Future Today\".";
 
 export default async function Home() {
   const competitions = await CompetitionRepository.findAll();
@@ -60,9 +69,9 @@ export default async function Home() {
 
                 <Reveal delay={100}>
                   <div className="mt-8 mb-6 flex justify-center lg:justify-start overflow-visible">
-                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter flex items-center leading-none">
+                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-[2.5rem] sm:text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter flex items-center leading-none">
                       <span className="text-festika-teal">FEST</span>
-                      <span className="bg-festika-teal text-[#FF9500] px-2 md:px-4 py-1 ml-1 md:ml-3 rounded-none inline-flex items-center justify-center">
+                      <span className="bg-festika-teal text-[#FF9500] px-2 sm:px-4 py-1 ml-1 sm:ml-3 rounded-none inline-flex items-center justify-center">
                         IKA
                       </span>
                     </h1>
@@ -102,84 +111,50 @@ export default async function Home() {
         </section>
 
         {/* ═══════════ ABOUT ═══════════ */}
-        <section id="about" className="relative py-20 lg:py-32 bg-[#FFF8F0] border-y-4 border-festika-navy overflow-hidden">
-          {/* Decorative pattern */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#0F2A36 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
-          
-          {/* Decorative brutalist shapes */}
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-festika-teal/10 border-4 border-festika-navy rotate-12 hidden lg:block" />
-          <div className="absolute bottom-10 -right-10 w-40 h-40 bg-festika-orange/10 border-4 border-festika-navy -rotate-6 hidden lg:block" />
+        <section id="about" className="relative py-16 lg:py-24 bg-[#FFF8F0] overflow-hidden">
 
           <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-
-              {/* Left - Illustration in a Brutalist Frame */}
-              <Reveal delay={0}>
-              <div className="flex-1 w-full max-w-[550px]">
-                <div className="relative group">
-                  <div className="absolute inset-0 bg-festika-teal translate-x-3 translate-y-3 border-4 border-festika-navy group-hover:translate-x-5 group-hover:translate-y-5 transition-transform duration-300" />
-                  <div className="relative bg-white border-4 border-festika-navy p-4 sm:p-8">
-                    <Image
-                      src="/2.svg"
-                      alt="About Festika Illustration"
-                      width={600}
-                      height={500}
-                      className="w-full h-auto object-contain"
-                    />
-                    <div className="absolute -top-6 -right-6 bg-festika-orange border-4 border-festika-navy px-6 py-4 shadow-[6px_6px_0_0_#0F2A36] -rotate-3 hover:rotate-0 transition-transform">
-                      <p className="text-white text-[10px] font-black uppercase tracking-widest leading-none mb-1">Since</p>
-                      <p className="text-white text-4xl font-black font-[family-name:var(--font-space-grotesk)] leading-none">2024</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="space-y-8">
+              <Reveal delay={150}>
+                <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-6xl font-black text-festika-navy uppercase tracking-tighter">
+                  Festika <span className="text-festika-orange">2026</span>
+                </h2>
+                <div className="w-16 h-1 bg-festika-teal mt-3" />
               </Reveal>
 
-              {/* Right - Text Content */}
-              <div className="flex-1 space-y-8">
-                <Reveal delay={150}>
-                <div className="space-y-4">
-                  <div className="inline-block bg-festika-teal border-2 border-festika-navy px-4 py-1 shadow-[3px_3px_0_0_#0F2A36]">
-                    <span className="text-white text-xs font-black uppercase tracking-widest">Tentang Kami</span>
-                  </div>
-                  
-                  <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-7xl font-black text-festika-navy leading-[0.9] uppercase italic tracking-tighter">
-                    Festika <br />
-                    <span className="text-festika-orange">2026</span>
-                  </h2>
-                </div>
-                </Reveal>
-
-                <Reveal delay={250}>
-                <div className="relative">
-                  <div className="absolute -left-6 top-0 bottom-0 w-2 bg-festika-orange border-l-2 border-r-2 border-festika-navy" />
-                  <p className="text-festika-navy font-bold text-lg lg:text-xl leading-relaxed pl-2">
+              <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                <div className="flex-1">
+                  <Reveal delay={250}>
+                  <p className="text-festika-navy text-base lg:text-lg leading-relaxed text-justify">
                     {ABOUT_DESCRIPTION}
+                    <strong>{ABOUT_COMPETITIONS[0]}</strong>,{" "}
+                    <strong>{ABOUT_COMPETITIONS[1]}</strong>, dan{" "}
+                    <strong>{ABOUT_COMPETITIONS[2]}</strong>
+                    {ABOUT_DESCRIPTION_2}
                   </p>
+                  </Reveal>
                 </div>
-                </Reveal>
 
-                <Reveal delay={350}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {[
-                    { icon: "🏆", label: "Kompetisi Bergengsi", color: "bg-white" },
-                    { icon: "💡", label: "Inovasi Digital", color: "bg-white" },
-                    { icon: "🤝", label: "Networking", color: "bg-white" },
-                    { icon: "🚀", label: "Teknologi Masa Depan", color: "bg-white" },
-                  ].map((item, i) => (
-                    <Reveal key={item.label} delay={400 + i * 100}>
-                    <div
-                      className={`flex items-center gap-4 ${item.color} border-2 border-festika-navy p-4 shadow-[4px_4px_0_0_#0F2A36] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all`}
-                    >
-                      <div className="text-3xl filter drop-shadow-[2px_2px_0_rgba(0,0,0,0.2)]">{item.icon}</div>
-                      <span className="text-festika-navy text-sm font-black uppercase tracking-tight leading-none">{item.label}</span>
-                    </div>
-                    </Reveal>
-                  ))}
+                <div className="flex-1 w-full">
+                  <Reveal delay={350}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-6">
+                    {[
+                      { icon: "🏆", label: "Kompetisi Bergengsi" },
+                      { icon: "💡", label: "Inovasi Digital" },
+                      { icon: "🤝", label: "Networking" },
+                      { icon: "🚀", label: "Teknologi Masa Depan" },
+                    ].map((item, i) => (
+                      <Reveal key={item.label} delay={400 + i * 100}>
+                      <div className="flex items-center gap-3 sm:gap-4 bg-white border-2 border-festika-navy px-3 sm:px-4 py-5 sm:py-6 shadow-[4px_4px_0_0_#0F2A36] transition-all">
+                        <div className="text-2xl sm:text-3xl shrink-0">{item.icon}</div>
+                        <span className="text-festika-navy text-xs sm:text-sm font-black uppercase tracking-tight leading-none font-[family-name:var(--font-space-grotesk)]">{item.label}</span>
+                      </div>
+                      </Reveal>
+                    ))}
+                  </div>
+                  </Reveal>
                 </div>
-                </Reveal>
               </div>
-
             </div>
           </div>
         </section>

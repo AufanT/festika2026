@@ -23,7 +23,6 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
   return (
     <section id="sponsors" className="py-24 lg:py-32 bg-gray-50 relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-festika-orange via-festika-teal to-festika-navy opacity-20" />
       <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-festika-teal/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -top-24 -left-24 w-96 h-96 bg-festika-orange/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -35,7 +34,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
             <Handshake size={18} className="text-festika-orange" />
             <span className="text-[10px] font-black text-festika-navy uppercase tracking-[0.3em]">Our Partners</span>
           </div>
-          <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-6xl font-black text-festika-navy uppercase tracking-tighter mb-4">
+          <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-6xl font-black text-festika-navy uppercase tracking-tighter mb-4">
             Official <span className="text-festika-orange">Sponsors</span>
           </h2>
           <div className="w-24 h-1.5 bg-festika-teal mx-auto" />
@@ -63,7 +62,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                     <div
                       key={spn.id}
                       className={`
-                        group relative flex items-center justify-center bg-white p-6 sm:p-10 transition-all duration-500
+                        group relative flex items-center justify-center bg-white p-3 sm:p-10 transition-all duration-500
                         border-2 border-transparent hover:border-festika-navy/10 hover:shadow-[12px_12px_0_0_rgba(15,42,54,0.05)]
                         ${tier.itemClass}
                       `}

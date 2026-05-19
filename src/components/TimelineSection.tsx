@@ -69,22 +69,20 @@ export default function TimelineSection({ competitions }: { competitions?: CompT
   return (
     <section
       id="timeline"
-      className="py-16 lg:py-24 bg-[#FFF8F0] border-y-4 border-festika-navy relative overflow-hidden"
+      className="py-16 lg:py-24 bg-[#FFF8F0] relative overflow-hidden"
     >
-      <div className="absolute top-8 left-8 w-28 h-28 border-4 border-festika-orange/20 rounded-full hidden lg:block pointer-events-none" />
-      <div className="absolute bottom-8 right-8 w-20 h-20 bg-festika-teal/10 rotate-45 hidden lg:block pointer-events-none" />
 
-      <div className="mx-auto max-w-6xl px-6 lg:px-8 relative z-10">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <Reveal>
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-12 lg:mb-16">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-12 lg:mb-16">
           <div>
             <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-6xl font-black tracking-tighter uppercase">
               <span className="text-festika-teal">TIMELINE</span>
               <span className="text-festika-orange ml-3">2026</span>
             </h2>
-            <div className="w-20 h-[3px] bg-festika-navy mt-3 rounded-full" />
+            <div className="w-16 h-1 bg-festika-teal mt-3" />
           </div>
-          <p className="text-festika-navy font-bold text-sm max-w-xs lg:text-right border-l-4 lg:border-l-0 lg:border-r-4 border-festika-orange pl-4 lg:pl-0 lg:pr-4">
+          <p className="text-gray-500 text-sm lg:text-base max-w-sm lg:text-right">
             Catat tanggalnya dan bersiaplah untuk kompetisi paling mendebarkan tahun ini.
           </p>
         </div>
@@ -117,18 +115,18 @@ function DynamicTimelines({ competitions }: { competitions: CompTimeline[] }) {
               {/* Desktop */}
               <div className="hidden md:block relative">
                 <div className="relative flex items-center py-6">
-                  <div className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-[3px] rounded-full ${color.line}`} />
+                  <div className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] rounded-full ${color.line}`} />
                   {comp.timeline.map((event, ei) => (
-                    <Reveal key={ei} delay={ei * 80} className="flex-1 flex flex-col items-center">
-                      <div className="h-16 flex flex-col items-center justify-end pb-2 w-full">
+                    <div key={ei} className="flex-1 flex flex-col items-center">
+                      <div className="h-14 flex flex-col items-center justify-end pb-2 w-full">
                         <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-sm leading-tight text-center px-1">
                           {event.label}
                         </p>
                       </div>
-                      <div className="relative z-10 flex-shrink-0">
-                        <div className={`w-5 h-5 rounded-full border-[3px] border-festika-navy ${color.dot}`} />
+                      <div className="relative z-10 flex items-center justify-center">
+                        <div className={`w-3 h-3 rounded-full border-2 border-festika-navy ${color.dot}`} />
                       </div>
-                      <div className="h-12 flex flex-col items-center justify-start pt-2 w-full">
+                      <div className="h-14 flex flex-col items-center justify-start pt-2 w-full">
                         <p className="text-[11px] text-festika-navy/70 font-semibold text-center leading-snug px-1">
                           {event.date}
                         </p>
@@ -138,17 +136,17 @@ function DynamicTimelines({ competitions }: { competitions: CompTimeline[] }) {
                           </p>
                         )}
                       </div>
-                    </Reveal>
+                    </div>
                   ))}
                 </div>
               </div>
 
               {/* Mobile */}
               <div className="md:hidden">
-                <div className="relative pl-8 border-l-[3px] border-festika-navy space-y-6 ml-2">
+                <div className="relative pl-8 border-l-2 border-festika-navy space-y-6 ml-2">
                   {comp.timeline.map((event, ei) => (
-                    <Reveal key={ei} delay={ei * 80} className="relative">
-                      <div className={`absolute -left-[22px] top-1 w-4 h-4 rounded-full border-[3px] border-festika-navy z-10 ${color.dot}`} />
+                    <div key={ei} className="relative">
+                      <div className={`absolute -left-[38px] top-1 w-3 h-3 rounded-full border-2 border-festika-navy z-10 ${color.dot}`} />
                       <div className="pl-2">
                         <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-sm leading-tight">
                           {event.label}
@@ -162,7 +160,7 @@ function DynamicTimelines({ competitions }: { competitions: CompTimeline[] }) {
                           </p>
                         )}
                       </div>
-                    </Reveal>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -180,7 +178,7 @@ function DefaultTimeline() {
       {/* Desktop */}
       <div className="hidden md:block">
         <div className="relative flex items-center" style={{ minHeight: "280px" }}>
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[4px] bg-festika-navy rounded-full z-0" />
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-festika-navy rounded-full z-0" />
           {defaultMilestones.map((m, i) => {
             const isTop = m.position === "top";
             return (
@@ -190,8 +188,8 @@ function DefaultTimeline() {
                 </div>
                 <div className="relative z-10 flex-shrink-0">
                   <div className={`absolute left-1/2 -translate-x-1/2 w-[3px] bg-festika-navy/50 ${isTop ? "bottom-full h-3" : "top-full h-3"}`} />
-                  <div className={`w-11 h-11 rounded-full border-[3px] border-festika-navy flex items-center justify-center shadow-[3px_3px_0_0_#0F2A36] ${m.accent}`}>
-                    <m.icon size={20} className="text-white" />
+                  <div className={`w-9 h-9 rounded-full border-[3px] border-festika-navy flex items-center justify-center ${m.accent}`}>
+                    <m.icon size={16} className="text-white" />
                   </div>
                 </div>
                 <div className="h-[120px] flex flex-col items-center justify-start pt-3 w-full">
@@ -205,11 +203,11 @@ function DefaultTimeline() {
 
       {/* Mobile */}
       <div className="md:hidden">
-        <div className="relative pl-10 border-l-[4px] border-festika-navy space-y-10 ml-4">
+        <div className="relative pl-10 border-l-2 border-festika-navy space-y-10 ml-4">
           {defaultMilestones.map((m, i) => (
             <Reveal key={m.title} delay={i * 100} className="relative">
-              <div className={`absolute -left-[54px] top-0 w-11 h-11 rounded-full border-[3px] border-festika-navy flex items-center justify-center shadow-[3px_3px_0_0_#0F2A36] z-10 ${m.accent}`}>
-                <m.icon size={18} className="text-white" />
+              <div className={`absolute -left-[58px] top-0 w-9 h-9 rounded-full border-[3px] border-festika-navy flex items-center justify-center z-10 ${m.accent}`}>
+                <m.icon size={16} className="text-white" />
               </div>
               <div className="pl-3 pt-0.5">
                 <h3 className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-base leading-tight mb-1.5">
@@ -235,7 +233,7 @@ function DefaultTimeline() {
 
 function DefaultCard({ milestone }: { milestone: Milestone }) {
   return (
-    <div className="bg-white border-[2.5px] border-festika-navy shadow-[4px_4px_0_0_#0F2A36] rounded-xl px-4 py-3 w-[88%] max-w-[210px] text-left hover:shadow-[6px_6px_0_0_#0F2A36] hover:-translate-y-0.5 transition-all duration-150">
+    <div className="bg-white border-2 border-festika-navy rounded-xl px-4 py-3 w-[88%] max-w-[210px] text-left hover:shadow-[4px_4px_0_0_#0F2A36] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-150">
       <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-sm leading-tight mb-2">
         {milestone.title}
       </p>

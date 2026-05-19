@@ -14,14 +14,14 @@ type Competition = {
 
 export default function CompetitionSection({ competitions }: { competitions: Competition[] }) {
   return (
-    <section id="competitions" className="py-20 lg:py-28 bg-white border-b border-gray-100 relative">
+    <section id="competitions" className="py-20 lg:py-28 bg-white relative">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         
         {/* Heading Area - Matching Timeline Section Style */}
         <Reveal>
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-16">
           <div>
-            <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl font-extrabold tracking-wider uppercase">
+            <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-6xl font-black tracking-tighter uppercase">
               <span className="text-festika-teal">OUR </span>
               <span className="text-festika-orange">COMPETITIONS</span>
             </h2>
@@ -43,7 +43,7 @@ export default function CompetitionSection({ competitions }: { competitions: Com
             >
               {/* Image or Icon */}
               {comp.imageUrl ? (
-                <div className="relative mb-6 w-full h-48 border-2 border-gray-100 overflow-hidden bg-gray-50">
+                <div className="relative mb-6 w-full h-40 sm:h-48 border-2 border-gray-100 overflow-hidden bg-gray-50">
                   <img 
                     src={comp.imageUrl} 
                     alt={comp.title} 

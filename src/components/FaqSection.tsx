@@ -79,22 +79,21 @@ export default function FaqSection() {
   };
 
   return (
-    <section id="faq" className="py-20 lg:py-28 bg-white border-b border-gray-100">
+    <section id="faq" className="py-20 lg:py-28 bg-white">
       <div className="mx-auto max-w-4xl px-6 lg:px-8">
         {/* Heading Area */}
         <Reveal>
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-16">
           <div>
-            <h2 className="font-[family-name:var(--font-space-grotesk)] text-4xl lg:text-5xl font-extrabold tracking-wider uppercase">
+            <h2 className="font-[family-name:var(--font-space-grotesk)] text-5xl lg:text-6xl font-black tracking-tighter uppercase">
               <span className="text-festika-teal">FREQUENTLY ASKED </span>
               <span className="text-festika-orange">QUESTIONS</span>
             </h2>
             <div className="w-16 h-1 bg-festika-teal mt-3" />
           </div>
-          <div className="flex items-center gap-2 text-gray-500 text-sm lg:text-base">
-            <HelpCircle size={20} className="text-festika-orange" />
-            <p>Punya pertanyaan? Temukan jawabannya di sini.</p>
-          </div>
+          <p className="text-gray-500 text-sm lg:text-base lg:text-right max-w-sm">
+            Punya pertanyaan? Temukan jawabannya di sini.
+          </p>
         </div>
         </Reveal>
 

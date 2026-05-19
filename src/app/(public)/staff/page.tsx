@@ -21,7 +21,7 @@ export default async function StaffPage() {
       {/* Header */}
       <div className="text-center py-12 bg-white">
         <h1 
-          className="font-[family-name:var(--font-space-grotesk)] text-5xl md:text-6xl font-extrabold text-festika-orange mx-auto"
+          className="font-[family-name:var(--font-space-grotesk)] text-5xl md:text-6xl font-black text-festika-orange uppercase tracking-tighter mx-auto"
           style={{ textShadow: "4px 4px 0 #0F2A36" }}
         >
           Our<br/>Staff!
