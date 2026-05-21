@@ -4,9 +4,19 @@ import Reveal from "@/components/Reveal";
 import { DivisionService } from "@/lib/services/division.service";
 import { StaffService } from "@/lib/services/staff.service";
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://festika2026.ifportofolio.com";
+
 export const metadata: Metadata = {
   title: "Our Staff — FESTIKA UA 2026",
   description: "Daftar susunan kepanitiaan Festival Informatika.",
+  openGraph: {
+    title: "Our Staff — FESTIKA UA 2026",
+    description: "Daftar susunan kepanitiaan Festival Informatika.",
+    url: `${baseUrl}/staff`,
+  },
+  alternates: {
+    canonical: `${baseUrl}/staff`,
+  },
 };
 
 export default async function StaffPage() {
@@ -16,7 +26,7 @@ export default async function StaffPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
       <Reveal>
       {/* Header */}
       <div className="text-center py-12 bg-white">
@@ -31,6 +41,6 @@ export default async function StaffPage() {
       
       {/* Container */}
       <Reveal><StaffView divisions={divisions} coreLeaders={coreLeaders} /></Reveal>
-    </div>
+    </main>
   );
 }

@@ -4,10 +4,10 @@ import { useMemo } from "react";
 import { Sponsor } from "@/lib/repositories/sponsor.repository";
 import { Handshake } from "lucide-react";
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
+function seededShuffle(arr: Sponsor[]): Sponsor[] {
+  const a = [...arr].sort((a, b) => a.id.localeCompare(b.id));
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = (i * 7 + 13) % (i + 1);
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
@@ -16,8 +16,8 @@ function shuffle<T>(arr: T[]): T[] {
 export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
   if (sponsors.length === 0) return null;
 
-  const row1Items = useMemo(() => Array(8).fill(shuffle(sponsors)).flat(), [sponsors]);
-  const row2Items = useMemo(() => Array(8).fill(shuffle(sponsors)).flat(), [sponsors]);
+  const row1Items = useMemo(() => Array(8).fill(seededShuffle(sponsors)).flat(), [sponsors]);
+  const row2Items = useMemo(() => Array(8).fill(seededShuffle(sponsors)).flat(), [sponsors]);
 
   return (
     <section

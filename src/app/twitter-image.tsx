@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 1200, height: 630 };
 export const alt = "FESTIKA UA 2026 — IT Festival";
 
-export default function OpenGraphImage() {
+export default function TwitterImage() {
   return new ImageResponse(
     (
       <div
@@ -25,10 +25,10 @@ export default function OpenGraphImage() {
             gap: "16px",
           }}
         >
-          <span style={{ fontSize: 120, fontWeight: 900, color: "#FFFFFF" }}>FEST</span>
+          <span style={{ fontSize: 100, fontWeight: 900, color: "#FFFFFF" }}>FEST</span>
           <span
             style={{
-              fontSize: 120,
+              fontSize: 100,
               fontWeight: 900,
               color: "#F5A623",
               background: "#FFFFFF",
@@ -40,7 +40,7 @@ export default function OpenGraphImage() {
         </div>
         <p
           style={{
-            fontSize: 32,
+            fontSize: 28,
             color: "#FDE8CF",
             marginTop: 24,
             letterSpacing: "0.1em",
@@ -48,7 +48,7 @@ export default function OpenGraphImage() {
             fontFamily: "'Space Grotesk', system-ui, sans-serif",
           }}
         >
-          TechSpark: Unleashing and Modern Creativity
+          IT Festival 2026 — Universitas Andalas
         </p>
       </div>
     ),

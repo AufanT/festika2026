@@ -104,6 +104,7 @@ export default function FaqSection() {
             return (
               <Reveal key={item.id} delay={index * 80}>
               <div 
+                key={item.id}
                 className={`
                   border-2 border-festika-navy transition-all duration-300
                   ${isOpen ? "bg-festika-peach/10 shadow-none translate-x-[2px] translate-y-[2px]" : "bg-white shadow-[4px_4px_0_0_#0F2A36] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"}
@@ -111,6 +112,8 @@ export default function FaqSection() {
               >
                 <button
                   onClick={() => toggleAccordion(index)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${item.id}`}
                   className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 group"
                 >
                   <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-lg md:text-xl text-festika-navy group-hover:text-festika-teal transition-colors text-balance">
@@ -124,7 +127,10 @@ export default function FaqSection() {
                   </div>
                 </button>
                 
-                <div className={`
+                <div
+                  id={`faq-panel-${item.id}`}
+                  role="region"
+                  className={`
                   overflow-hidden transition-all duration-300 ease-in-out
                   ${isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}
                 `}>

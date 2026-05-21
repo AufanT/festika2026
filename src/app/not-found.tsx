@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "404 — Halaman Tidak Ditemukan",
+  description: "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
+  robots: { index: false },
+};
 
 export default function NotFound() {
   return (

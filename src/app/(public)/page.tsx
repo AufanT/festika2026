@@ -7,6 +7,9 @@ import { SponsorRepository } from "@/lib/repositories/sponsor.repository";
 import HeroButtons from "@/components/HeroButtons";
 import TimelineSection from "@/components/TimelineSection";
 import Reveal from "@/components/Reveal";
+import JsonLd from "@/components/JsonLd";
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://festika2026.ifportofolio.com";
 
 export const metadata: Metadata = {
   title: "FESTIKA UA 2026 — IT Festival",
@@ -16,15 +19,13 @@ export const metadata: Metadata = {
     title: "FESTIKA UA 2026",
     description:
       "TechSpark: Unleashing and Modern Creativity in the Technological World.",
-    type: "website",
+    url: baseUrl,
+  },
+  alternates: {
+    canonical: baseUrl,
   },
 };
 
-
-// force-dynamic: Next.js tidak melakukan pre-render saat build.
-// Halaman di-render saat ada request nyata (SSR), bukan di build time.
-// Ini menghindari kebutuhan koneksi DB saat proses build di Hostinger,
-// sekaligus memastikan data selalu fresh.
 export const dynamic = "force-dynamic";
 
 /* ── Page ─────────────────────────────────────────── */
@@ -45,8 +46,39 @@ export default async function Home() {
   const competitions = await CompetitionRepository.findAll();
   const sponsors = await SponsorRepository.findAll();
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Event",
+          name: "FESTIKA UA 2026",
+          description:
+            "Festival Teknologi Informasi terbesar di Universitas Andalas — kompetisi CTF, Web Design, dan KTI.",
+          startDate: `${currentYear}-09-01`,
+          endDate: `${currentYear}-09-30`,
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          location: {
+            "@type": "Place",
+            name: "Universitas Andalas",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Padang",
+              addressRegion: "Sumatera Barat",
+              addressCountry: "ID",
+            },
+          },
+          image: `${baseUrl}/icon.png`,
+          organizer: {
+            "@type": "Organization",
+            name: "FESTIKA UA 2026",
+            url: baseUrl,
+          },
+        }}
+      />
       <main className="flex-1">
         {/* ═══════════ HERO ═══════════ */}
         <section

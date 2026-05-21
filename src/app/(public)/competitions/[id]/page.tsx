@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CompetitionService } from "@/lib/services/competition.service";
 import { MessageSquare, ArrowLeft, Sparkles } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatWhatsAppLink } from "@/lib/utils";
@@ -8,21 +9,33 @@ import RegistrationCard from "@/components/RegistrationCard";
 import FloatingRegisterButton from "@/components/FloatingRegisterButton";
 import Reveal from "@/components/Reveal";
 import Timeline from "@/components/Timeline";
+import JsonLd from "@/components/JsonLd";
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://festika2026.ifportofolio.com";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
     const competition = await CompetitionService.getCompetitionById(id);
     return {
-      title: `${competition.title} — FESTIKA UA 2026`,
+      title: competition.title,
       description: competition.description?.slice(0, 160) || `Detail lomba ${competition.title} di FESTIKA UA 2026.`,
       openGraph: {
         title: competition.title,
         description: competition.theme || competition.description?.slice(0, 160),
+        url: `${baseUrl}/competitions/${id}`,
+      },
+      alternates: {
+        canonical: `${baseUrl}/competitions/${id}`,
       },
     };
   } catch {
-    return { title: "Lomba Tidak Ditemukan — FESTIKA UA 2026" };
+    return {
+      title: "Lomba Tidak Ditemukan — FESTIKA UA 2026",
+      description: "Kompetisi yang Anda cari tidak tersedia.",
+      robots: { index: false },
+      alternates: { canonical: `${baseUrl}/competitions/${id}` },
+    };
   }
 }
 
@@ -52,6 +65,33 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Event",
+          name: competition.title,
+          description: competition.description?.slice(0, 200) || `Lomba ${competition.title} di FESTIKA UA 2026.`,
+          startDate: competition.registrationStartDate || "",
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          location: {
+            "@type": "Place",
+            name: "Universitas Andalas",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Padang",
+              addressRegion: "Sumatera Barat",
+              addressCountry: "ID",
+            },
+          },
+          image: competition.imageUrl || `${baseUrl}/icon.png`,
+          organizer: {
+            "@type": "Organization",
+            name: "FESTIKA UA 2026",
+            url: baseUrl,
+          },
+        }}
+      />
       <main className="pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-6">
           <Reveal delay={0}>
@@ -92,9 +132,11 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
           {competition.imageUrl && (
             <Reveal delay={200}>
               <div className="border-4 border-festika-navy shadow-[12px_12px_0_0_#0F2A36] overflow-hidden bg-white mb-10">
-                <img
+                <Image
                   src={competition.imageUrl}
                   alt={competition.title}
+                  width={800}
+                  height={450}
                   className="w-full h-auto"
                 />
               </div>
@@ -104,9 +146,9 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
           {/* Card 1: Description */}
           <Reveal delay={300}>
             <div className="bg-white border-2 border-festika-navy p-8 lg:p-10 shadow-[8px_8px_0_0_#F5A623] mb-8">
-              <h3 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
+              <h2 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
                 Deskripsi Lomba
-              </h3>
+              </h2>
               <div className="prose prose-festika max-w-none">
                 <p className="text-gray-600 leading-relaxed text-lg whitespace-pre-wrap">
                   {competition.description || "Detail lomba belum tersedia."}
@@ -119,9 +161,9 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
           {competition.timeline && competition.timeline.length > 0 && (
             <Reveal delay={350}>
               <div className="bg-white border-2 border-festika-navy p-8 lg:p-10 shadow-[8px_8px_0_0_#F5A623] mb-8">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
+                <h2 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
                   Timeline Lomba
-                </h3>
+                </h2>
                 <Timeline events={competition.timeline} />
               </div>
             </Reveal>
@@ -131,9 +173,9 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
           {competition.prizeList && competition.prizeList.length > 0 && (
             <Reveal delay={400}>
               <div className="bg-white border-2 border-festika-navy p-8 lg:p-10 shadow-[8px_8px_0_0_#F5A623] mb-8">
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
+                <h2 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
                   Prize List
-                </h3>
+                </h2>
                 <div className="space-y-4">
                   {competition.prizeList.map((prize: any, idx: number) => (
                     <div
@@ -172,9 +214,9 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
             competition.contacts.length > 0 && (
               <Reveal delay={200}>
                 <div className="bg-white border-2 border-festika-navy p-8 mt-8">
-                  <h4 className="font-black uppercase tracking-widest text-xs text-festika-navy mb-6 border-b-2 border-festika-teal inline-block">
+                  <h3 className="font-black uppercase tracking-widest text-xs text-festika-navy mb-6 border-b-2 border-festika-teal inline-block">
                     Contact Person
-                  </h4>
+                  </h3>
                   <div className="space-y-4">
                     {competition.contacts.map((cp: any, idx: number) => (
                       <div

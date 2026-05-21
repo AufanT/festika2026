@@ -18,30 +18,3 @@ cloudinary.config({
 });
 
 export default cloudinary;
-
-/**
- * Fungsi helper untuk mengunggah file gambar ke Cloudinary
- */
-export async function uploadImage(fileBuffer: Buffer, folder: string = "festika") {
-  return new Promise((resolve, reject) => {
-    console.log(`[Cloudinary] Memulai upload stream ke folder: ${folder}...`);
-    
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: folder,
-        resource_type: "auto",
-      },
-      (error, result) => {
-        if (error) {
-          console.error("[Cloudinary] Upload Stream Error:", error);
-          reject(error);
-        } else {
-          console.log("[Cloudinary] Upload Stream Berhasil!");
-          resolve(result);
-        }
-      }
-    );
-
-    uploadStream.end(fileBuffer);
-  });
-}

@@ -28,7 +28,16 @@ export default function PastEventCard({
   return (
     <div
       onClick={() => onDetailsClick(event)}
-      className="border-2 border-gray-100 rounded-none p-6 flex flex-col group hover:border-festika-teal hover:shadow-[12px_12px_0_0_#17A99E] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-white/80 hover:bg-white"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onDetailsClick(event);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Lihat detail ${event.title}`}
+      className="border-2 border-gray-100 rounded-none p-6 flex flex-col group hover:border-festika-teal hover:shadow-[12px_12px_0_0_#17A99E] hover:-translate-x-1 hover:-translate-y-1 transition-all duration-300 cursor-pointer bg-white/80 hover:bg-white relative"
     >
       {/* Corner Accent - Top Right */}
       <div className="absolute top-0 right-0 w-8 h-8 bg-festika-orange flex items-center justify-center">
