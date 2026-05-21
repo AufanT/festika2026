@@ -51,10 +51,10 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
           {/* Left: Image (Navy wrapper with wide Orange shadow) */}
           <div className="relative max-w-sm mx-auto w-full">
              <div className="absolute top-6 left-6 right-[-24px] bottom-[-24px] bg-festika-orange z-0"></div>
-             <div className="relative z-10 border-[6px] border-festika-navy bg-white aspect-[3/4] overflow-hidden flex items-center justify-center">
-               {selectedStaff.imageUrl ? (
-                 <img src={selectedStaff.imageUrl} alt={selectedStaff.name} className="w-full h-full object-cover" />
-               ) : (
+              <div className="relative z-10 border-[6px] border-festika-navy bg-white aspect-[3/4] overflow-hidden flex items-center justify-center">
+                {selectedStaff.imageUrl ? (
+                  <img src={selectedStaff.imageUrl} alt={selectedStaff.name} loading="lazy" className="w-full h-full object-cover" />
+                ) : (
                  <span className="text-gray-400 font-bold">NO FOTO</span>
                )}
              </div>
@@ -133,7 +133,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
                     <div className="relative aspect-square w-full border-b-4 border-festika-navy overflow-hidden bg-gray-100">
                       <div className="absolute top-0 right-0 w-12 h-12 bg-festika-teal border-l-4 border-b-4 border-festika-navy z-20 group-hover:bg-festika-orange transition-colors" />
                       {stf.imageUrl ? (
-                        <img src={stf.imageUrl} alt={stf.name} className="w-full h-full object-cover transition-all duration-500" />
+                        <img src={stf.imageUrl} alt={stf.name} loading="lazy" className="w-full h-full object-cover transition-all duration-500" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-300 font-bold text-2xl bg-festika-navy/5">NO FOTO</div>
                       )}
@@ -178,7 +178,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
                 <div className="relative z-10 border-4 border-festika-navy bg-white">
                   <div className="aspect-[4/5] overflow-hidden bg-gray-100 border-b-4 border-festika-navy">
                     {leader.imageUrl ? (
-                      <img src={leader.imageUrl} alt={leader.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <img src={leader.imageUrl} alt={leader.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-festika-orange/10 text-festika-orange font-black">LEADER</div>
                     )}
@@ -223,7 +223,7 @@ export default function StaffView({ divisions, coreLeaders = [] }: { divisions: 
                 {/* Image */}
                 <div className="aspect-square w-full border-b-4 border-festika-navy overflow-hidden bg-gray-100 flex items-center justify-center">
                   {div.imageUrl ? (
-                    <img src={div.imageUrl} alt={div.name} className="w-full h-full object-cover filter brightness-90 group-hover:brightness-100 transition-all" />
+                    <img src={div.imageUrl} alt={div.name} loading="lazy" className="w-full h-full object-cover filter brightness-90 group-hover:brightness-100 transition-all" />
                   ) : (
                     <span className="font-bold text-gray-300 text-sm tracking-widest uppercase">Divisi: {div.name}</span>
                   )}

@@ -8,17 +8,18 @@ import HeroButtons from "@/components/HeroButtons";
 import TimelineSection from "@/components/TimelineSection";
 import Reveal from "@/components/Reveal";
 import JsonLd from "@/components/JsonLd";
+import { fallbackFaqs } from "@/lib/faq-data";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://festika2026.ifportofolio.com";
 
 export const metadata: Metadata = {
   title: "FESTIKA UA 2026 — IT Festival",
   description:
-    "Unleashing Innovation through Digital Creativity. Festival Teknologi Informasi terbesar di Universitas Andalas — kompetisi CTF, Web Design, dan KTI.",
+    "Daftar sekarang! Festival Teknologi Informasi terbesar di Universitas Andalas — ikuti kompetisi CTF, Web Design, dan KTI. Raih hadiah jutaan rupiah!",
   openGraph: {
     title: "FESTIKA UA 2026",
     description:
-      "TechSpark: Unleashing and Modern Creativity in the Technological World.",
+      "Daftar sekarang! Festival Teknologi Informasi terbesar di Universitas Andalas — ikuti kompetisi CTF, Web Design, dan KTI. Raih hadiah jutaan rupiah!",
     url: baseUrl,
   },
   alternates: {
@@ -50,6 +51,20 @@ export default async function Home() {
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: fallbackFaqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }}
+      />
       <JsonLd
         data={{
           "@context": "https://schema.org",

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CompetitionService } from "@/lib/services/competition.service";
-import { MessageSquare, ArrowLeft, Sparkles } from "lucide-react";
+import { MessageSquare, ArrowLeft, Sparkles, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,12 +17,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   try {
     const competition = await CompetitionService.getCompetitionById(id);
+    const desc = competition.description
+      ? competition.description.slice(0, 140) + ". Daftar sekarang!"
+      : `Daftar lomba ${competition.title} di FESTIKA UA 2026. Raih hadiah jutaan rupiah!`;
     return {
       title: competition.title,
-      description: competition.description?.slice(0, 160) || `Detail lomba ${competition.title} di FESTIKA UA 2026.`,
+      description: desc,
       openGraph: {
         title: competition.title,
-        description: competition.theme || competition.description?.slice(0, 160),
+        description: competition.theme || desc,
         url: `${baseUrl}/competitions/${id}`,
       },
       alternates: {
@@ -94,6 +97,17 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
       />
       <main className="pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-6">
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="mb-8">
+            <ol className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400">
+              <li>
+                <Link href="/" className="hover:text-festika-teal transition-colors">Beranda</Link>
+              </li>
+              <li><ChevronRight size={12} /></li>
+              <li className="text-festika-navy" aria-current="page">{competition.title}</li>
+            </ol>
+          </nav>
+
           <Reveal delay={0}>
             <Link
               href="/#competitions"

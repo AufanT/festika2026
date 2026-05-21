@@ -95,6 +95,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                 <img
                   src={spn.imageUrl || "/Logo_Festika-04.webp"}
                   alt={spn.name}
+                  loading="lazy"
                   className="h-full w-auto object-contain"
                 />
               </div>
@@ -113,6 +114,7 @@ export default function SponsorSection({ sponsors }: { sponsors: Sponsor[] }) {
                 <img
                   src={spn.imageUrl || "/Logo_Festika-04.webp"}
                   alt={spn.name}
+                  loading="lazy"
                   className="h-full w-auto object-contain"
                 />
               </div>

@@ -181,7 +181,7 @@ export default function DivisionGrid({
 
               {div.imageUrl ? (
                 <div className="w-full h-32 mb-3 bg-gray-100 overflow-hidden border-2 border-festika-navy">
-                  <img src={div.imageUrl} alt={div.name} className="w-full h-full object-cover" />
+                  <img src={div.imageUrl} alt={div.name} loading="lazy" className="w-full h-full object-cover" />
                 </div>
               ) : (
                 <div className="w-full h-32 mb-3 bg-festika-orange/10 border-2 border-dashed border-festika-orange flex flex-col items-center justify-center text-festika-orange">

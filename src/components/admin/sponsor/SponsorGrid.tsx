@@ -132,7 +132,7 @@ export default function SponsorGrid({
 
               <div className="px-4 mx-auto w-full aspect-video bg-white overflow-hidden mb-4 p-4 flex items-center justify-center relative">
                 {spn.imageUrl
-                  ? <img src={spn.imageUrl} alt={spn.name} className="w-full h-full object-contain" />
+                  ? <img src={spn.imageUrl} alt={spn.name} loading="lazy" className="w-full h-full object-contain" />
                   : <Handshake className="w-12 h-12 text-gray-200" />
                 }
 

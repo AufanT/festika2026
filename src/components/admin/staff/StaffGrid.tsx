@@ -151,7 +151,7 @@ export default function StaffGrid({
 
               <div className="px-4 mx-auto w-full aspect-square border-2 border-festika-navy bg-festika-navy/10 overflow-hidden mb-4 rounded-full max-w-[160px]">
                 {stf.imageUrl
-                  ? <img src={stf.imageUrl} alt={stf.name} className="w-full h-full object-cover" />
+                  ? <img src={stf.imageUrl} alt={stf.name} loading="lazy" className="w-full h-full object-cover" />
                   : <Users className="w-full h-full p-8 text-gray-400" />
                 }
               </div>

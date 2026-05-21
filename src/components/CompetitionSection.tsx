@@ -47,6 +47,7 @@ export default function CompetitionSection({ competitions }: { competitions: Com
                   <img 
                     src={comp.imageUrl} 
                     alt={comp.title} 
+                    loading="lazy"
                     className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500" 
                   />
                 </div>
