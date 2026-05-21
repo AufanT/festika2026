@@ -71,19 +71,19 @@ export default async function Home() {
             }}
           />
 
-          <div className="mx-auto max-w-4xl px-6 lg:px-8 w-full py-12 lg:py-16 relative z-10">
+          <div className="mx-auto max-w-4xl px-6 lg:px-8 w-full py-8 sm:py-12 lg:py-16 relative z-10">
             <div className="flex flex-col items-center text-center">
               <Reveal delay={0}>
-                <span className="inline-block border border-festika-teal rounded-full px-5 py-1.5 text-xs font-semibold text-festika-teal tracking-wider uppercase">
+                <span className="inline-block border border-festika-teal rounded-full px-4 sm:px-5 py-1 text-xs font-semibold text-festika-teal tracking-wider uppercase">
                   IT Festival 2026
                 </span>
               </Reveal>
 
               <Reveal delay={100}>
-                <div className="mt-8 mb-6 flex justify-center overflow-visible">
-                  <h1 className="font-[family-name:var(--font-space-grotesk)] text-[2.5rem] sm:text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter flex items-center leading-none">
+                <div className="mt-5 sm:mt-8 mb-2 sm:mb-4 flex justify-center overflow-visible">
+                  <h1 className="font-[family-name:var(--font-space-grotesk)] text-[2.5rem] sm:text-6xl md:text-8xl lg:text-[10rem] font-extrabold tracking-tighter flex items-center leading-none">
                     <span className="text-festika-teal">FEST</span>
-                    <span className="bg-festika-teal text-[#FF9500] px-2 sm:px-4 py-1 ml-1 sm:ml-3 rounded-none inline-flex items-center justify-center">
+                    <span className="bg-festika-teal text-[#FF9500] px-2 sm:px-5 py-1 sm:py-2 ml-1 sm:ml-3 rounded-none inline-flex items-center justify-center">
                       IKA
                     </span>
                   </h1>
@@ -91,8 +91,8 @@ export default async function Home() {
               </Reveal>
 
               <Reveal delay={200}>
-                <div className="mt-10">
-                  <p className="text-festika-navy/80 text-base lg:text-lg font-bold italic leading-relaxed max-w-2xl mx-auto">
+                <div className="mt-2 sm:mt-6">
+                  <p className="text-festika-navy/80 text-sm sm:text-base lg:text-lg font-bold italic leading-relaxed max-w-2xl mx-auto">
                     "TechSpark: Unleashing and Modern Creativity in the Technological World"
                   </p>
                 </div>

@@ -7,16 +7,16 @@ import GuidebookButton from "@/components/GuidebookButton";
 
 export default function HeroButtons() {
   return (
-    <div className="flex flex-col sm:flex-row gap-5 mt-10 justify-center">
+    <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 mt-5 sm:mt-10 justify-center">
       <Link href="/#competitions" className="w-full sm:w-auto">
         <Button
-          className="w-full sm:w-auto bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-4 sm:px-8 h-12 text-base font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer gap-2"
+          className="w-full sm:w-auto bg-festika-orange hover:bg-festika-orange-light text-white rounded-none px-5 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-bold border-2 border-festika-navy shadow-[4px_4px_0_0_#0F2A36] hover:shadow-[0_0_15px_rgba(245,166,35,0.6)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer gap-2"
         >
           Join the Festival
           <ArrowRight size={18} />
         </Button>
       </Link>
-      <GuidebookButton className="w-full sm:w-auto !px-4 sm:!px-8" />
+      <GuidebookButton className="w-full sm:w-auto !px-5 sm:!px-8 !h-11 sm:!h-12 !text-sm sm:!text-base" />
     </div>
   );
 }
