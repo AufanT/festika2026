@@ -14,8 +14,6 @@ export class SponsorService {
       id: "spn-" + crypto.randomBytes(8).toString("hex"),
       name: validated.name.trim(),
       imageUrl: validated.imageUrl || null,
-      link: validated.link || null,
-      tier: validated.tier || "General",
       createdAt: new Date(),
       updatedAt: new Date(),
     };

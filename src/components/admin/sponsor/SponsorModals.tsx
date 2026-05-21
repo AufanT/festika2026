@@ -6,14 +6,12 @@ type AddSponsorModalProps = {
   onSubmit: (e: React.FormEvent) => void;
   name: string;
   onNameChange: (val: string) => void;
-  tier: string;
-  onTierChange: (val: string) => void;
   onFileChange: (file: File | null) => void;
   isLoading: boolean;
 };
 
 export function AddSponsorModal({
-  isOpen, onClose, onSubmit, name, onNameChange, tier, onTierChange, onFileChange, isLoading
+  isOpen, onClose, onSubmit, name, onNameChange, onFileChange, isLoading
 }: AddSponsorModalProps) {
   if (!isOpen) return null;
   return (
@@ -27,13 +25,6 @@ export function AddSponsorModal({
           <div>
             <label className="text-sm font-bold text-festika-navy block mb-1">Nama Sponsor</label>
             <input required value={name} onChange={e => onNameChange(e.target.value)} className="w-full px-3 py-2 border-2 border-gray-200 focus:border-festika-teal focus:outline-none" placeholder="Cth: PT. Teknologi Indonesia" />
-          </div>
-          <div>
-            <label className="text-sm font-bold text-festika-navy block mb-1">Tier / Kategori</label>
-            <select value={tier} onChange={e => onTierChange(e.target.value)} className="w-full px-3 py-2 border-2 border-gray-200 focus:border-festika-teal focus:outline-none bg-white">
-              <option value="Supported By">Supported By</option>
-              <option value="Media Partner">Media Partner</option>
-            </select>
           </div>
           <div>
             <label className="text-sm font-bold text-festika-navy block mb-1">Logo Sponsor (Wajib)</label>

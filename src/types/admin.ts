@@ -58,8 +58,6 @@ export type Sponsor = {
   id: string;
   name: string;
   imageUrl: string | null;
-  link: string | null;
-  tier: string | null;
 };
 
 export type Faq = {

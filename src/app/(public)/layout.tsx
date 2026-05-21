@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CursorYou from "@/components/CursorYou";
 
 export default function PublicLayout({
   children,
@@ -8,6 +9,7 @@ export default function PublicLayout({
 }) {
   return (
     <>
+      <CursorYou />
       <Navbar />
       {children}
       <Footer />

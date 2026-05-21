@@ -60,8 +60,6 @@ export const staffSchema = z.object({
 export const sponsorSchema = z.object({
   name: z.string().min(2, "Nama sponsor minimal 2 karakter").max(100),
   imageUrl: z.string().url("Format URL logo tidak valid").optional().nullable(),
-  link: z.string().url("Format URL link sponsor tidak valid").optional().nullable().or(z.literal("")),
-  tier: z.string().optional().nullable(),
 });
 
 export type CompetitionFormData = z.infer<typeof competitionSchema>;

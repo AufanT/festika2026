@@ -4,8 +4,6 @@ export interface Sponsor {
   id: string;
   name: string;
   imageUrl: string | null;
-  link: string | null;
-  tier: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,7 +15,7 @@ export class SponsorRepository {
     while (attempts < maxAttempts) {
       try {
         const [rows]: any = await pool.query(
-          "SELECT id, name, imageUrl, link, tier, createdAt, updatedAt FROM sponsors ORDER BY tier ASC, name ASC"
+          "SELECT id, name, imageUrl, createdAt, updatedAt FROM sponsors ORDER BY name ASC"
         );
         return rows as Sponsor[];
       } catch (err: any) {
@@ -38,8 +36,8 @@ export class SponsorRepository {
     while (attempts < maxAttempts) {
       try {
         await pool.query(
-          "INSERT INTO sponsors (id, name, imageUrl, link, tier, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)",
-          [data.id, data.name, data.imageUrl, data.link, data.tier, data.createdAt, data.updatedAt]
+          "INSERT INTO sponsors (id, name, imageUrl, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)",
+          [data.id, data.name, data.imageUrl, data.createdAt, data.updatedAt]
         );
         return data;
       } catch (err: any) {

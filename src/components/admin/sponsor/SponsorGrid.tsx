@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Handshake, Trash2, Plus, X, CheckSquare, ExternalLink } from "lucide-react";
+import { Handshake, Trash2, Plus, X, CheckSquare } from "lucide-react";
 import { Sponsor } from "@/types/admin";
 
 type SponsorGridProps = {
@@ -130,27 +130,16 @@ export default function SponsorGrid({
                 </div>
               )}
 
-              <div className="px-4 mx-auto w-full aspect-video bg-white overflow-hidden mb-4 p-4 flex items-center justify-center group relative">
+              <div className="px-4 mx-auto w-full aspect-video bg-white overflow-hidden mb-4 p-4 flex items-center justify-center relative">
                 {spn.imageUrl
                   ? <img src={spn.imageUrl} alt={spn.name} className="w-full h-full object-contain" />
                   : <Handshake className="w-12 h-12 text-gray-200" />
                 }
-                
-                {!isDeleteMode && spn.link && (
-                  <a 
-                    href={spn.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="absolute inset-0 bg-festika-navy/80 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity gap-2 font-bold text-xs"
-                  >
-                    Kunjungi <ExternalLink size={14} />
-                  </a>
-                )}
+
               </div>
 
               <div className="text-center pb-3 px-4 flex-1">
-                <h4 className="font-[family-name:var(--font-space-grotesk)] font-bold text-festika-navy text-sm leading-tight mb-1 truncate">{spn.name}</h4>
-                <p className="text-festika-teal font-extrabold text-[9px] uppercase tracking-widest">{spn.tier || "General"}</p>
+                <h4 className="font-[family-name:var(--font-space-grotesk)] font-bold text-festika-navy text-sm leading-tight truncate">{spn.name}</h4>
               </div>
             </div>
           );

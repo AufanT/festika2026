@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { CompetitionRepository } from "@/lib/repositories/competition.repository";
 import CompetitionSection from "@/components/CompetitionSection";
 import FaqSection from "@/components/FaqSection";
@@ -58,53 +57,49 @@ export default async function Home() {
               "linear-gradient(135deg, #FFF8F0 0%, #FDE8CF 40%, #F8C88C 100%)",
           }}
         >
-          <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full py-12 lg:py-16">
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-              <div className="flex-1 text-center lg:text-left z-10">
-                <Reveal delay={0}>
-                  <span className="inline-block border border-festika-teal rounded-full px-5 py-1.5 text-xs font-semibold text-festika-teal tracking-wider uppercase">
-                    IT Festival 2026
-                  </span>
-                </Reveal>
+          {/* Background gradient orbs */}
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-festika-teal/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-festika-orange/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#0F2A36]/[0.02] rounded-full blur-3xl pointer-events-none" />
 
-                <Reveal delay={100}>
-                  <div className="mt-8 mb-6 flex justify-center lg:justify-start overflow-visible">
-                    <h1 className="font-[family-name:var(--font-space-grotesk)] text-[2.5rem] sm:text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter flex items-center leading-none">
-                      <span className="text-festika-teal">FEST</span>
-                      <span className="bg-festika-teal text-[#FF9500] px-2 sm:px-4 py-1 ml-1 sm:ml-3 rounded-none inline-flex items-center justify-center">
-                        IKA
-                      </span>
-                    </h1>
-                  </div>
-                </Reveal>
+          {/* Subtle dot grid overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.04]"
+            style={{
+              backgroundImage: "radial-gradient(circle, #0F2A36 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
 
-                <Reveal delay={200}>
-                  <div className="mt-10">
-                    <p className="text-festika-navy/80 text-base lg:text-lg font-bold italic leading-relaxed max-w-xl">
-                      "TechSpark: Unleashing and Modern Creativity in the Technological World"
-                    </p>
-                  </div>
-                </Reveal>
+          <div className="mx-auto max-w-4xl px-6 lg:px-8 w-full py-12 lg:py-16 relative z-10">
+            <div className="flex flex-col items-center text-center">
+              <Reveal delay={0}>
+                <span className="inline-block border border-festika-teal rounded-full px-5 py-1.5 text-xs font-semibold text-festika-teal tracking-wider uppercase">
+                  IT Festival 2026
+                </span>
+              </Reveal>
 
-                <Reveal delay={300}>
-                  <HeroButtons />
-                </Reveal>
-              </div>
-
-              <Reveal delay={400} className="absolute inset-0 lg:static flex-[1.6] flex justify-center lg:justify-end items-center overflow-visible z-0 opacity-[0.08] lg:opacity-100 pointer-events-none lg:pointer-events-auto">
-                {/* Background Glow behind SVG (Desktop only) */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-festika-orange/10 blur-[100px] rounded-full z-[-1] hidden lg:block" />
-                
-                <div className="relative w-full max-w-[600px] sm:max-w-[700px] lg:max-w-[1100px] xl:max-w-[1300px] lg:-mr-8 xl:-mr-12 transform scale-110 sm:scale-125 lg:scale-140 xl:scale-150 transition-all duration-700 animate-float">
-                  <Image
-                    src="/1.svg"
-                    alt="Hero Festika Illustration"
-                    width={1300}
-                    height={1000}
-                    priority
-                    className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.1)] lg:drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
-                  />
+              <Reveal delay={100}>
+                <div className="mt-8 mb-6 flex justify-center overflow-visible">
+                  <h1 className="font-[family-name:var(--font-space-grotesk)] text-[2.5rem] sm:text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter flex items-center leading-none">
+                    <span className="text-festika-teal">FEST</span>
+                    <span className="bg-festika-teal text-[#FF9500] px-2 sm:px-4 py-1 ml-1 sm:ml-3 rounded-none inline-flex items-center justify-center">
+                      IKA
+                    </span>
+                  </h1>
                 </div>
+              </Reveal>
+
+              <Reveal delay={200}>
+                <div className="mt-10">
+                  <p className="text-festika-navy/80 text-base lg:text-lg font-bold italic leading-relaxed max-w-2xl mx-auto">
+                    "TechSpark: Unleashing and Modern Creativity in the Technological World"
+                  </p>
+                </div>
+              </Reveal>
+
+              <Reveal delay={300}>
+                <HeroButtons />
               </Reveal>
             </div>
           </div>
@@ -166,7 +161,7 @@ export default async function Home() {
         <Reveal><TimelineSection competitions={competitions} /></Reveal>
 
         {/* ═══════════ SPONSORS ═══════════ */}
-        <Reveal><SponsorSection sponsors={sponsors} /></Reveal>
+        <SponsorSection sponsors={sponsors} />
 
         {/* ═══════════ FAQ ═══════════ */}
         <Reveal><FaqSection /></Reveal>

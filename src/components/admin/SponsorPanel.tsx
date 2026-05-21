@@ -17,7 +17,6 @@ export default function SponsorPanel() {
   // ── Forms State ──────────────────────────────────────────────────────────
   const [showAdd, setShowAdd] = useState(false);
   const [name, setName] = useState("");
-  const [tier, setTier] = useState("Supported By");
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,13 +58,12 @@ export default function SponsorPanel() {
       const res = await fetch("/api/sponsors", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, tier, imageUrl }),
+        body: JSON.stringify({ name, imageUrl }),
       });
       
       if (res.ok) {
         setShowAdd(false); 
         setName(""); 
-        setTier("Supported By"); 
         setFile(null);
         fetchSponsors();
         showNotification("success", "Berhasil", "Sponsor berhasil ditambahkan");
@@ -86,7 +84,7 @@ export default function SponsorPanel() {
       .map(s => ({
         id: s.id,
         label: s.name,
-        subLabel: s.tier || "General",
+        subLabel: "Sponsor",
       }));
     setDeleteTargets(targets);
     setIsDeleteOpen(true);
@@ -133,8 +131,6 @@ export default function SponsorPanel() {
         onSubmit={handleAddSponsor}
         name={name}
         onNameChange={setName}
-        tier={tier}
-        onTierChange={setTier}
         onFileChange={setFile}
         isLoading={isSubmitting}
       />
