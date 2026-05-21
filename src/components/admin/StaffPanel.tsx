@@ -46,7 +46,7 @@ export default function StaffPanel() {
       const res = await fetch("/api/divisions");
       const json = await res.json();
       setDivisions(json.data || []);
-    } catch { /* ignore */ } finally { setIsLoading(false); }
+    } catch { showNotification("error", "Gagal", "Gagal memuat data divisi"); } finally { setIsLoading(false); }
   };
 
   const fetchStaff = async (divId: string) => {
@@ -55,7 +55,7 @@ export default function StaffPanel() {
       const res = await fetch(`/api/staff?divisionId=${divId}`);
       const json = await res.json();
       setStaff(json.data || []);
-    } catch { /* ignore */ } finally { setIsLoading(false); }
+    } catch { showNotification("error", "Gagal", "Gagal memuat data anggota"); } finally { setIsLoading(false); }
   };
 
   useEffect(() => { fetchDivisions(); }, []);
@@ -149,7 +149,7 @@ export default function StaffPanel() {
           fetch(`/api/divisions?id=${t.id}`, { method: "DELETE" })
         )
       );
-      const successCount = results.filter(r => r.status === "fulfilled").length;
+      const successCount = results.filter(r => r.status === "fulfilled" && (r.value as Response).ok).length;
       const failCount = results.length - successCount;
 
       setIsDivDeleteOpen(false);
@@ -195,7 +195,7 @@ export default function StaffPanel() {
           fetch(`/api/staff?id=${t.id}`, { method: "DELETE" })
         )
       );
-      const successCount = results.filter(r => r.status === "fulfilled").length;
+      const successCount = results.filter(r => r.status === "fulfilled" && (r.value as Response).ok).length;
       const failCount = results.length - successCount;
 
       setIsStaffDeleteOpen(false);

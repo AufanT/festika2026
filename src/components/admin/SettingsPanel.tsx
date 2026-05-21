@@ -25,6 +25,11 @@ export default function SettingsPanel() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
+    if (f.size > 10 * 1024 * 1024) {
+      showNotification("error", "File Terlalu Besar", "Maksimal ukuran file adalah 10 MB");
+      e.target.value = "";
+      return;
+    }
     setUploading(true);
     try {
       const fd = new FormData();

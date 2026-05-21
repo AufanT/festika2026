@@ -3,6 +3,7 @@
 import StaffPanel from "./StaffPanel";
 import { useNotification } from "@/context/NotificationContext";
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
   LogOut,
@@ -30,6 +31,7 @@ import { Competition, User } from "@/types/admin";
 
 export default function AdminDashboard({ user }: { user: User | undefined }) {
   const { showNotification } = useNotification();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<
     "competitions" | "our-journey" | "staff" | "site"
   >("competitions");
@@ -65,10 +67,10 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
 
   // Security Layer 2
   useEffect(() => {
-    if (typeof window !== "undefined" && (!user || !user.name)) {
-      window.location.href = "/admin/login";
+    if (!user || !user.name) {
+      router.push("/admin/login");
     }
-  }, [user]);
+  }, [user, router]);
 
   // ── Data Fetching ────────────────────────────────────────────────────────
   const fetchCompetitions = useCallback(async () => {
@@ -78,7 +80,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
       const json = await res.json();
       setCompetitions(json.data || []);
     } catch {
-      /* ignore */
+      showNotification("error", "Gagal", "Gagal memuat data lomba");
     } finally {
       setIsLoading(false);
     }
@@ -103,7 +105,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
         /* ignore */
       }
     } catch {
-      /* ignore */
+      showNotification("error", "Gagal", "Gagal memuat data riwayat");
     } finally {
       setIsLoading(false);
     }
@@ -225,7 +227,7 @@ export default function AdminDashboard({ user }: { user: User | undefined }) {
         ),
       );
       const successCount = results.filter(
-        (r) => r.status === "fulfilled",
+        (r) => r.status === "fulfilled" && (r.value as Response).ok,
       ).length;
       const failCount = results.length - successCount;
 

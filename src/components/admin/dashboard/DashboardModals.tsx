@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Loader2, AlertTriangle, X, CheckCircle2, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Competition } from "@/types/admin";
+import { useNotification } from "@/context/NotificationContext";
 
 // ---------------------------------------------------------------------------
 // AddCompetitionModal
@@ -29,60 +30,54 @@ export function CompetitionModal({
   mode,
   modalType = "competition",
 }: CompetitionModalProps) {
-  const [formData, setFormData] = useState(() =>
-    initialData
-      ? {
-          title: initialData.title || "",
-          theme: initialData.theme || "",
-          description: initialData.description || "",
-          registrationStartDate: initialData.registrationStartDate
-            ? new Date(initialData.registrationStartDate).toISOString().split("T")[0]
-            : "",
-          registrationEndDate: initialData.registrationEndDate
-            ? new Date(initialData.registrationEndDate).toISOString().split("T")[0]
-            : "",
-          registrationLink: initialData.registrationLink || "",
-          tags: initialData.tags || "",
-          imageUrl: initialData.imageUrl || "",
-          contacts:
-            initialData.contacts && initialData.contacts.length > 0
-              ? initialData.contacts
-              : [{ name: "", phone: "" }],
-          timeline:
-            initialData.timeline && initialData.timeline.length > 0
-              ? initialData.timeline
-              : [],
-          prizeList:
-            initialData.prizeList && initialData.prizeList.length > 0
-              ? initialData.prizeList
-              : [],
-          isArchived: initialData.isArchived || false,
-          year: initialData.year || 2025,
-          participants: initialData.participants || "",
-          winner: initialData.winner || "",
-          runnerUp: initialData.runnerUp || "",
-          thirdPlace: initialData.thirdPlace || "",
-        }
-      : {
-          title: "",
-          theme: "",
-          description: "",
-          registrationStartDate: "",
-          registrationEndDate: "",
-          registrationLink: "",
-          tags: "",
-          imageUrl: "",
-          contacts: [{ name: "", phone: "" }],
-          timeline: [],
-          prizeList: [],
-          isArchived: false,
-          year: 2025,
-          participants: "",
-          winner: "",
-          runnerUp: "",
-          thirdPlace: "",
-        },
-  );
+  const defaultForm = {
+    title: "",
+    theme: "",
+    description: "",
+    registrationStartDate: "",
+    registrationEndDate: "",
+    registrationLink: "",
+    tags: "",
+    imageUrl: "",
+    contacts: [{ name: "", phone: "" }] as { name: string; phone: string }[],
+    timeline: [] as { label: string; date: string; description?: string }[],
+    prizeList: [] as { position: string; prize: string; description?: string }[],
+    isArchived: false,
+    year: 2025,
+    participants: "",
+    winner: "",
+    runnerUp: "",
+    thirdPlace: "",
+  };
+
+  const buildForm = (data: any) => data ? {
+    title: data.title || "",
+    theme: data.theme || "",
+    description: data.description || "",
+    registrationStartDate: data.registrationStartDate
+      ? new Date(data.registrationStartDate).toISOString().split("T")[0] : "",
+    registrationEndDate: data.registrationEndDate
+      ? new Date(data.registrationEndDate).toISOString().split("T")[0] : "",
+    registrationLink: data.registrationLink || "",
+    tags: data.tags || "",
+    imageUrl: data.imageUrl || "",
+    contacts: data.contacts?.length > 0 ? data.contacts : [{ name: "", phone: "" }],
+    timeline: data.timeline?.length > 0 ? data.timeline : [],
+    prizeList: data.prizeList?.length > 0 ? data.prizeList : [],
+    isArchived: data.isArchived || false,
+    year: data.year || 2025,
+    participants: data.participants || "",
+    winner: data.winner || "",
+    runnerUp: data.runnerUp || "",
+    thirdPlace: data.thirdPlace || "",
+  } : { ...defaultForm, contacts: [{ name: "", phone: "" }] };
+
+  const [formData, setFormData] = useState(() => buildForm(initialData));
+
+  // Sync form state when modal reopens with different data (belt-and-suspenders with key prop)
+  useEffect(() => {
+    if (isOpen) setFormData(buildForm(initialData));
+  }, [isOpen, initialData]);
 
   const handleAddContact = () => {
     setFormData((prev: any) => ({
@@ -161,13 +156,26 @@ export function CompetitionModal({
     onSubmit(formData);
   };
 
+  const { showNotification } = useNotification();
+
+  const hasUnsavedChanges = formData.title || formData.description || formData.theme ||
+    formData.registrationLink || formData.tags || formData.imageUrl;
+
+  const handleClose = () => {
+    if (hasUnsavedChanges) {
+      showNotification("confirm", "Perubahan Belum Disimpan", "Ada data yang belum disimpan. Yakin ingin menutup?", onClose);
+    } else {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-start p-4 bg-black/60 backdrop-blur-sm animate-in fade-in overflow-y-auto py-8">
       <div className="bg-white border-4 border-festika-navy p-6 w-full max-w-2xl my-8 shadow-[12px_12px_0_0_#F5A623] relative">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-festika-navy"
         >
           <X size={24} />
@@ -301,6 +309,7 @@ export function CompetitionModal({
                 }
                 className="w-full px-4 py-2 border-2 border-festika-navy outline-none focus:border-festika-orange"
               />
+              <p className="text-[10px] text-gray-400">Pisahkan dengan spasi, contoh: #FESTIKA2026 #Tech</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-festika-navy">
@@ -346,10 +355,12 @@ export function CompetitionModal({
                 <div className="flex-1 space-y-1">
                   <input
                     value={contact.phone}
-                    onChange={(e) =>
-                      handleContactChange(index, "phone", e.target.value)
-                    }
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/\D/g, "");
+                      handleContactChange(index, "phone", v);
+                    }}
                     placeholder="No WhatsApp (08...)"
+                    maxLength={15}
                     className="w-full px-3 py-1.5 border-2 border-festika-navy text-sm"
                   />
                 </div>
@@ -467,7 +478,7 @@ export function CompetitionModal({
           <div className="flex gap-3 pt-4">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="flex-1 py-3 border-2 border-gray-200 font-bold hover:bg-gray-50 transition-colors"
             >
               Batal
@@ -487,6 +498,9 @@ export function CompetitionModal({
   );
 }
 
+// ---------------------------------------------------------------------------
+// AddYearModal
+// ---------------------------------------------------------------------------
 type AddYearModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -562,6 +576,37 @@ export function AddYearModal({
 // ---------------------------------------------------------------------------
 // Admin Past Event Modal (separate from CompetitionModal)
 // ---------------------------------------------------------------------------
+function buildPastEventForm(data: any) {
+  const defaultYear = new Date().getFullYear() - 1;
+  return data ? {
+    title: data.title || "",
+    theme: data.theme || "",
+    description: data.description || "",
+    eventDate: data.eventDate ? new Date(data.eventDate).toISOString().split("T")[0] : "",
+    imageUrl: data.imageUrl || "",
+    galleryUrls: Array.isArray(data.galleryUrls) ? data.galleryUrls : data.galleryUrls || [],
+    year: data.year || defaultYear,
+    participants: data.participants ? String(data.participants) : "",
+    winner: data.winner || "",
+    runnerUp: data.runnerUp || "",
+    thirdPlace: data.thirdPlace || "",
+    orderIndex: data.orderIndex || 0,
+  } : {
+    title: "",
+    theme: "",
+    description: "",
+    eventDate: "",
+    imageUrl: "",
+    galleryUrls: [] as string[],
+    year: defaultYear,
+    participants: "",
+    winner: "",
+    runnerUp: "",
+    thirdPlace: "",
+    orderIndex: 0,
+  };
+}
+
 export function AdminPastEventModal({
   isOpen,
   onClose,
@@ -570,43 +615,11 @@ export function AdminPastEventModal({
   isLoading,
   mode,
 }: CompetitionModalProps) {
-  const [formData, setFormData] = useState(() => {
-    const defaultYear = new Date().getFullYear() - 1;
-    if (initialData) {
-      return {
-        title: initialData.title || "",
-        theme: initialData.theme || "",
-        description: initialData.description || "",
-        eventDate: initialData.eventDate
-          ? new Date(initialData.eventDate).toISOString().split("T")[0]
-          : "",
-        imageUrl: initialData.imageUrl || "",
-        galleryUrls: Array.isArray(initialData.galleryUrls)
-          ? initialData.galleryUrls
-          : initialData.galleryUrls || [],
-        year: initialData.year || defaultYear,
-        participants: initialData.participants ? String(initialData.participants) : "",
-        winner: initialData.winner || "",
-        runnerUp: initialData.runnerUp || "",
-        thirdPlace: initialData.thirdPlace || "",
-        orderIndex: initialData.orderIndex || 0,
-      };
-    }
-    return {
-      title: "",
-      theme: "",
-      description: "",
-      eventDate: "",
-      imageUrl: "",
-      galleryUrls: [] as string[],
-      year: defaultYear,
-      participants: "",
-      winner: "",
-      runnerUp: "",
-      thirdPlace: "",
-      orderIndex: 0,
-    };
-  });
+  const [formData, setFormData] = useState(() => buildPastEventForm(initialData));
+
+  useEffect(() => {
+    if (isOpen) setFormData(buildPastEventForm(initialData));
+  }, [isOpen, initialData]);
 
   const galleryRef = useRef<HTMLDivElement | null>(null);
 
@@ -617,6 +630,7 @@ export function AdminPastEventModal({
     c.scrollBy({ left: delta, behavior: "smooth" });
   };
 
+  const { showNotification } = useNotification();
   const [isUploading, setIsUploading] = useState(false);
 
   const uploadToServer = async (file: File) => {
@@ -639,9 +653,8 @@ export function AdminPastEventModal({
       const data: any = await uploadToServer(f);
       const url = data?.secure_url || data?.url;
       if (url) setFormData((prev: any) => ({ ...prev, imageUrl: url }));
-    } catch (err) {
-      console.error(err);
-      alert("Gagal mengupload poster");
+    } catch {
+      showNotification("error", "Gagal", "Gagal mengupload poster");
     } finally {
       setIsUploading(false);
     }
@@ -654,19 +667,20 @@ export function AdminPastEventModal({
     if (!files || files.length === 0) return;
     setIsUploading(true);
     try {
-      const uploaded: string[] = [];
-      for (let i = 0; i < files.length; i++) {
-        const d: any = await uploadToServer(files[i]);
-        const url = d?.secure_url || d?.url;
-        if (url) uploaded.push(url);
-      }
+      const uploaded: string[] = (
+        await Promise.all(
+          Array.from(files).map(async (file) => {
+            const d: any = await uploadToServer(file);
+            return d?.secure_url || d?.url;
+          }),
+        )
+      ).filter(Boolean);
       setFormData((prev: any) => ({
         ...prev,
         galleryUrls: [...(prev.galleryUrls || []), ...uploaded],
       }));
-    } catch (err) {
-      console.error(err);
-      alert("Gagal mengupload gallery images");
+    } catch {
+      showNotification("error", "Gagal", "Gagal mengupload gallery images");
     } finally {
       setIsUploading(false);
     }
@@ -1121,13 +1135,10 @@ export function DeleteCompetitionModal({
               </div>
               <div className="flex gap-3">
                 <button
-                  onClick={() => {
-                    onInputChange("");
-                    onNextStep();
-                  }}
+                  onClick={onClose}
                   className="flex-1 py-3 border-2 border-gray-200 font-bold hover:bg-gray-50 transition-colors"
                 >
-                  Batal (Reset)
+                  Batal
                 </button>
                 <button
                   onClick={onConfirm}
@@ -1189,6 +1200,8 @@ export function DeleteMultipleModal({
 }: DeleteMultipleModalProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [input, setInput] = useState("");
+
+  useEffect(() => { setStep(1); setInput(""); }, [isOpen]);
 
   if (!isOpen || targets.length === 0) return null;
 

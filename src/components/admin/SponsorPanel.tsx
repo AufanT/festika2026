@@ -99,7 +99,7 @@ export default function SponsorPanel() {
           fetch(`/api/sponsors?id=${t.id}`, { method: "DELETE" })
         )
       );
-      const successCount = results.filter(r => r.status === "fulfilled").length;
+      const successCount = results.filter(r => r.status === "fulfilled" && (r.value as Response).ok).length;
       const failCount = results.length - successCount;
 
       setIsDeleteOpen(false);

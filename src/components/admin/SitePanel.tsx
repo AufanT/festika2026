@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SponsorPanel from "./SponsorPanel";
 import FaqPanel from "./faq/FaqPanel";
 import SettingsPanel from "./SettingsPanel";
@@ -11,8 +11,26 @@ const subTabs = [
   { id: "settings", label: "Guidebook" },
 ] as const;
 
+function getTabFromUrl(): string {
+  if (typeof window === "undefined") return "sponsors";
+  const params = new URLSearchParams(window.location.search);
+  return params.get("tab") || "sponsors";
+}
+
 export default function SitePanel() {
-  const [activeSub, setActiveSub] = useState<string>("sponsors");
+  const [activeSub, setActiveSub] = useState(getTabFromUrl);
+
+  useEffect(() => {
+    setActiveSub(getTabFromUrl());
+  }, []);
+
+  const handleTabChange = (tab: string) => {
+    setActiveSub(tab);
+    const url = new URL(window.location.href);
+    if (tab === "sponsors") url.searchParams.delete("tab");
+    else url.searchParams.set("tab", tab);
+    window.history.replaceState(null, "", url.toString());
+  };
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -20,7 +38,7 @@ export default function SitePanel() {
         {subTabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveSub(tab.id)}
+            onClick={() => handleTabChange(tab.id)}
             className={`px-5 py-3 font-bold text-sm transition-all border-b-4 shrink-0 whitespace-nowrap ${
               activeSub === tab.id
                 ? "border-festika-orange text-festika-navy"

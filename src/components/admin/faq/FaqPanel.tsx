@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Plus, Pencil, Trash2, ArrowUp, ArrowDown, X } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowUp, ArrowDown, X, AlertTriangle } from "lucide-react";
 import { Faq } from "@/types/admin";
+import { useNotification } from "@/context/NotificationContext";
 
 export default function FaqPanel() {
+  const { showNotification } = useNotification();
   const [faqs, setFaqs] = useState<Faq[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingFaq, setEditingFaq] = useState<Faq | null>(null);
   const [formData, setFormData] = useState({ question: "", answer: "" });
   const [saving, setSaving] = useState(false);
-  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Faq | null>(null);
 
   const fetchFaqs = useCallback(async () => {
     setIsLoading(true);
@@ -20,7 +22,7 @@ export default function FaqPanel() {
       const json = await res.json();
       setFaqs(json.data || []);
     } catch {
-      /* ignore */
+      showNotification("error", "Gagal", "Gagal memuat data FAQ");
     } finally {
       setIsLoading(false);
     }
@@ -58,23 +60,34 @@ export default function FaqPanel() {
       if (res.ok) {
         setModalOpen(false);
         fetchFaqs();
+        showNotification("success", "Berhasil", `FAQ berhasil ${editingFaq ? "diperbarui" : "ditambahkan"}`);
+      } else {
+        const json = await res.json();
+        showNotification("error", "Gagal", json.message || "Gagal menyimpan FAQ");
       }
     } catch {
-      /* ignore */
+      showNotification("error", "Gagal", "Terjadi kesalahan koneksi");
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    setDeleteId(id);
+  const handleDelete = async () => {
+    if (!deleteConfirm) return;
+    const id = deleteConfirm.id;
     try {
-      await fetch(`/api/faqs?id=${id}`, { method: "DELETE" });
-      fetchFaqs();
+      const res = await fetch(`/api/faqs?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        fetchFaqs();
+        showNotification("success", "Berhasil", "FAQ berhasil dihapus");
+      } else {
+        const json = await res.json();
+        showNotification("error", "Gagal", json.message || "Gagal menghapus FAQ");
+      }
     } catch {
-      /* ignore */
+      showNotification("error", "Gagal", "Terjadi kesalahan koneksi");
     } finally {
-      setDeleteId(null);
+      setDeleteConfirm(null);
     }
   };
 
@@ -82,6 +95,7 @@ export default function FaqPanel() {
     const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex < 0 || newIndex >= faqs.length) return;
 
+    const prev = [...faqs];
     const items = [...faqs];
     const temp = items[index].orderIndex;
     items[index].orderIndex = items[newIndex].orderIndex;
@@ -89,7 +103,7 @@ export default function FaqPanel() {
 
     setFaqs(items);
 
-    await Promise.all([
+    const results = await Promise.allSettled([
       fetch(`/api/faqs?id=${items[index].id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -101,6 +115,11 @@ export default function FaqPanel() {
         body: JSON.stringify({ orderIndex: items[newIndex].orderIndex }),
       }),
     ]);
+
+    if (results.some(r => r.status === "rejected")) {
+      setFaqs(prev);
+      showNotification("error", "Gagal", "Gagal mengubah urutan FAQ");
+    }
   };
 
   if (isLoading) {
@@ -169,15 +188,10 @@ export default function FaqPanel() {
                 <Pencil size={18} />
               </button>
               <button
-                onClick={() => handleDelete(faq.id)}
-                disabled={deleteId === faq.id}
-                className="p-2 text-gray-400 hover:text-red-500 transition-colors disabled:opacity-50"
+                onClick={() => setDeleteConfirm(faq)}
+                className="p-2 text-gray-400 hover:text-red-500 transition-colors"
               >
-                {deleteId === faq.id ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Trash2 size={18} />
-                )}
+                <Trash2 size={18} />
               </button>
             </div>
           </div>
@@ -241,6 +255,44 @@ export default function FaqPanel() {
                 >
                   {saving && <Loader2 size={16} className="animate-spin" />}{" "}
                   {editingFaq ? "Perbarui" : "Simpan"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ── Delete Confirmation ── */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white border-4 border-festika-navy w-full max-w-sm shadow-[8px_8px_0_0_#0F2A36]">
+            <div className="bg-red-600 p-4 flex justify-between items-center text-white">
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={20} />
+                <h3 className="font-bold">Hapus FAQ</h3>
+              </div>
+              <button onClick={() => setDeleteConfirm(null)}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-6 text-center space-y-4">
+              <p className="text-festika-navy font-medium">
+                Yakin ingin menghapus FAQ ini?
+              </p>
+              <p className="text-sm text-gray-500 line-clamp-2">
+                "{deleteConfirm.question}"
+              </p>
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setDeleteConfirm(null)}
+                  className="flex-1 py-3 border-2 border-gray-200 font-bold hover:bg-gray-50 transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="flex-1 py-3 bg-red-600 text-white font-bold hover:bg-red-700 transition-colors border-2 border-red-700 shadow-[3px_3px_0_0_#7f1d1d]"
+                >
+                  Ya, Hapus
                 </button>
               </div>
             </div>
