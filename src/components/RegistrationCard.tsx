@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Link as LinkIcon, Check } from "lucide-react";
+import { Calendar, Link as LinkIcon, Check, BookOpen } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import GuidebookButton from "@/components/GuidebookButton";
 
 interface RegistrationCardProps {
   registrationLink: string;
   startDate: string | null;
   endDate: string | null;
   delay?: number;
+  guidebookFile?: string;
 }
 
 export default function RegistrationCard({
@@ -16,6 +18,7 @@ export default function RegistrationCard({
   startDate,
   endDate,
   delay = 0,
+  guidebookFile,
 }: RegistrationCardProps) {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -67,6 +70,14 @@ export default function RegistrationCard({
             akan diikuti
           </span>
         </label>
+
+        {/* Guidebook */}
+        <div className="mb-6">
+          <GuidebookButton
+            filePath={guidebookFile}
+            className="w-full !bg-white/10 !border-white/30 !text-white hover:!bg-white/20 hover:!border-white/60 !shadow-none !px-4 !py-3 !text-xs !tracking-wider justify-center"
+          />
+        </div>
 
         <a
           href={registrationLink}

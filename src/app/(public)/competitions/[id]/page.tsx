@@ -4,10 +4,10 @@ import { MessageSquare, ArrowLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatWhatsAppLink } from "@/lib/utils";
-import GuidebookCalloutCard from "@/components/GuidebookCalloutCard";
 import RegistrationCard from "@/components/RegistrationCard";
 import FloatingRegisterButton from "@/components/FloatingRegisterButton";
 import Reveal from "@/components/Reveal";
+import Timeline from "@/components/Timeline";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -122,26 +122,7 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
                 <h3 className="font-[family-name:var(--font-space-grotesk)] text-xl font-black text-festika-navy mb-6 uppercase border-b-4 border-festika-orange inline-block">
                   Timeline Lomba
                 </h3>
-                <div className="relative pl-8 border-l-[3px] border-festika-navy space-y-8 ml-2">
-                  {competition.timeline.map((event: any, idx: number) => (
-                    <div key={idx} className="relative">
-                      <div className="absolute -left-[25px] top-1 w-5 h-5 rounded-full border-[3px] border-festika-navy bg-festika-teal z-10" />
-                      <div className="pl-2">
-                        <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-base leading-tight">
-                          {event.label}
-                        </p>
-                        <p className="text-sm text-festika-navy/70 font-semibold mt-0.5">
-                          {event.date}
-                        </p>
-                        {event.description && (
-                          <p className="text-sm text-gray-500 mt-1">
-                            {event.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <Timeline events={competition.timeline} />
               </div>
             </Reveal>
           )}
@@ -159,20 +140,15 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
                       key={idx}
                       className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-b-0 last:pb-0"
                     >
-                      <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-full bg-festika-orange/10 border-2 border-festika-orange flex items-center justify-center text-festika-navy font-black text-sm shrink-0">
-                          {idx + 1}
-                        </span>
-                        <div>
-                          <p className="font-bold text-festika-navy text-sm">
-                            {prize.position}
-                          </p>
-                          {prize.description && (
-                            <p className="text-xs text-gray-500">{prize.description}</p>
-                          )}
-                        </div>
+                      <div>
+                        <p className="font-bold text-festika-navy text-sm">
+                          {prize.position}
+                        </p>
+                        {prize.description && (
+                          <p className="text-xs text-gray-500">{prize.description}</p>
+                        )}
                       </div>
-                      <p className="font-extrabold text-festika-teal text-sm text-right">
+                      <p className="font-extrabold text-festika-teal text-sm text-right shrink-0 ml-4">
                         {prize.prize}
                       </p>
                     </div>
@@ -181,11 +157,6 @@ export default async function CompetitionDetailPage({ params }: { params: Promis
               </div>
             </Reveal>
           )}
-
-          {/* Card 2: Guidebook */}
-          <div className="mb-8">
-            <GuidebookCalloutCard />
-          </div>
 
           {/* Card 3: Registration */}
           <RegistrationCard

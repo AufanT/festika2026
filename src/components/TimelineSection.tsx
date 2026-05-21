@@ -1,5 +1,6 @@
 import { ClipboardList, Swords, Trophy, Flag } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import Timeline from "@/components/Timeline";
 
 interface MilestoneDetail { label: string; date: string; }
 interface Milestone {
@@ -111,59 +112,7 @@ function DynamicTimelines({ competitions }: { competitions: CompTimeline[] }) {
               <h3 className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-lg mb-4 uppercase tracking-tight">
                 {comp.title}
               </h3>
-
-              {/* Desktop */}
-              <div className="hidden md:block relative">
-                <div className="relative flex items-center py-6">
-                  <div className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] rounded-full ${color.line}`} />
-                  {comp.timeline.map((event, ei) => (
-                    <div key={ei} className="flex-1 flex flex-col items-center">
-                      <div className="h-14 flex flex-col items-center justify-end pb-2 w-full">
-                        <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-sm leading-tight text-center px-1">
-                          {event.label}
-                        </p>
-                      </div>
-                      <div className="relative z-10 flex items-center justify-center">
-                        <div className={`w-3 h-3 rounded-full border-2 border-festika-navy ${color.dot}`} />
-                      </div>
-                      <div className="h-14 flex flex-col items-center justify-start pt-2 w-full">
-                        <p className="text-[11px] text-festika-navy/70 font-semibold text-center leading-snug px-1">
-                          {event.date}
-                        </p>
-                        {event.description && (
-                          <p className="text-[10px] text-festika-navy/50 text-center leading-tight mt-0.5 px-1">
-                            {event.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Mobile */}
-              <div className="md:hidden">
-                <div className="relative pl-8 border-l-2 border-festika-navy space-y-6 ml-2">
-                  {comp.timeline.map((event, ei) => (
-                    <div key={ei} className="relative">
-                      <div className={`absolute -left-[38px] top-1 w-3 h-3 rounded-full border-2 border-festika-navy z-10 ${color.dot}`} />
-                      <div className="pl-2">
-                        <p className="font-[family-name:var(--font-space-grotesk)] font-extrabold text-festika-navy text-sm leading-tight">
-                          {event.label}
-                        </p>
-                        <p className="text-xs text-festika-navy/70 font-semibold mt-0.5">
-                          {event.date}
-                        </p>
-                        {event.description && (
-                          <p className="text-[11px] text-festika-navy/50 mt-0.5">
-                            {event.description}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <Timeline events={comp.timeline} color={color} />
             </div>
           </Reveal>
         );
